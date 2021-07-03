@@ -414,7 +414,8 @@ body {
   align-items: center;
   margin-bottom: 0.5em;
 }
-.reviews-wrapper .review-pages__list .page, .reviews-wrapper .review-pages__list .page--clickable{
+.reviews-wrapper .review-pages__list .page,
+.reviews-wrapper .review-pages__list .page--clickable {
   border-radius: 4px;
   min-height: 35px;
   min-width: 36px;
@@ -498,7 +499,7 @@ body {
   font-size: 1.2rem;
   font-weight: 300;
 }
-.rate-wrapper .review-form #name {
+.rate-wrapper .review-form #username {
   display: block;
   border-radius: 4px;
   padding: 0.4em 1em;
@@ -522,6 +523,16 @@ body {
   font-size: 1.4rem;
   letter-spacing: 1px;
 }
+.rate-wrapper .review-form .required-arterisk {
+  color: red;
+  font-size: 2rem;
+  font-weight: 900;
+}
+.rate-wrapper .review-form .error {
+  color: #dc1f1f;
+  font-size: 1.4rem;
+  font-weight: 500;
+}
 .rate-wrapper .confirmation-modal {
   background-color: #f6f6f6;
   padding: 1em 2em;
@@ -529,7 +540,7 @@ body {
   border-radius: 10px;
   font-size: 1.5rem;
   line-height: 2rem;
-  display: none;
+  max-width: 400px;
 }
 .rate-wrapper .confirmation-modal a {
   background-color: #dc1f1f;

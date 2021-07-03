@@ -60,7 +60,7 @@ class Reviews extends Component {
           </a>
           <span> \ </span>
           <a href='/software_details' className='page-link'>
-            Visual Studio Code
+            {software.name}
           </a>
           <span> \ </span>
           <a href='/reviews' className='page-link active-page-link'>

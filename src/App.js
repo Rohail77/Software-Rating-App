@@ -9,9 +9,7 @@ function App(props) {
   return (
     <Router>
       <Switch>
-        <Route path='/rate'>
-          <Rate />
-        </Route>
+        <Route path='/rate' component={Rate} />
         <Route path='/software_details' component={SoftwareDetails} />
         <Route path='/reviews' component={Reviews} />
         <Route path='/'>

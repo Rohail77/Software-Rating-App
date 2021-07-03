@@ -1,4 +1,6 @@
 import { Component } from 'react';
+import SoftwareInfo from '../../common/SoftwareInfo';
+import RateLink from './RateLink';
 
 export class Software extends Component {
   render() {
@@ -6,15 +8,8 @@ export class Software extends Component {
 
     return (
       <section className='software'>
-        <img
-          src={`images/software logos/${name.toLowerCase()}.svg`}
-          alt={`${name.toLowerCase()} logo`}
-          className='software__logo'
-        />
-        <div className='software__details'>
-          <p className='software__name'>{name}</p>
-          <p className='software__developer'>{developer}</p>
-        </div>
+        <SoftwareInfo name={name} developer={developer} />
+
         <div className='feedback-content'>
           <div className='feedback'>
             <div className='feedback__rating'>
@@ -23,12 +18,11 @@ export class Software extends Component {
             </div>
             <span> | </span>
             <div className='feedback__reviews'>
-              <span className='reviews-qty'>{reviews}</span> <span>Reviews</span>
+              <span className='reviews-qty'>{reviews}</span>{' '}
+              <span>Reviews</span>
             </div>
           </div>
-          <a href='/rate' className='rate-link'>
-            Rate this app
-          </a>
+          <RateLink software={{ name, developer }} />
         </div>
       </section>
     );

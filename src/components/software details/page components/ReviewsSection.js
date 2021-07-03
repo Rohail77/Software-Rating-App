@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import ReviewsList from '../../common/ReviewsList';
+import RateLink from './RateLink';
 import ReviewsLink from './ReviewsLink';
 
 class ReviewsSection extends Component {
@@ -10,9 +11,7 @@ class ReviewsSection extends Component {
       <section className='reviews'>
         <h2 className='reviews-heading'>Reviews</h2>
         <p className='ask-for-review-para'>Write a review by rating this app</p>
-        <a href='/rate' className='rate-link'>
-          Rate this app
-        </a>
+        <RateLink software={software}/>
 
         <div className='review-feedback-content'>
           <div>
