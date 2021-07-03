@@ -1,38 +1,665 @@
-.App {
-  text-align: center;
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+:root {
+  font-size: 10px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+ul {
+  list-style-type: none;
 }
 
-.App-header {
-  background-color: #282c34;
+a {
+  text-decoration: none;
+  display: block;
+  width: fit-content;
+  color: black;
+}
+
+img {
+  max-width: 100%;
+}
+
+p {
+  line-height: 2.5rem;
+}
+
+button,
+input[type='submit'] {
+  cursor: pointer;
+}
+
+body {
+  font-size: 1.6rem;
+  font-family: 'Roboto', sans-serif;
   min-height: 100vh;
+  padding: 0.05px 0;
+}
+
+.wrapper {
+  width: 80%;
+  margin: 2em auto;
+}
+
+.stars-list {
   display: flex;
-  flex-direction: column;
+}
+
+.rate-link,
+.reviews-link,
+.active-page-link {
+  color: #dc1f1f;
+  text-decoration: underline;
+}
+
+.rate-link,
+.reviews-link {
+  font-weight: 500;
+}
+
+.reviews-wrapper h2,
+.software-details-wrapper h2 {
+  font-size: 2.2rem;
+  font-weight: 500;
+}
+.reviews-wrapper .reviews,
+.software-details-wrapper .reviews {
+  max-width: 500px;
+}
+.reviews-wrapper .reviews .reviews-heading,
+.software-details-wrapper .reviews .reviews-heading {
+  margin-bottom: 0.6em;
+}
+.reviews-wrapper .reviews .ask-for-review-para,
+.software-details-wrapper .reviews .ask-for-review-para {
+  font-weight: 300;
+  font-size: 1.4rem;
+  line-height: 1.6rem;
+  margin-bottom: 0.6em;
+}
+.reviews-wrapper .review,
+.software-details-wrapper .review {
+  margin-top: 2em;
+}
+.reviews-wrapper .review__info,
+.software-details-wrapper .review__info {
+  font-size: 1.4rem;
+  font-weight: 500;
+  display: flex;
+  align-items: baseline;
+}
+.reviews-wrapper .review__info .review-date,
+.software-details-wrapper .review__info .review-date {
+  font-size: 1.25rem;
+  margin-left: 3em;
+  font-weight: 400;
+}
+.reviews-wrapper .review__info span,
+.software-details-wrapper .review__info span {
+  display: inline-block;
+}
+.reviews-wrapper .review__rating-type,
+.software-details-wrapper .review__rating-type {
+  margin: 0.35em 0;
+}
+.reviews-wrapper .review__rating-type .rating-qty,
+.software-details-wrapper .review__rating-type .rating-qty {
+  font-size: 2rem;
+}
+.reviews-wrapper .review__rating-type img,
+.software-details-wrapper .review__rating-type img {
+  width: 13.6px;
+  margin-left: 0.3em;
+}
+.reviews-wrapper .review__para,
+.software-details-wrapper .review__para {
+  font-size: 1.5rem;
+}
+
+.reviews-wrapper .software,
+.rate-wrapper .software {
+  margin: 2.3em auto;
+  display: grid;
   align-items: center;
+  justify-content: start;
+  grid-template-columns: auto auto;
+  grid-gap: 0 1.5em;
+  width: fit-content;
+}
+.reviews-wrapper .software__logo,
+.rate-wrapper .software__logo {
+  width: min(80px, 20vw);
+  min-width: 55px;
+}
+.reviews-wrapper .software__name,
+.rate-wrapper .software__name {
+  font-weight: 700;
+  font-size: clamp(1.7rem, 5vw, 2rem);
+  line-height: clamp(1.8rem, 6vw, 2.5rem);
+}
+.reviews-wrapper .software__developer,
+.rate-wrapper .software__developer {
+  font-size: 1.3rem;
+}
+
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  width: fit-content;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+.breadcrumbs > * + * {
+  margin-left: 0.4em;
+}
+.breadcrumbs .page-link {
+  white-space: nowrap;
+}
+
+/*=========================
+    Main Page Styling
+=========================*/
+.main-wrapper .home-link {
+  color: #dc1f1f;
+  text-decoration: underline;
+}
+.main-wrapper .search {
+  position: relative;
+  margin: 1.5em auto 0 auto;
+  width: 300px;
+}
+.main-wrapper .search__img {
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  left: 1px;
+  background-color: #dc1f1f;
+  padding: 0.5em 0.75em;
+  border-radius: 9px 0 0 9px;
+}
+.main-wrapper .search input {
+  padding: 0.9em 1em 0.9em 5em;
+  border: 0.5px solid #000000;
+  border-radius: 10px;
+  width: 100%;
+}
+.main-wrapper .search input::placeholder {
+  color: #5e5e5e;
+  font-weight: 300;
+}
+.main-wrapper .softwares-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 1em;
+  margin-top: 3em;
+}
+.main-wrapper .software {
+  margin-bottom: 3em;
+}
+.main-wrapper .software a {
+  color: black;
+  display: grid;
+  align-items: center;
+  grid-template-columns: auto 1fr;
+  grid-gap: 1em 1.1em;
+}
+.main-wrapper .software__logo {
+  width: clamp(60px, 4.5vw, 75px);
+}
+.main-wrapper .software__details {
+  padding-top: 0.8em;
+}
+.main-wrapper .software__details p {
+  line-height: 2.35rem;
+}
+.main-wrapper .software__name {
+  font-weight: 700;
+  font-size: clamp(1.75rem, 1.4vw, 2rem);
+}
+.main-wrapper .software__developer {
+  font-size: clamp(1.4rem, 2vw, 1.6rem);
+  font-weight: 400;
+}
+.main-wrapper .software .stars-list {
+  grid-column: 1/-1;
+}
+.main-wrapper .software .stars-list .star {
+  width: 19px;
+  height: 18px;
+}
+.main-wrapper .software .stars-list .star + .star {
+  margin-left: 0.3em;
+}
+
+/*====================================
+    Software Details Page Styling
+====================================*/
+.software-details-wrapper .software {
+  margin: 2.5em 0;
+  display: grid;
+  align-items: center;
+  justify-content: start;
+  grid-template-columns: auto auto;
+  grid-gap: 0.4em 1.5em;
+  max-width: 500px;
+}
+.software-details-wrapper .software__logo {
+  width: min(120px, 20vw);
+  min-width: 70px;
+  height: 120px;
+}
+.software-details-wrapper .software__name {
+  font-weight: 700;
+  font-size: clamp(1.6rem, 4.2vw, 3rem);
+  line-height: clamp(1.8rem, 4.2vw, 3.2rem);
+  margin-bottom: 0.2em;
+}
+.software-details-wrapper .software__developer {
+  font-size: clamp(1.4rem, 3vw, 1.6rem);
+}
+.software-details-wrapper .software .feedback-content {
+  grid-column: 2/-1;
+  display: flex;
+  align-items: baseline;
+}
+.software-details-wrapper .software .feedback-content .feedback {
+  display: grid;
+  align-items: center;
+  grid-template-columns: auto auto auto;
+  grid-gap: 0 0.9em;
+}
+.software-details-wrapper .software .feedback-content .feedback span {
+  display: inline-block;
+}
+.software-details-wrapper .software .feedback-content .feedback__rating img {
+  width: 13.6px;
+  height: 12.8px;
+  margin-left: 0.2em;
+}
+.software-details-wrapper .software .feedback-content .rating-qty,
+.software-details-wrapper .software .feedback-content .reviews-qty {
+  font-weight: 700;
+  font-size: 2rem;
+}
+.software-details-wrapper .software .feedback-content .reviews-qty {
+  margin-right: 0.2em;
+}
+.software-details-wrapper .software .feedback-content .rate-link {
+  margin-left: 5.2em;
+}
+.software-details-wrapper .software-description-and-rating {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 1280px;
+}
+.software-details-wrapper .software-description {
+  max-width: 500px;
+}
+.software-details-wrapper .software-description h2 {
+  margin-bottom: 0.4em;
+}
+.software-details-wrapper .software-rating {
+  margin-left: 5em;
+  max-width: 300px;
+}
+.software-details-wrapper .software-rating .average-rating {
+  display: flex;
+  align-items: baseline;
+  margin: 0.4em 0 0.7em 0;
+}
+.software-details-wrapper .software-rating .rating-qty {
+  font-size: 3rem;
+  font-weight: 700;
+}
+.software-details-wrapper .software-rating .stars-list {
+  margin-left: 1.6em;
+}
+.software-details-wrapper .software-rating .stars-list .star {
+  width: 100%;
+}
+.software-details-wrapper .software-rating .stars-list li {
+  width: 25.5px;
+  height: 21.8px;
+}
+.software-details-wrapper .software-rating .stars-list li + li {
+  margin-left: 0.6em;
+}
+.software-details-wrapper .software-rating .rating {
+  display: grid;
+  align-items: baseline;
+  grid-template-columns: auto 1fr;
+  grid-gap: 1em;
+}
+.software-details-wrapper .software-rating .rating .rating-qty {
+  font-size: 2.1rem;
+  font-weight: 400;
+}
+.software-details-wrapper .software-rating .rating__type img {
+  width: 13px;
+  height: 12px;
+  margin-left: 0.3em;
+}
+.software-details-wrapper .software-rating .rating__growth {
+  height: 16px;
+  border: 1px solid #000000;
+  border-radius: 4px;
+}
+.software-details-wrapper .software-rating .rating__growth__line {
+  background: #dc1f1f;
+  height: 14px;
+  border-radius: 3px 0 0 3px;
+}
+
+.software-details-wrapper .software-rating .rating + .rating {
+  margin-top: 0.4em;
+}
+.software-details-wrapper .reviews__list {
+  margin-bottom: 2em;
+}
+.software-details-wrapper .reviews .review-feedback-content {
+  display: flex;
+  align-items: baseline;
+  margin-top: 1.5em;
+  font-size: 1.8rem;
+}
+.software-details-wrapper .reviews .review-feedback-content .reviews-qty {
+  font-weight: 700;
+}
+.software-details-wrapper .reviews .review-feedback-content .reviews-link {
+  margin-left: 2.8em;
+  font-size: 1.5rem;
+}
+
+/*============================
+    Reviews Page Styling
+==============================*/
+.reviews-wrapper .breadcrumbs {
+  margin: 0 auto;
+}
+.reviews-wrapper .reviews {
+  margin: 0 auto;
+  max-width: 600px;
+}
+.reviews-wrapper .reviews .rate-link {
+  font-size: 1.4rem;
+}
+.reviews-wrapper .filter-rating-form {
+  margin: 2.8em 0 1.6em 0;
+}
+.reviews-wrapper .filter-rating-form label {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+.reviews-wrapper .filter-rating-form select {
+  padding: 0.2em 0.5em;
+  margin-left: 0.5em;
+  width: 130px;
+  border-radius: 4px;
+}
+.reviews-wrapper .review__para {
+  font-size: clamp(1.5rem, 4.5vw, 1.6rem);
+}
+.reviews-wrapper .review-pages {
+  text-align: center;
+  margin-top: 2.5em;
+}
+.reviews-wrapper .review-pages__list {
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+.reviews-wrapper .review-pages__list .page, .reviews-wrapper .review-pages__list .page--clickable{
+  border-radius: 4px;
+  min-height: 35px;
+  min-width: 36px;
+  text-align: center;
+  border: 1px solid black;
+  font-weight: 700;
+  background: white;
+}
+.reviews-wrapper .review-pages__list .page--clickable:hover {
+  background-color: #e5e5e5;
+}
+.reviews-wrapper .review-pages__list .active-review-page {
+  background-color: #dc1f1f;
   color: white;
 }
-
-.App-link {
-  color: #61dafb;
+.reviews-wrapper .review-pages__list .active-review-page:hover {
+  background-color: #dc1f1f;
+}
+.reviews-wrapper .review-pages__list li + li {
+  margin-left: 0.4em;
+}
+.reviews-wrapper .review-pages__list img {
+  min-width: 9px;
+}
+.reviews-wrapper .review-pages__info {
+  font-size: 1.4rem;
+}
+.reviews-wrapper .review-pages__total-pages {
+  font-weight: 700;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/*========================
+    Rate Page Styling
+==========================*/
+.rate-wrapper {
+  max-width: 400px;
+}
+.rate-wrapper .breadcrumbs {
+  margin: 0 auto;
+}
+.rate-wrapper .software {
+  margin: 2.5em 0;
+}
+.rate-wrapper .rate h2 {
+  font-size: 3rem;
+  font-weight: 400;
+}
+.rate-wrapper .rate .stars-list {
+  margin: 0.5em 0 1.5em 0;
+}
+.rate-wrapper .rate .stars-list li + li {
+  margin-left: 1em;
+}
+.rate-wrapper .rate .stars-list .star {
+  width: 39px;
+  min-width: 25px;
+  height: 32px;
+}
+.rate-wrapper .review-form textarea,
+.rate-wrapper .review-form input {
+  font-family: 'Roboto', sans-serif;
+  border: 1px solid #686767;
+}
+.rate-wrapper .review-form div + div {
+  margin-top: 1em;
+}
+.rate-wrapper .review-form label {
+  margin-bottom: 0.5em;
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+.rate-wrapper .review-form #review {
+  padding: 1em;
+  border-radius: 6px;
+  width: 100%;
+  height: 130px;
+}
+.rate-wrapper .review-form #review::placeholder {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 300;
+}
+.rate-wrapper .review-form #name {
+  display: block;
+  border-radius: 4px;
+  padding: 0.4em 1em;
+  font-size: 1.3rem;
+  width: min(100%, 280px);
+}
+.rate-wrapper .review-form .submit-btn {
+  background-color: #dc1f1f;
+  border-radius: 4px;
+  color: white;
+  padding-top: 0.7em;
+  padding-bottom: 0.7em;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+  text-align: center;
+  border: none;
+  display: block;
+  margin-left: auto;
+  margin-top: 1em;
+  font-weight: 500;
+  font-size: 1.4rem;
+  letter-spacing: 1px;
+}
+.rate-wrapper .confirmation-modal {
+  background-color: #f6f6f6;
+  padding: 1em 2em;
+  margin: 3em 0;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  display: none;
+}
+.rate-wrapper .confirmation-modal a {
+  background-color: #dc1f1f;
+  border-radius: 4px;
+  color: white;
+  padding-top: 0.4em;
+  padding-bottom: 0.4em;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+  text-align: center;
+  margin-left: auto;
+  font-size: 1.3rem;
+}
+
+/*========================
+    Media Queries
+==========================*/
+@media (max-width: 900px) {
+  .main-wrapper .softwares-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }
-  to {
-    transform: rotate(360deg);
+
+  .software-details-wrapper .software-description-and-rating {
+    grid-template-columns: 1fr;
+  }
+  .software-details-wrapper .software-rating {
+    margin: 3em 0 3em 0;
   }
 }
+@media (max-width: 650px) {
+  .main-wrapper .search {
+    margin: 1.5em 0;
+  }
+
+  .software-details-wrapper .software .feedback-content {
+    flex-direction: column;
+  }
+  .software-details-wrapper .software .feedback-content .rate-link {
+    margin: 0.7em 0 0 0;
+  }
+}
+@media (max-width: 400px) {
+  .wrapper {
+    width: 90%;
+  }
+
+  .main-wrapper .search {
+    width: 100%;
+  }
+  .main-wrapper .softwares-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+  }
+  .main-wrapper .software img {
+    width: 50px;
+  }
+
+  .software-details-wrapper .reviews,
+  .reviews-wrapper .reviews {
+    text-align: center;
+  }
+  .software-details-wrapper .reviews .rate-link,
+  .reviews-wrapper .reviews .rate-link {
+    margin: 0 auto;
+  }
+  .software-details-wrapper .review__info,
+  .reviews-wrapper .review__info {
+    justify-content: center;
+  }
+  .software-details-wrapper .review__info .review-date,
+  .reviews-wrapper .review__info .review-date {
+    margin-left: 2rem;
+  }
+
+  .software-details-wrapper .breadcrumbs {
+    margin: 0 auto;
+  }
+  .software-details-wrapper .software-description-and-rating {
+    text-align: center;
+  }
+  .software-details-wrapper .software {
+    justify-content: center;
+  }
+  .software-details-wrapper .software .feedback-content {
+    grid-column: 1/-1;
+    align-items: center;
+  }
+  .software-details-wrapper .software-rating {
+    max-width: initial;
+  }
+  .software-details-wrapper .software-rating .average-rating {
+    flex-direction: column;
+    align-items: center;
+    margin: 0.5em 0;
+  }
+  .software-details-wrapper .software-rating .stars-list {
+    margin: 0.2em 0 0.2em 0;
+  }
+  .software-details-wrapper .reviews .review-feedback-content {
+    justify-content: center;
+  }
+  .software-details-wrapper .reviews-link--bottom {
+    margin: 2em auto 0 auto;
+  }
+
+  .rate-wrapper .rate .stars-list li + li {
+    margin-left: 0.5em;
+  }
+  .rate-wrapper .review-form #review {
+    height: 200px;
+  }
+}
+@media (max-width: 250px) {
+  .reviews-wrapper .software,
+  .software-details-wrapper .software,
+  .rate-wrapper .software {
+    grid-gap: 0.8em;
+  }
+
+  .software-details-wrapper .software-rating .stars-list li {
+    width: 22.5px;
+  }
+  .software-details-wrapper .software-rating .stars-list li + li {
+    margin-left: 0.4em;
+  }
+
+  .reviews-wrapper .review-pages__list .page {
+    min-width: 30px;
+  }
+}
+
+/*# sourceMappingURL=main.css.map */
