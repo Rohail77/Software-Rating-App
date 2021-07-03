@@ -70,7 +70,6 @@ class ReviewForm extends Component {
 
   validate() {
     if (this.state.rating === 0 || this.state.username === '') {
-      console.log('error');
       return false;
     } return true
   }
