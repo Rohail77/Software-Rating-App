@@ -1,8 +1,11 @@
 import { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class Review extends Component {
   render() {
-    const { review } = this.props;
+    const { review, maxLength } = this.props;
+    const lengthDifference = review.review.length - maxLength;
+
     return (
       <li className='review'>
         <div className='review__info'>
@@ -14,7 +17,21 @@ class Review extends Component {
           <span className='rating-qty'>{review.rating}</span>
           <img src='/images/red star.svg' alt='red star' />
         </div>
-        <p className='review__para'>{review.review}</p>
+        <p className='review__para'>
+          {lengthDifference > 20
+            ? `${review.review.slice(0, maxLength)} ....`
+            : review.review}
+        </p>
+        {lengthDifference > 20 ? (
+          <Link
+            className='see-more-link'
+            to={{
+              pathname: `/software_details/reviews/review/${review.username}`,
+            }}
+          >
+            See more
+          </Link>
+        ) : null}
       </li>
     );
   }

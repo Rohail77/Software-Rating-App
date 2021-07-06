@@ -5,6 +5,7 @@ import ReviewPages from './page components/ReviewPages';
 import RateLink from '../software details/page components/RateLink';
 import ReviewsInfo from './page components/ReviewsInfo';
 import { Link } from 'react-router-dom';
+import HomeLink from '../common/HomeLink';
 
 class Reviews extends Component {
   constructor(props) {
@@ -63,14 +64,7 @@ class Reviews extends Component {
     return (
       <div className='wrapper reviews-wrapper'>
         <div className='breadcrumbs'>
-          <Link
-            className='page-link'
-            to={{
-              pathname: '/',
-            }}
-          >
-            Home
-          </Link>
+          <HomeLink isActive={false} />
           <span> \ </span>
           <Link
             className='page-link'
@@ -99,7 +93,7 @@ class Reviews extends Component {
             Write a review by rating this app
           </p>
 
-          <RateLink software={software} />
+          <RateLink softwareID={software.id} />
 
           <ReviewsInfo
             filterReviews={this.filterReviews}

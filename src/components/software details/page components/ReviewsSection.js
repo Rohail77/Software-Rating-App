@@ -23,14 +23,14 @@ class ReviewsSection extends Component {
         <div className='review-feedback-content'>
           <ReviewsCount total_reviews={software.total_reviews} />
           {software.total_reviews <= 3 ? null : (
-            <ReviewsLink data={{ software, reviews }} />
+            <ReviewsLink softwareID={software.id} />
           )}
         </div>
 
         <ReviewsList reviews={reviews.slice(0, 3)} />
 
         {software.total_reviews <= 3 ? null : (
-          <ReviewsLink data={{ software, reviews }} />
+          <ReviewsLink softwareID={software.id} />
         )}
       </section>
     );

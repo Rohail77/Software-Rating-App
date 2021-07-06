@@ -3,6 +3,7 @@ import SoftwareInfo from '../common/SoftwareInfo';
 import ConfirmationModal from './page components/ConfirmationModal';
 import ReviewForm from './page components/ReviewForm';
 import { Link } from 'react-router-dom';
+import HomeLink from '../common/HomeLink';
 
 class Rate extends Component {
   constructor(props) {
@@ -21,32 +22,30 @@ class Rate extends Component {
   }
 
   render() {
-    const { name, developer, id } = this.props.location.state.software;
+    const { name, developer, id } = this.props.software;
 
     return (
       <div className='wrapper rate-wrapper'>
         <div className='breadcrumbs'>
-          <Link
-            className='page-link'
-            to={{
-              pathname: '/',
-            }}
-          >
-            Home
-          </Link>
+          <HomeLink isActive={false} />
           <span> \ </span>
           <Link
             className='page-link'
             to={{
-              pathname: '/software_details',
+              pathname: `/software_details/${id}`,
             }}
           >
             {name}
           </Link>
           <span> \ </span>
-          <a href='/rate' className='page-link active-page-link'>
+          <Link
+            className='page-link active-page-link'
+            to={{
+              pathname: `/software_details/rate/${id}`,
+            }}
+          >
             Rate
-          </a>
+          </Link>
         </div>
 
         <section className='software'>

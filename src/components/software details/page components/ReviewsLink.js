@@ -1,18 +1,15 @@
-import { Component } from 'react'
+import { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 class ReviewsLink extends Component {
-
-  
   render() {
-    const {data} = this.props;
+    const { softwareID } = this.props;
 
     return (
       <Link
         className='reviews-link'
         to={{
-          pathname: `/software_details/reviews/${data.software.id}`,
-          // state: data
+          pathname: `/software_details/reviews/${softwareID}`,
         }}
       >
         {' '}
@@ -22,4 +19,4 @@ class ReviewsLink extends Component {
   }
 }
 
-export default ReviewsLink
+export default ReviewsLink;

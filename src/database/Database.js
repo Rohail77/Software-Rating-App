@@ -67,7 +67,6 @@ class Database {
   }
 
   updateAverageRatingHelper(softwareID, averageRating, cb) {
-    console.log(Number(averageRating.toFixed(1)));
     this.softwaresRef
       .doc(`${softwareID}`)
       .update({
@@ -92,14 +91,16 @@ class Database {
     this.softwaresRef
       .doc(`${softwareID}`)
       .collection('Reviews')
-      .where('review', '!=', '')
+      .orderBy('date', 'desc')
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-          const date = new Intl.DateTimeFormat('en-US').format(
-            doc.data().date.toDate()
-          );
-          reviews.push({ ...doc.data(), date });
+          if(doc.data().review !== '') {
+            const date = new Intl.DateTimeFormat('en-US').format(
+              doc.data().date.toDate()
+            );
+            reviews.push({ ...doc.data(), date });
+          }
         });
         cb(reviews);
       })

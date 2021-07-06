@@ -9,7 +9,7 @@ class ReviewsList extends Component {
     return (
       <ul className='reviews__list'>
         {reviews.map(review => (
-          <Review review={review} key={uuidv4()} />
+          <Review review={review} key={uuidv4()} maxLength={50}/>
         ))}
       </ul>
     );

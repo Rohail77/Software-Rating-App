@@ -15,7 +15,6 @@ class RouteSelector extends Component {
             path='/software_details/:id'
             component={SoftwareDetailsRouuter}
           />
-          {/* <Route path='/reviews' component={Reviews} /> */}
           <Route
             path='/'
             exact

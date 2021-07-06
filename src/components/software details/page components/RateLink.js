@@ -3,17 +3,13 @@ import { Link } from 'react-router-dom';
 
 class RateLink extends Component {
   render() {
-    const { software } = this.props;
+    const { softwareID } = this.props;
 
     return (
       <Link
-        href='/rate'
         className='rate-link'
         to={{
-          pathname: '/rate',
-          state: {
-            software,
-          },
+          pathname: `/software_details/rate/${softwareID}`,
         }}
       >
         Rate this app

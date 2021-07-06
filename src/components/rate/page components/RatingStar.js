@@ -20,7 +20,7 @@ class RatingStar extends Component {
         <a href='a'>
           <img
             className='star'
-            src={`images/${starType} star.svg`}
+            src={`/images/${starType} star.svg`}
             alt={`${starType} star`}
             onClick={this.handleClick}
           />

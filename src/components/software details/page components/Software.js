@@ -22,7 +22,7 @@ export class Software extends Component {
               <ReviewsCount total_reviews={total_reviews} />
             </div>
           </div>
-          <RateLink software={{ name, developer, id }} />
+          <RateLink softwareID={id} />
         </div>
       </section>
     );

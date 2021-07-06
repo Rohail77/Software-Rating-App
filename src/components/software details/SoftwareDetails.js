@@ -1,6 +1,7 @@
 import { Component, Fragment } from 'react';
 
 import { Link } from 'react-router-dom';
+import HomeLink from '../common/HomeLink';
 import SoftwareDetailsContent from './SoftwareDetailsContent';
 
 class SoftwareDetails extends Component {
@@ -12,14 +13,7 @@ class SoftwareDetails extends Component {
       <Fragment>
         <div className='wrapper software-details-wrapper'>
           <div className='breadcrumbs'>
-            <Link
-              className='page-link'
-              to={{
-                pathname: '/',
-              }}
-            >
-              Home
-            </Link>
+            <HomeLink isActive={false}/>
             <span> \ </span>
             <Link
               className='page-link active-page-link'
