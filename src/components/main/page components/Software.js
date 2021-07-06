@@ -1,28 +1,21 @@
 import React, { Component } from 'react';
 import Stars from '../../common/Stars';
 import { Link } from 'react-router-dom';
+import SoftwareInfo from '../../common/SoftwareInfo';
 
 class software extends Component {
+
   render() {
-    const { name, developer, rating, reviews } = this.props.software;
+    const { name, developer, average_rating, id } = this.props.software;
     return (
       <li className='software'>
         <Link
           to={{
-            pathname: '/software_details',
-            state: { name, developer, rating, reviews },
+            pathname: `/software_details/${id}`,
           }}
         >
-          <img
-            src={`images/software logos/${name.toLowerCase()}.svg`}
-            alt={`${name.toLowerCase()} logo`}
-            className='software__logo'
-          />
-          <div className='software__details'>
-            <p className='software__name'>{name}</p>
-            <p className='software__developer'>{developer}</p>
-          </div>
-          <Stars averageRating={rating.average} />
+          <SoftwareInfo name={name} developer={developer} />
+          <Stars averageRating={average_rating} />
         </Link>
       </li>
     );

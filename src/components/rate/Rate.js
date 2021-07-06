@@ -2,6 +2,7 @@ import { Component } from 'react';
 import SoftwareInfo from '../common/SoftwareInfo';
 import ConfirmationModal from './page components/ConfirmationModal';
 import ReviewForm from './page components/ReviewForm';
+import { Link } from 'react-router-dom';
 
 class Rate extends Component {
   constructor(props) {
@@ -20,16 +21,28 @@ class Rate extends Component {
   }
 
   render() {
-    const { name, developer } = this.props.location.state.software;
+    const { name, developer, id } = this.props.location.state.software;
 
     return (
       <div className='wrapper rate-wrapper'>
         <div className='breadcrumbs'>
-          <a href='/'>Home</a>
+          <Link
+            className='page-link'
+            to={{
+              pathname: '/',
+            }}
+          >
+            Home
+          </Link>
           <span> \ </span>
-          <a href='/software_details' className='page-link'>
+          <Link
+            className='page-link'
+            to={{
+              pathname: '/software_details',
+            }}
+          >
             {name}
-          </a>
+          </Link>
           <span> \ </span>
           <a href='/rate' className='page-link active-page-link'>
             Rate
@@ -40,7 +53,10 @@ class Rate extends Component {
           <SoftwareInfo name={name} developer={developer} />
         </section>
 
-        <ReviewForm showConfirmationModal={this.showConfirmationModal} />
+        <ReviewForm
+          showConfirmationModal={this.showConfirmationModal}
+          softwareID={id}
+        />
 
         {this.state.formSubmitted ? <ConfirmationModal /> : null}
       </div>

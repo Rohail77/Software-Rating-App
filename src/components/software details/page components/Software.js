@@ -1,10 +1,11 @@
 import { Component } from 'react';
+import ReviewsCount from '../../common/ReviewsCount';
 import SoftwareInfo from '../../common/SoftwareInfo';
 import RateLink from './RateLink';
 
 export class Software extends Component {
   render() {
-    const { name, developer, rating, reviews } = this.props.software;
+    const { name, developer, average_rating, total_reviews, id } = this.props;
 
     return (
       <section className='software'>
@@ -13,16 +14,15 @@ export class Software extends Component {
         <div className='feedback-content'>
           <div className='feedback'>
             <div className='feedback__rating'>
-              <span className='rating-qty'>{rating.average}</span>
-              <img src='images/red star.svg' alt='red star' />
+              <span className='rating-qty'>{average_rating}</span>
+              <img src='/images/red star.svg' alt='red star' />
             </div>
             <span> | </span>
             <div className='feedback__reviews'>
-              <span className='reviews-qty'>{reviews}</span>{' '}
-              <span>Reviews</span>
+              <ReviewsCount total_reviews={total_reviews} />
             </div>
           </div>
-          <RateLink software={{ name, developer }} />
+          <RateLink software={{ name, developer, id }} />
         </div>
       </section>
     );

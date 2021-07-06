@@ -1,27 +1,26 @@
 import { Component } from 'react';
-import Rating from './Rating'
+import Rating from './Rating';
 import { v4 as uuidv4 } from 'uuid';
 
 class RatingsList extends Component {
   getStarPercentage(starCount) {
-    return (starCount / this.props.ratingCount) * 100;
+    const { totalStars } = this.props;
+
+    return totalStars === 0 ? 0 : (starCount / totalStars) * 100;
   }
 
   render() {
+    const { stars_count } = this.props;
+
     return (
       <ul className='ratings-list'>
-      {this.props.ratingCategories.map(category => {
-        return (
+        {Object.keys(stars_count).map(star => (
           <Rating
-            ratingPercentage={this.getStarPercentage(
-              category.count
-            )}
-            ratingQty={category.type}
+            ratingPercentage={this.getStarPercentage(stars_count[star])}
+            ratingQty={star}
             key={uuidv4()}
           />
-        );
-      })}
-        
+        ))}
       </ul>
     );
   }

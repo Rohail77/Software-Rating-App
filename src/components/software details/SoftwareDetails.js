@@ -1,38 +1,38 @@
-import { Component } from 'react';
-import Software from './page components/Software';
-import SoftwareDescription from './page components/SoftwareDescription';
-import SoftwareRating from './page components/SoftwareRating';
-import ReviewsSection from './page components/ReviewsSection';
-import { reviews } from '../../data/reviews';
+import { Component, Fragment } from 'react';
+
+import { Link } from 'react-router-dom';
+import SoftwareDetailsContent from './SoftwareDetailsContent';
 
 class SoftwareDetails extends Component {
+
   render() {
-    const { state } = this.props.location;
+    const { software, reviews } = this.props;
 
     return (
-      <div className='wrapper software-details-wrapper'>
-        <div className='breadcrumbs'>
-          <a href='/' className='page-link'>
-            Home
-          </a>
-          <span> \ </span>
-          <a href='/software_details' className='page-link active-page-link'>
-            {state.name}
-          </a>
+      <Fragment>
+        <div className='wrapper software-details-wrapper'>
+          <div className='breadcrumbs'>
+            <Link
+              className='page-link'
+              to={{
+                pathname: '/',
+              }}
+            >
+              Home
+            </Link>
+            <span> \ </span>
+            <Link
+              className='page-link active-page-link'
+              to={{
+                pathname: `/software_details/${software.id}`,
+              }}
+            >
+              {software.name}
+            </Link>
+          </div>
+          <SoftwareDetailsContent software={software} reviews={reviews} />
         </div>
-
-        <Software software={state} />
-
-        <section className='software-description-and-rating'>
-          <SoftwareDescription />
-          <SoftwareRating rating={state.rating} />
-        </section>
-
-        <ReviewsSection
-          reviews={reviews}
-          software={{ name: state.name, developer: state.developer }}
-        />
-      </div>
+      </Fragment>
     );
   }
 }

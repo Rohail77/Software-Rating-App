@@ -2,28 +2,36 @@ import { Component } from 'react';
 import ReviewsList from '../../common/ReviewsList';
 import RateLink from './RateLink';
 import ReviewsLink from './ReviewsLink';
+import ReviewsCount from '../../common/ReviewsCount';
 
 class ReviewsSection extends Component {
   render() {
-    const { reviews, software } = this.props;
+    const { software, reviews } = this.props;
 
     return (
       <section className='reviews'>
         <h2 className='reviews-heading'>Reviews</h2>
         <p className='ask-for-review-para'>Write a review by rating this app</p>
-        <RateLink software={software}/>
+        <RateLink
+          software={{
+            name: software.name,
+            developer: software.developer,
+            id: software.id,
+          }}
+        />
 
         <div className='review-feedback-content'>
-          <div>
-            <span className='reviews-qty'> {reviews.length} </span>
-            <span>Reviews</span>
-          </div>
-          <ReviewsLink data={{ software, reviews }} />
+          <ReviewsCount total_reviews={software.total_reviews} />
+          {software.total_reviews <= 3 ? null : (
+            <ReviewsLink data={{ software, reviews }} />
+          )}
         </div>
 
         <ReviewsList reviews={reviews.slice(0, 3)} />
 
-        <ReviewsLink data={{ software, reviews }} />
+        {software.total_reviews <= 3 ? null : (
+          <ReviewsLink data={{ software, reviews }} />
+        )}
       </section>
     );
   }

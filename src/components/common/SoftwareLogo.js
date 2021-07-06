@@ -3,7 +3,7 @@ function SoftwareLogo(props) {
 
   return (
     <img
-      src={`images/software logos/${name.toLowerCase()}.svg`}
+      src={`/images/software logos/${name.toLowerCase()}.svg`}
       alt={`${name.toLowerCase()} logo`}
       className='software__logo'
     />

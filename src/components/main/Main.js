@@ -2,19 +2,27 @@ import React from 'react';
 import Search from './page components/Search';
 import Software from './page components/Software';
 import { v4 as uuidv4 } from 'uuid';
+import { Link } from 'react-router-dom';
 
 function Main(props) {
+  const { setSoftwareSearchString, softwares, getReviews} = props;
+
   return (
     <div className='wrapper main-wrapper'>
       <div className='breadcrumbs'>
-        <a href='/' className='page-link active-page-link'>
+        <Link
+          className='page-link active-page-link'
+          to={{
+            pathname: '/',
+          }}
+        >
           Home
-        </a>
+        </Link>
       </div>
-      <Search setSoftwareSearchString={props.setSoftwareSearchString} />
+      <Search setSoftwareSearchString={setSoftwareSearchString} />
       <ul className='softwares-list'>
-        {props.softwares.map(software => (
-          <Software software={software} key={uuidv4()} />
+        {softwares.map(software => (
+          <Software software={software} key={uuidv4()} getReviews={getReviews}/>
         ))}
       </ul>
     </div>

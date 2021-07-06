@@ -22,7 +22,7 @@ class PreviousPageButton extends Component {
           disabled={isDisabled}
           style={{ cursor: `${isDisabled ? 'auto' : 'pointer'}` }}
         >
-          <img src='images/left_arrow.svg' alt='left arrow' />
+          <img src='/images/left_arrow.svg' alt='left arrow' />
         </button>
       </li>
     );

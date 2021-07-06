@@ -1,23 +1,40 @@
-import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import { Component } from 'react';
 import './App.css';
-import MainLogic from './components/main/MainLogic';
-import Rate from './components/rate/Rate';
-import Reviews from './components/reviews/Reviews';
-import SoftwareDetails from './components/software details/SoftwareDetails';
+import RouteSelector from './components/RouteSelector';
+import { db } from './database/Database';
 
-function App(props) {
-  return (
-    <Router>
-      <Switch>
-        <Route path='/rate' component={Rate} />
-        <Route path='/software_details' component={SoftwareDetails} />
-        <Route path='/reviews' component={Reviews} />
-        <Route path='/'>
-          <MainLogic />
-        </Route>
-      </Switch>
-    </Router>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      softwares: [],
+    };
+    this.getReviews = this.getReviews.bind(this);
+  }
+
+  getReviews(id) {
+    db.getReviews(id, reviews => console.log(reviews));
+  }
+
+  componentDidMount() {
+    db.getSoftwares(softwares =>
+      this.setState({
+        softwares: softwares,
+      })
+    );
+  }
+
+  render() {
+    const { softwares, reviews } = this.state;
+
+    return (
+      <RouteSelector
+        softwares={softwares}
+        getReviews={this.getReviews}
+        reviews={reviews}
+      />
+    );
+  }
 }
 
 export default App;

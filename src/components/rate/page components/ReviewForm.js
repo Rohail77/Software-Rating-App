@@ -1,6 +1,9 @@
 import { Component } from 'react';
 import FormError from './FormError';
 import RatingSection from './RatingSection';
+import { db } from '../../../database/Database';
+import WaitMessage from './WaitMessage';
+import ReviewLimitMessage from './ReviewLimitMessage';
 
 class ReviewForm extends Component {
   constructor(props) {
@@ -9,13 +12,16 @@ class ReviewForm extends Component {
       username: '',
       review: '',
       rating: 0,
-      isError: false,
-      errorMsg: '',
+      onWait: false,
+    };
+    this.data = {
+      maxReviewLength: 3000,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setRating = this.setRating.bind(this);
-    this.hideError = this.hideError.bind(this);
+    this.afterSave = this.afterSave.bind(this);
+    this.saveData = this.saveData.bind(this);
   }
 
   handleChange(event) {
@@ -33,61 +39,71 @@ class ReviewForm extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.validate()
-      ? this.setState(
-          {
-            username: '',
-            review: '',
-            isError: false,
-            errorMsg: '',
-            rating:0
-          },
-          this.props.showConfirmationModal
-        )
-      : this.showError();
+    this.wait();
   }
 
-  showError() {
+  saveData() {
+    const { username, rating, review } = this.state;
+    db.addRating(
+      this.props.softwareID,
+      {
+        username,
+        rating,
+        review,
+      },
+      this.afterSave
+    );
+  }
+
+  wait() {
     this.setState(
       {
-        isError: true,
-        errorMsg: 'Please fill all the required fields *',
+        onWait: true,
       },
-      this.hideError
+      this.saveData
     );
   }
 
-  hideError() {
-    setTimeout(
-      () =>
-        this.setState({
-          isError: false,
-          errorMsg: '',
-        }),
-      3000
+  afterSave() {
+    this.setState(
+      {
+        username: '',
+        review: '',
+        rating: 0,
+        onWait: false,
+      },
+      this.props.showConfirmationModal
     );
   }
 
-  validate() {
-    if (this.state.rating === 0 || this.state.username === '') {
-      return false;
-    } return true
+  isIncomplete() {
+    const { rating, review, username } = this.state;
+    const { maxReviewLength } = this.data;
+    return (
+      rating === 0 || review.length >= maxReviewLength || username.length <= 0
+    );
   }
 
   render() {
-    const { rating, isError, errorMsg, username, review } = this.state;
+    const { rating, isComplete, errorMsg, username, review, onWait } =
+      this.state;
+    const { maxReviewLength } = this.data;
 
     return (
       <form className='review-form' onSubmit={this.handleSubmit}>
         <RatingSection setRating={this.setRating} rating={rating} />
         <div>
-          <label htmlFor='review'> Write a review (optional) </label>
+          <label htmlFor='review'>Review (optional) </label>
+          {review.length >= maxReviewLength ? (
+            <ReviewLimitMessage maxReviewLength={maxReviewLength} />
+          ) : null}
           <textarea
             name='review'
             id='review'
             placeholder='Tell us your experience with the app'
             onChange={this.handleChange}
             value={review}
+            maxLength={maxReviewLength}
           ></textarea>
         </div>
         <div>
@@ -103,10 +119,16 @@ class ReviewForm extends Component {
             value={username}
           />
         </div>
-        <button type='submit' className='submit-btn'>
+        <button
+          type='submit'
+          className={`submit-btn${
+            this.isIncomplete() ? ' submit-btn--disabled' : ''
+          }`}
+        >
           Submit
         </button>
-        {isError ? <FormError errorMsg={errorMsg} /> : null}
+        {isComplete ? null : <FormError errorMsg={errorMsg} />}
+        {onWait ? <WaitMessage /> : null}
       </form>
     );
   }

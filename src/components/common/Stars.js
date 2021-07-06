@@ -8,7 +8,7 @@ class Stars extends Component {
   }
 
   getTotalWhiteStars() {
-    const {averageRating} = this.props;
+    const { averageRating } = this.props;
     return Number.isInteger(averageRating)
       ? 5 - averageRating
       : 5 - Math.ceil(averageRating);
@@ -16,12 +16,15 @@ class Stars extends Component {
 
   getStarTypes() {
     const starTypes = [];
+    const { averageRating } = this.props;
+
     for (let i = 1; i <= this.getTotalRedStars(); i++) {
       starTypes.push('red star');
     }
 
-    if (this.getTotalRedStars() < 5 && !Number.isInteger())
+    if (this.getTotalRedStars() < 5 && !Number.isInteger(averageRating)) {
       starTypes.push('half filled red star');
+    }
 
     for (let i = 1; i <= this.getTotalWhiteStars(); i++) {
       starTypes.push('white star');

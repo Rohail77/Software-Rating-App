@@ -1,15 +1,18 @@
 import { Component } from 'react';
 import Software from './page components/Software';
 import ReviewsList from '../common/ReviewsList';
-import FilterRatingForm from './page components/FilterRatingForm';
 import ReviewPages from './page components/ReviewPages';
+import RateLink from '../software details/page components/RateLink';
+import ReviewsInfo from './page components/ReviewsInfo';
+import { Link } from 'react-router-dom';
 
 class Reviews extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      reviews: this.props.location.state.reviews,
       currentPage: 1,
+      star: 'all',
+      reviews: this.props.reviews,
     };
     this.filterReviews = this.filterReviews.bind(this);
     this.updateCurrentPage = this.updateCurrentPage.bind(this);
@@ -22,20 +25,23 @@ class Reviews extends Component {
   }
 
   filterReviews(category) {
-    const { reviews } = this.props.location.state;
+    const { reviews } = this.props;
     this.setState(state => {
       return {
         reviews:
           category === 'all'
             ? reviews
-            : reviews.filter(review => review.star === category),
-        currentPage: 1
+            : reviews.filter(
+                review => review.rating === Number.parseInt(category)
+              ),
+        currentPage: 1,
       };
     });
   }
 
   getReviewsForCurrentPage() {
-    return this.state.reviews.slice(
+    const { reviews } = this.state;
+    return reviews.slice(
       this.getInitialReviewNumberForCurrentPage(),
       this.getInitialReviewNumberForCurrentPage() + 10
     );
@@ -46,26 +52,43 @@ class Reviews extends Component {
   }
 
   getTotalPages() {
-    return Math.ceil(this.state.reviews.length / 10);
+    const { reviews } = this.state;
+    return Math.ceil(reviews.length / 10);
   }
 
   render() {
-    const { software } = this.props.location.state;
+    const { software } = this.props;
+    const { reviews } = this.state;
 
     return (
       <div className='wrapper reviews-wrapper'>
         <div className='breadcrumbs'>
-          <a href='/' className='page-link'>
+          <Link
+            className='page-link'
+            to={{
+              pathname: '/',
+            }}
+          >
             Home
-          </a>
+          </Link>
           <span> \ </span>
-          <a href='/software_details' className='page-link'>
+          <Link
+            className='page-link'
+            to={{
+              pathname: `/software_details/${software.id}`,
+            }}
+          >
             {software.name}
-          </a>
+          </Link>
           <span> \ </span>
-          <a href='/reviews' className='page-link active-page-link'>
+          <Link
+            className='page-link active-page-link'
+            to={{
+              pathname: `/software_details/reviews/${software.id}`,
+            }}
+          >
             Reviews
-          </a>
+          </Link>
         </div>
 
         <Software software={software} />
@@ -75,18 +98,22 @@ class Reviews extends Component {
           <p className='ask-for-review-para'>
             Write a review by rating this app
           </p>
-          <a href='rate.html' className='rate-link'>
-            Rate this app
-          </a>
 
-          <FilterRatingForm filterReviews={this.filterReviews} />
+          <RateLink software={software} />
+
+          <ReviewsInfo
+            filterReviews={this.filterReviews}
+            total_reviews={reviews.length}
+          />
 
           <ReviewsList reviews={this.getReviewsForCurrentPage()} />
-          <ReviewPages
-            totalPages={this.getTotalPages()}
-            currentPage={this.state.currentPage}
-            updateCurrentPage={this.updateCurrentPage}
-          />
+          {this.getTotalPages() === 0 ? null : (
+            <ReviewPages
+              totalPages={this.getTotalPages()}
+              currentPage={this.state.currentPage}
+              updateCurrentPage={this.updateCurrentPage}
+            />
+          )}
         </section>
       </div>
     );

@@ -9,7 +9,7 @@ class Rating extends Component {
         <li className='rating'>
           <div className='rating__type'>
             <span className='rating-qty'>{ratingQty}</span>
-            <img src='images/red star.svg' alt='red star' />
+            <img src='/images/red star.svg' alt='red star' />
           </div>
           <div className='rating__growth'>
             <div

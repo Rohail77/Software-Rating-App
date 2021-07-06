@@ -11,8 +11,8 @@ class ReviewsLink extends Component {
       <Link
         className='reviews-link'
         to={{
-          pathname: '/reviews',
-          state: data
+          pathname: `/software_details/reviews/${data.software.id}`,
+          // state: data
         }}
       >
         {' '}

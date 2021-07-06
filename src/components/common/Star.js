@@ -5,7 +5,7 @@ class Star extends Component {
     const {starType} = this.props;
     return (
       <li className='star'>
-        <img src={`images/${starType}.svg`} alt={starType} />
+        <img src={`/images/${starType}.svg`} alt={starType} />
       </li>
     );
   }

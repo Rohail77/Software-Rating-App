@@ -10,13 +10,17 @@ class FilterRatingForm extends Component {
   }
 
   handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value,
-    }, this.filterReviews);
+    this.setState(
+      {
+        [event.target.name]: event.target.value,
+      },
+      this.filterReviews
+    );
   }
 
   filterReviews() {
-    this.props.filterReviews(this.state.category);
+    const { category } = this.state;
+    this.props.filterReviews(category);
   }
 
   render() {
