@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import './App.css';
-import RouteSelector from './components/RouteSelector';
+import AppRouter from './components/AppRouter';
 import { db } from './database/Database';
 
 class App extends Component {
@@ -8,32 +8,38 @@ class App extends Component {
     super(props);
     this.state = {
       softwares: [],
+      onWait: true
     };
-    this.getReviews = this.getReviews.bind(this);
-  }
-
-  getReviews(id) {
-    db.getReviews(id, reviews => console.log(reviews));
+    this.onSoftwareUpdate = this.onSoftwareUpdate.bind(this);
   }
 
   componentDidMount() {
-    db.getSoftwares(softwares =>
-      this.setState({
-        softwares: softwares,
-      })
+    db.getSoftwares(
+      softwares =>
+        this.setState({
+          softwares: softwares,
+          onWait: false
+        }),
+      this.onSoftwareUpdate
     );
   }
 
-  render() {
-    const { softwares, reviews } = this.state;
+  onSoftwareUpdate(updatedSoftware) {
+    this.setState(state => {
+      return {
+        softwares: state.softwares.map(software => {
+          return software.id === updatedSoftware.id
+            ? updatedSoftware
+            : software;
+        }),
+      };
+    });
+  }
 
-    return (
-      <RouteSelector
-        softwares={softwares}
-        getReviews={this.getReviews}
-        reviews={reviews}
-      />
-    );
+  render() {
+    const { softwares, onWait } = this.state;
+
+    return <AppRouter softwares={softwares} onWait={onWait}/>;
   }
 }
 

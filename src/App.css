@@ -326,6 +326,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   max-width: 1280px;
+  margin-bottom: 2.5em;
 }
 .software-details-wrapper .software-description {
   max-width: 550px;
@@ -596,7 +597,7 @@ body {
   color: #dc1f1f;
   font-weight: 500;
 }
-.rate-wrapper .wait-msg {
+.wait-msg {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -605,10 +606,12 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
+}
+.rate-wrapper .wait-msg {
   background: black;
   opacity: 0.95;
 }
-.rate-wrapper .wait-msg img {
+.wait-msg img {
   animation: spin 2s linear infinite;
 }
 @keyframes spin {
@@ -633,24 +636,32 @@ body {
 }
 .rate-wrapper .confirmation-modal {
   background-color: #f6f6f6;
-  padding: 1em 2em;
-  margin: 3em 0;
-  border-radius: 10px;
+  padding: 1em;
+  margin: 0 0.5em;
+  border-radius: 8px;
   font-size: 1.5rem;
   line-height: 2rem;
-  max-width: 400px;
+  max-width: 450px;
+  width: max(32%, 200px);
+}
+.rate-wrapper .confirmation-modal__buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5em;
 }
 .rate-wrapper .confirmation-modal a {
   background-color: #dc1f1f;
-  border-radius: 4px;
+  border-radius: 3px;
   color: white;
   padding-top: 0.4em;
   padding-bottom: 0.4em;
-  padding-left: 1.5em;
-  padding-right: 1.5em;
+  padding-left: 1em;
+  padding-right: 1em;
   text-align: center;
-  margin-left: auto;
   font-size: 1.3rem;
+}
+.rate-wrapper .confirmation-modal a + a {
+  margin-left: 0.6em;
 }
 
 /*========================
@@ -666,7 +677,7 @@ body {
     grid-template-columns: 1fr;
   }
   .software-details-wrapper .software-rating {
-    margin: 3em 0 3em 0;
+    margin: 2.5em 0 0 0;
   }
 }
 @media (max-width: 650px) {
@@ -711,9 +722,9 @@ body {
   .reviews-wrapper .reviews .rate-link {
     margin: 0 auto;
   }
-  .software-details-wrapper .review__info,
-  .reviews-wrapper .review__info {
-    justify-content: center;
+  .reviews-wrapper .review,
+  .software-details-wrapper .review {
+    text-align: left;
   }
   .software-details-wrapper .review__info .review-date,
   .reviews-wrapper .review__info .review-date {

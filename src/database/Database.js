@@ -5,15 +5,56 @@ import { reviews } from './data/reviews';
 class Database {
   constructor() {
     this.softwaresRef = database.collection('Softwares');
+    // this.bindUpdaterToSoftwares();
   }
 
-  getSoftwares(cb) {
-    const softwares = [];
+  // bindUpdaterToSoftwares() {
+  //   this.softwaresRef.onSnapshot(querySnapshot => {
+  //     querySnapshot.forEach(doc => {
+  //       console.log('Updated Softwares Collection: ', doc.data());
+  //     });
+  //   });
+  // }
 
+  bindUpdaterToSoftware(softwareID, onUpdateCb) {
+    this.softwaresRef
+      .doc(`${softwareID}`)
+      .onSnapshot({ includeMetadataChanges: true }, doc => {
+        onUpdateCb({ id: doc.id, ...doc.data() });
+        // console.log('Updated Software: ', doc.data());
+      });
+  }
+
+  bindUpdaterToReviews(softwareID) {
+    this.softwaresRef
+      .doc(`${softwareID}`)
+      .collection('Reviews')
+      .onSnapshot(querySnapshot => {
+        // console.log('Updated Review');
+        querySnapshot.forEach(doc => {
+          // console.log('Updated Reviews for Software: ', doc.data());
+        });
+      });
+  }
+
+  bindUpdaterToReview(softwareID, username) {
+    this.softwaresRef
+      .doc(`${softwareID}`)
+      .collection('Reviews')
+      .doc(`${username}`)
+      .onSnapshot(doc => {
+        console.log('Updated User Review: ', doc.data());
+      });
+  }
+
+  getSoftwares(cb, onUpdateCb) {
+    const softwares = [];
     this.softwaresRef
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
+          this.bindUpdaterToReviews(doc.id);
+          this.bindUpdaterToSoftware(doc.id, onUpdateCb);
           softwares.push({ id: doc.id, ...doc.data() });
         });
         cb(softwares);
@@ -95,7 +136,7 @@ class Database {
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-          if(doc.data().review !== '') {
+          if (doc.data().review !== '') {
             const date = new Intl.DateTimeFormat('en-US').format(
               doc.data().date.toDate()
             );
