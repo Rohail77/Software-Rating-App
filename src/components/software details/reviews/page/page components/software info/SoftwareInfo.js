@@ -1,12 +1,11 @@
 import SoftwareBasicInfo from '../../../../../common/software basic info/SoftwareBasicInfo';
 
-function Software(props) {
-
+function SoftwareInfo(props) {
   return (
     <section className='software'>
-      <SoftwareBasicInfo {...props.software} />
+      <SoftwareBasicInfo {...props} />
     </section>
   );
 }
 
-export default Software
+export default SoftwareInfo;

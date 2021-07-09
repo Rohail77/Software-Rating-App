@@ -1,11 +1,6 @@
-import { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-class ConfirmationModal extends Component {
-  render() {
-
-    const {softwareID} = this.props;
-
+function ConfirmationModal({softwareID}) {
     return (
       <div className='confirmation-modal-overlay'>
         <div className='confirmation-modal'>
@@ -29,7 +24,7 @@ class ConfirmationModal extends Component {
         </div>
       </div>
     );
-  }
+  
 }
 
 export default ConfirmationModal;

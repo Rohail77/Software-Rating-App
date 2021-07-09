@@ -1,10 +1,6 @@
-import React from 'react'
 import SoftwareBasicInfo from '../../../../../common/software basic info/SoftwareBasicInfo';
 
-function Software(props) {
-
-  const {name, developer} = props;
-
+function Software({name, developer}) {
   return (
     <section className='software'>
       <SoftwareBasicInfo name={name} developer={developer} />

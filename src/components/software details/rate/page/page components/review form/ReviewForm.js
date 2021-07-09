@@ -13,6 +13,9 @@ class ReviewForm extends Component {
       rating: 0,
       onWait: false,
     };
+    this.data = {
+      maxReviewLength: 3000
+    }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setRating = this.setRating.bind(this);

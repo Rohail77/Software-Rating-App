@@ -1,5 +1,4 @@
-function SoftwareDetails(props) {
-  const { name, developer } = props;
+function SoftwareDetails({ name, developer }) {
 
   return (
     <div className='software__details'>

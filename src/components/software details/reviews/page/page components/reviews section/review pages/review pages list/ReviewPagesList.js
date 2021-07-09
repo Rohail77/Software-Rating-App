@@ -1,20 +1,17 @@
-import { Component } from 'react';
 import ReviewPage from './review page/ReviewPage';
 import { v4 as uuidv4 } from 'uuid';
 import PreviousPageButton from './page navigation buttons/PreviousPageButton';
 import NextPageButton from './page navigation buttons/NextPageButton';
 
-class ReviewPagesList extends Component {
-  endPagesNotReached() {
-    const { currentPage, totalPages } = this.props;
+function ReviewPagesList({ currentPage, totalPages, updateCurrentPage }) {
+  function endPagesNotReached() {
     return currentPage + 2 <= totalPages;
   }
 
-  getPageNumbers() {
-    const { currentPage, totalPages } = this.props;
+  function getPageNumbers() {
     const pageNumbers = [];
 
-    if (this.endPagesNotReached()) {
+    if (endPagesNotReached()) {
       for (
         let pageNumber = currentPage;
         pageNumber <= currentPage + 2;
@@ -34,42 +31,36 @@ class ReviewPagesList extends Component {
     return pageNumbers;
   }
 
-  disablePreviousPageButton() {
-    const { currentPage } = this.props;
+  function disablePreviousPageButton() {
     return currentPage === 1;
   }
 
-  disableNextPageButton() {
-    const { currentPage, totalPages } = this.props;
+  function disableNextPageButton() {
     return currentPage === totalPages;
   }
 
-  render() {
-    const { currentPage, updateCurrentPage } = this.props;
-
-    return (
-      <ul className='review-pages__list'>
-        <PreviousPageButton
-          isDisabled={this.disablePreviousPageButton()}
-          currentPage={currentPage}
+  return (
+    <ul className='review-pages__list'>
+      <PreviousPageButton
+        isDisabled={disablePreviousPageButton()}
+        currentPage={currentPage}
+        updateCurrentPage={updateCurrentPage}
+      />
+      {getPageNumbers().map(pageNumber => (
+        <ReviewPage
+          pageNumber={pageNumber}
           updateCurrentPage={updateCurrentPage}
+          isActive={pageNumber === currentPage}
+          key={uuidv4()}
         />
-        {this.getPageNumbers().map(pageNumber => (
-          <ReviewPage
-            pageNumber={pageNumber}
-            updateCurrentPage={updateCurrentPage}
-            isActive={pageNumber === currentPage}
-            key={uuidv4()}
-          />
-        ))}
-        <NextPageButton
-          isDisabled={this.disableNextPageButton()}
-          currentPage={currentPage}
-          updateCurrentPage={updateCurrentPage}
-        />
-      </ul>
-    );
-  }
+      ))}
+      <NextPageButton
+        isDisabled={disableNextPageButton()}
+        currentPage={currentPage}
+        updateCurrentPage={updateCurrentPage}
+      />
+    </ul>
+  );
 }
 
 export default ReviewPagesList;

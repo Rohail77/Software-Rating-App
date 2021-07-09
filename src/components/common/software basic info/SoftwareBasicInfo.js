@@ -4,7 +4,6 @@ import { Fragment  } from 'react';
 
 function SoftwareBasicInfo(props) {
   const { name } = props;
-
   return (
     <Fragment>
       <SoftwareLogo name={name} />

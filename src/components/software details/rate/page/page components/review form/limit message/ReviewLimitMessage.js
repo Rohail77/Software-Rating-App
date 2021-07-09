@@ -1,5 +1,4 @@
-function ReviewLimitMessage(props) {
-  const { maxReviewLength } = props;
+function ReviewLimitMessage({ maxReviewLength }) {
   return (
     <p className='review-limit-msg'>
       * Reached max characters ({maxReviewLength}) for review.

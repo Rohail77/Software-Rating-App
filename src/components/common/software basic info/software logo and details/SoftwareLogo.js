@@ -1,5 +1,4 @@
-function SoftwareLogo(props) {
-  const { name } = props;
+function SoftwareLogo({name}) {
 
   return (
     <img

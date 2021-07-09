@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import HomeLink from '../../../common/home link/HomeLink';
 import Software from './page components/software info/Software';
 
-class Rate extends Component {
+class RatePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -63,4 +63,4 @@ class Rate extends Component {
   }
 }
 
-export default Rate;
+export default RatePage;

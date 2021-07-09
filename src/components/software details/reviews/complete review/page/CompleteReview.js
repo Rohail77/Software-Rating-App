@@ -35,9 +35,21 @@ class CompleteReview extends Component {
           <span> \ </span>
           <Link
             className='page-link active-page-link'
-            to={{
-              pathname: `/software_details/${id}/reviews/review/${review.username}`,
-            }}
+            to={
+              fromSoftwareDetailsPage
+                ? {
+                    pathname: `/software_details/${id}/reviews/review/${review.username}`,
+                    state: {
+                      fromSoftwareDetailsPage,
+                    },
+                  }
+                : {
+                    pathname: `/software_details/${id}/reviews/review/${review.username}`,
+                    state: {
+                      fromSoftwareDetailsPage: false
+                    },
+                  }
+            }
           >
             {' '}
             Review

@@ -1,4 +1,3 @@
-
 function WaitMessage() {
   return (
     <div className="wait-msg">

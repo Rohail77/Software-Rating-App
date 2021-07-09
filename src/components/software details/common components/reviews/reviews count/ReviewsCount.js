@@ -1,9 +1,4 @@
-import React from 'react'
-
-function ReviewsCount(props) {
-
-  const {total_reviews} = props;
-
+function ReviewsCount({ total_reviews }) {
   return (
     <div>
       <span className='reviews-qty'> {total_reviews} </span>
@@ -14,4 +9,4 @@ function ReviewsCount(props) {
   );
 }
 
-export default ReviewsCount
+export default ReviewsCount;

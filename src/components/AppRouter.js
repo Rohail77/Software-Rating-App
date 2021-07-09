@@ -18,8 +18,11 @@ class AppRouter extends Component {
             path='/software_details/:id'
             render={props => {
               const { id } = props.match.params;
+              const software = this.getSoftware(id)
               return (
-                <SoftwareDetailsRouterLogic software={this.getSoftware(id)} />
+                software ?
+                <SoftwareDetailsRouterLogic software={software} /> :
+                <NotFound />
               );
             }}
           />

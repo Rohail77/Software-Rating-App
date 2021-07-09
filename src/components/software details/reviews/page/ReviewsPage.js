@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import Software from './page components/software info/Software';
+import SoftwareInfo from './page components/software info/SoftwareInfo';
 import ReviewsList from '../../common components/reviews/review list/ReviewsList';
 import ReviewPages from './page components/reviews section/review pages/ReviewPages';
 import RateLink from '../../common components/common links/RateLink';
@@ -7,7 +7,7 @@ import ReviewsInfo from './page components/reviews section/reviews info/ReviewsI
 import { Link } from 'react-router-dom';
 import HomeLink from '../../../common/home link/HomeLink';
 
-class Reviews extends Component {
+class ReviewsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -85,7 +85,7 @@ class Reviews extends Component {
           </Link>
         </div>
 
-        <Software software={software} />
+        <SoftwareInfo name={software.name} developer={software.developer} />
 
         <section className='reviews'>
           <h2 className='reviews-heading'>Reviews</h2>
@@ -100,7 +100,10 @@ class Reviews extends Component {
             total_reviews={reviews.length}
           />
 
-          <ReviewsList reviews={this.getReviewsForCurrentPage()} softwareID={software.id}/>
+          <ReviewsList
+            reviews={this.getReviewsForCurrentPage()}
+            softwareID={software.id}
+          />
           {this.getTotalPages() === 0 ? null : (
             <ReviewPages
               totalPages={this.getTotalPages()}
@@ -114,4 +117,4 @@ class Reviews extends Component {
   }
 }
 
-export default Reviews;
+export default ReviewsPage;
