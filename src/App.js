@@ -8,7 +8,7 @@ class App extends Component {
     super(props);
     this.state = {
       softwares: [],
-      onWait: true
+      onWait: true,
     };
     this.onSoftwareUpdate = this.onSoftwareUpdate.bind(this);
   }
@@ -18,7 +18,7 @@ class App extends Component {
       softwares =>
         this.setState({
           softwares: softwares,
-          onWait: false
+          onWait: false,
         }),
       this.onSoftwareUpdate
     );
@@ -37,9 +37,7 @@ class App extends Component {
   }
 
   render() {
-    const { softwares, onWait } = this.state;
-
-    return <AppRouter softwares={softwares} onWait={onWait}/>;
+    return <AppRouter {...this.state} />;
   }
 }
 

@@ -1,33 +1,22 @@
-import { Component } from 'react';
-
-class Search extends Component {
-  constructor(props) {
-    super(props);
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick(event) {
+function Search({ setSoftwareSearchString, softwareSearchInput }) {
+  function handleClick(event) {
     event.preventDefault();
-    const { setSoftwareSearchString, softwareSearchInput } = this.props;
     setSoftwareSearchString(softwareSearchInput.current.value);
   }
 
-  render() {
-    const { softwareSearchInput } = this.props;
-    return (
-      <div className='search'>
-        <a className='search__img' href='null' onClick={this.handleClick}>
-          <img src='images/search.svg' alt='magnifying glass' />
-        </a>
-        <input
-          type='text'
-          name='name'
-          placeholder='Search'
-          ref={softwareSearchInput}
-        />
-      </div>
-    );
-  }
+  return (
+    <div className='search'>
+      <a className='search__img' href='null' onClick={handleClick}>
+        <img src='images/search.svg' alt='magnifying glass' />
+      </a>
+      <input
+        type='text'
+        name='name'
+        placeholder='Search'
+        ref={softwareSearchInput}
+      />
+    </div>
+  );
 }
 
 export default Search;

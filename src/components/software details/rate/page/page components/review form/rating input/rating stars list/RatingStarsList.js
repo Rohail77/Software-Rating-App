@@ -1,9 +1,8 @@
 import RatingStar from './RatingStar';
 import { v4 as uuidv4 } from 'uuid';
 
-function RatingStarsList(props) {
+function RatingStarsList({ rating, setRating }) {
   function getStarTypes() {
-    const { rating } = props;
     const starTypes = [];
     for (let starNumber = 0; starNumber < rating; starNumber++) {
       starTypes.push('red');
@@ -18,7 +17,7 @@ function RatingStarsList(props) {
     <ul className='stars-list'>
       {getStarTypes().map((starType, index) => (
         <RatingStar
-          {...props}
+          setRating={setRating}
           starType={starType}
           starNumber={index + 1}
           key={uuidv4()}
