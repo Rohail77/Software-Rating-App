@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import RatingInput from './rating input/RatingInput';
 import { db } from '../../../../../../database/Database';
-import WaitMessage from '../wait message/WaitMessage';
+import WaitMessage from '../../../../../common/wait message/WaitMessage';
 import ReviewLimitMessage from './limit message/ReviewLimitMessage';
 
 class ReviewForm extends Component {

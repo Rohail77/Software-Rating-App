@@ -3,7 +3,8 @@ import Search from './page components/search/Search';
 import Software from './page components/software info/Software';
 import { v4 as uuidv4 } from 'uuid';
 import { Link } from 'react-router-dom';
-import WaitMessage from '../../software details/rate/page/page components/wait message/WaitMessage';
+import WaitMessage from '../../common/wait message/WaitMessage';
+import Account from './page components/account/Account';
 
 function MainPage({ setSoftwareSearchString, softwares, onWait }) {
   const softwareSearchInput = createRef();
@@ -19,17 +20,21 @@ function MainPage({ setSoftwareSearchString, softwares, onWait }) {
 
   return (
     <div className='wrapper main-wrapper'>
-      <div className='breadcrumbs'>
-        <Link
-          className='page-link active-page-link'
-          to={{
-            pathname: '/',
-          }}
-          onClick={onHomePageClick}
-        >
-          Home
-        </Link>
-      </div>
+      <header>
+        <div className='breadcrumbs'>
+          <Link
+            className='page-link active-page-link'
+            to={{
+              pathname: '/',
+            }}
+            onClick={onHomePageClick}
+          >
+            Home
+          </Link>
+        </div>
+
+        <Account />
+      </header>
       <Search
         setSoftwareSearchString={setSoftwareSearchString}
         softwareSearchInput={softwareSearchInput}

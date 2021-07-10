@@ -179,50 +179,5 @@ export const db = new Database();
 //       5: 0,
 //     },
 //     total_reviews: 0,
-//   },
-//   {
-//     name: 'Skype',
-//     developer: 'Microsoft',
-//     average_rating: 0,
-//     description:
-//       'Skype is a proprietary telecommunications application that specializes in providing VoIP-based videotelephony, videoconferencing and voice calls. It also has instant messaging, file transfer, debit-based calls to landline and mobile telephones, and other features.',
-//     stars_count: {
-//       1: 0,
-//       2: 0,
-//       3: 0,
-//       4: 0,
-//       5: 0,
-//     },
-//     total_reviews: 0,
-//   },
-//   {
-//     name: 'Visual Studio Code',
-//     developer: 'Microsoft',
-//     average_rating: 0,
-//     description:
-//       'Visual Studio Code is a source-code editor made by Microsoft for Windows, Linux and macOS. Features include support for debugging, syntax highlighting, intelligent code completion, snippets, code refactoring, and embedded Git.',
-//     stars_count: {
-//       1: 0,
-//       2: 0,
-//       3: 0,
-//       4: 0,
-//       5: 0,
-//     },
-//     total_reviews: 0,
-//   },
-//   {
-//     name: 'Figma',
-//     developer: 'Figma, Inc',
-//     average_rating: 0,
-//     description:
-//       'Figma is a vector graphics editor and prototyping tool which is primarily web-based, with additional offline features enabled by desktop applications for macOS and Windows. The Figma Mirror companion apps for Android and iOS allow viewing Figma prototypes in real-time on mobile devices.',
-//     stars_count: {
-//       1: 0,
-//       2: 0,
-//       3: 0,
-//       4: 0,
-//       5: 0,
-//     },
-//     total_reviews: 0,
-//   },
+//   }
 // ];

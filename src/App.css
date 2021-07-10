@@ -54,7 +54,10 @@ body {
 .rate-link,
 .reviews-link,
 .active-page-link,
-.see-more-link {
+.see-more-link,
+.gateway-wrapper .gateway-para .gateway-link,
+.main-wrapper header .signin-link,
+.main-wrapper header .signout-link {
   color: #dc1f1f;
   text-decoration: underline;
 }
@@ -179,7 +182,15 @@ body {
 .review-wrapper .software__developer {
   font-size: 1.3rem;
 }
-
+.review-wrapper .back-link,
+.gateway-wrapper .back-link {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #dc1f1f;
+  display: flex;
+  align-items: center;
+  margin: 0 0 1.3em -0.3em;
+}
 .breadcrumbs {
   display: flex;
   flex-wrap: wrap;
@@ -200,6 +211,18 @@ body {
 .main-wrapper .home-link {
   color: #dc1f1f;
   text-decoration: underline;
+}
+.main-wrapper header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.main-wrapper .account {
+  font-size: 1.4rem;
+}
+.main-wrapper header .account .signin-link,
+.main-wrapper header .account .signout-link {
+  font-weight: 700;
 }
 .main-wrapper .search {
   position: relative;
@@ -496,14 +519,7 @@ body {
 .review-wrapper .review {
   margin: 0 auto;
 }
-.review-wrapper .back-link {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #dc1f1f;
-  display: flex;
-  align-items: center;
-  margin: 0 0 1.3em -0.3em;
-}
+
 /*========================
     Rate Page Styling
 ==========================*/
@@ -709,6 +725,136 @@ body {
   border-radius: 4px;
 }
 
+/*=================================
+    SignIn / SignUpPage Stytling
+==================================*/
+
+.gateway-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gateway-wrapper .gateway-form-section {
+  width: min(350px, 100%);
+  margin: 0 0.5em;
+  font-size: 1.4rem;
+}
+
+.gateway-wrapper .gateway-para,
+.gateway-wrapper .gateway-form {
+  padding-left: 2.5em;
+}
+.gateway-wrapper .back-link {
+  margin-bottom: 2em;
+  font-size: 1.6rem;
+}
+
+.gateway-wrapper .gateway-form {
+  border-left: 3px solid #dc1f1f;
+}
+
+.gateway-wrapper .gateway-form .main-h {
+  font-weight: 700;
+  font-size: 40px;
+  margin-bottom: 0.6em;
+}
+
+.gateway-wrapper .gateway-form div {
+  display: grid;
+  grid-gap: 0.5em;
+}
+
+.gateway-wrapper .gateway-form label {
+  font-weight: 700;
+}
+
+.gateway-wrapper .gateway-form div input {
+  border: 0.5px solid #686767;
+  border-radius: 5px;
+  padding: 0.55em 1em;
+}
+
+.gateway-wrapper .gateway-form div + div {
+  margin-top: 1.5em;
+}
+
+.gateway-wrapper .gateway-form input::placeholder {
+  font-weight: 300;
+  color: #5e5e5e;
+  font-size: 1.2rem;
+}
+
+.gateway-wrapper .gateway-para .gateway-link {
+  display: inline-block;
+}
+
+.gateway-wrapper .gateway-form .submit-btn {
+  background-color: #dc1f1f;
+  color: white;
+  font-weight: 500;
+  padding: 0.6em 1em;
+  border-radius: 4px;
+  margin-left: auto;
+  display: block;
+  margin-top: 1.5em;
+  border: none;
+}
+
+.gateway-form__error {
+  color: #dc1f1f;
+  font-weight: 700;
+  font-size: 1.35rem;
+  margin-top: 1em;
+  line-height: 1.9rem;
+}
+
+.gateway-wrapper .gateway-para {
+  margin-top: 1em;
+  border-left: 3px solid white;
+}
+
+.email-verification-modal-wrapper {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #00000030;
+}
+
+.email-verification-modal {
+  background-color: #2d2b2b;
+  color: white;
+  padding: 1em;
+  border-radius: 7px;
+  max-width: 400px;
+  font-size: 1.4rem;
+  box-shadow: -5px 5px 16px 0px #a0a0a0;
+}
+
+.email-verification-modal p {
+  line-height: 2rem;
+}
+
+.email-verification-modal a {
+  background-color: #dc1f1f;
+  color: white;
+  padding: 0.4em 1em;
+  border-radius: 4px;
+  margin-top: 1.5em;
+  width: 100%;
+  text-align: center;
+}
+
+.gateway-wrapper .wait-msg {
+  background-color: #000000b3;
+}
+
 /*========================
     Media Queries
 ==========================*/
@@ -819,6 +965,11 @@ body {
   }
   .rate-wrapper .review-form #review {
     height: 200px;
+  }
+  .gateway-wrapper .gateway-form,
+  .gateway-wrapper .gateway-para {
+    border-left: none;
+    padding-left: 0;
   }
 }
 @media (max-width: 250px) {
