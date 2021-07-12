@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../../../context/userContext';
 import { authorization } from '../../gateway/auth/Authorization';
 
 class SignoutLink extends Component {
@@ -8,18 +9,28 @@ class SignoutLink extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick(event) {
-    event.preventDefault();
+  handleClick(cb) {
     authorization.signout();
-    const { setLogin } = this.props;
-    setLogin(false);
+    cb(false);
   }
 
   render() {
     return (
-      <Link className='signout-link' onClick={this.handleClick}>
-        Sign out
-      </Link>
+      <UserContext.Consumer>
+        {user => (
+          <Link
+            className='signout-link'
+            onClick={event => {
+              event.preventDefault();
+              this.handleClick(user.setLogin);
+            }}
+            to='/'
+          >
+            <img src='/images/signout.svg' alt='signout' />
+            <span>Signout</span>
+          </Link>
+        )}
+      </UserContext.Consumer>
     );
   }
 }

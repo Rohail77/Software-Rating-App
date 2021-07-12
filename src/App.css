@@ -35,6 +35,11 @@ input[type='submit'] {
   cursor: pointer;
 }
 
+textarea,
+input {
+  font-family: 'Roboto', sans-serif;
+}
+
 body {
   font-size: 1.6rem;
   font-family: 'Roboto', sans-serif;
@@ -56,8 +61,7 @@ body {
 .active-page-link,
 .see-more-link,
 .gateway-wrapper .gateway-para .gateway-link,
-.main-wrapper header .signin-link,
-.main-wrapper header .signout-link {
+.main-wrapper header .signin-link {
   color: #dc1f1f;
   text-decoration: underline;
 }
@@ -204,6 +208,14 @@ body {
 .breadcrumbs .page-link {
   white-space: nowrap;
 }
+.main-wrapper .software a,
+.past-review__software {
+  color: black;
+  display: grid;
+  align-items: center;
+  grid-template-columns: auto 1fr;
+  grid-gap: 1em 1.1em;
+}
 
 /*=========================
     Main Page Styling
@@ -212,17 +224,52 @@ body {
   color: #dc1f1f;
   text-decoration: underline;
 }
-.main-wrapper header {
+.main-wrapper .main-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 .main-wrapper .account {
   font-size: 1.4rem;
+  display: flex;
+  align-items: center;
 }
-.main-wrapper header .account .signin-link,
-.main-wrapper header .account .signout-link {
+.main-wrapper .avatar-container {
+  border-radius: 50%;
+  border: 1px solid #2b2929;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.5em;
+}
+.main-wrapper .account__options {
+  background-color: #2a2929;
+  padding: 1.5em 1.5em;
+  border-radius: 4px;
+  font-size: 1.3rem;
+  position: absolute;
+  top: 40px;
+  right: -15px;
+  z-index: 12;
+}
+.main-wrapper .account__options a {
+  color: white;
+}
+.main-wrapper .account__options .signout-link {
+  display: flex;
+}
+.main-wrapper .account__options .signout-link img {
+  margin-right: 0.2em;
+}
+.main-wrapper .account__options li + li {
+  margin-top: 1.2em;
+}
+.main-wrapper header .signin-link {
   font-weight: 700;
+  font-size: 1.4rem;
 }
 .main-wrapper .search {
   position: relative;
@@ -256,13 +303,6 @@ body {
 }
 .main-wrapper .software {
   margin-bottom: 3em;
-}
-.main-wrapper .software a {
-  color: black;
-  display: grid;
-  align-items: center;
-  grid-template-columns: auto 1fr;
-  grid-gap: 1em 1.1em;
 }
 .main-wrapper .software__logo {
   width: clamp(60px, 4.5vw, 75px);
@@ -547,7 +587,6 @@ body {
 }
 .rate-wrapper .review-form textarea,
 .rate-wrapper .review-form input {
-  font-family: 'Roboto', sans-serif;
   border: 1px solid #686767;
 }
 .rate-wrapper .review-form div + div {
@@ -647,8 +686,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: black;
-  opacity: 0.95;
+  background: #000000b3;
 }
 .rate-wrapper .confirmation-modal {
   background-color: #f6f6f6;
@@ -678,6 +716,76 @@ body {
 }
 .rate-wrapper .confirmation-modal a + a {
   margin-left: 0.6em;
+}
+
+/*===============================
+    Edit Reviews Page Styling
+===============================*/
+
+.edit-reviews-wrapper {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.edit-reviews-wrapper header {
+  margin-top: 2em;
+}
+.edit-reviews-wrapper header .breadcrumbs {
+  margin: 0 auto;
+}
+.edit-reviews-wrapper .ratings-h {
+  text-align: center;
+  margin: 1.5em 0;
+}
+.edit-reviews-wrapper .past-review + .past-review {
+  margin-top: 3em;
+}
+.edit-reviews-wrapper .past-review__basic-info-and-ctas {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.edit-reviews-wrapper .past-review__ctas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.edit-reviews-wrapper .past-review__ctas .edit-btn,
+.edit-reviews-wrapper .past-review__ctas .save-btn {
+  margin-right: 1em;
+}
+.edit-reviews-wrapper .past-review__ctas .save-btn,
+.edit-reviews-wrapper .past-review__ctas .cancel-btn {
+  background-color: #dc1f1f;
+  padding: 0.5em;
+  border-radius: 4px;
+  color: white;
+  font-size: 1.4rem;
+}
+.edit-reviews-wrapper .past-review .stars-list {
+  margin: 1em 0;
+}
+.edit-reviews-wrapper .past-review .stars-list .star {
+  width: 22px;
+  height: 22px;
+}
+.edit-reviews-wrapper .past-review .stars-list .star + .star {
+  margin-left: 0.3em;
+}
+.edit-reviews-wrapper .past-review__software .software__review-date {
+  font-size: 1.25rem;
+}
+.edit-reviews-wrapper .past-review__text {
+  display: block;
+  max-width: 100%;
+  min-width: 100%;
+  min-height: 100px;
+  max-height: 100px;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.4rem;
+  line-height: 2rem;
+  background-color: #f8fbf8;
 }
 
 /*===============================
@@ -893,7 +1001,9 @@ body {
   .wrapper {
     width: 90%;
   }
-
+  .main-wrapper .account__options {
+    right: 0;
+  }
   .main-wrapper .search {
     width: 100%;
   }

@@ -1,7 +1,7 @@
 import { auth } from '../../../config/database_config';
+import { user } from '../../../database/User';
 
 export class Authorization {
-
   signout() {
     auth.signOut();
   }
@@ -12,6 +12,10 @@ export class Authorization {
 
   isSignedin() {
     return auth.currentUser;
+  }
+
+  getEmail() {
+    return auth.currentUser.email;
   }
 
   signup({ email, password }, cb) {
@@ -52,14 +56,19 @@ export class Authorization {
       });
   }
 
+  onLoginDetection(cb) {
+    this.handleLoginDetection = cb;
+  }
+
   setAuthorizationStateObserver() {
-    auth.onAuthStateChanged(user => {
-      if (user) {
+    auth.onAuthStateChanged(aUser => {
+      if (aUser) {
         console.log('user signed in');
-        this.loggedin = true;
+        this.handleLoginDetection(true);
+        user.setUser();
       } else {
+        this.handleLoginDetection(false);
         console.log('user signed out');
-        this.loggedin = false;
       }
     });
   }

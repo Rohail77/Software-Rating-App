@@ -1,28 +1,30 @@
 import { database } from '../config/database_config';
 import firebase from 'firebase';
 import { reviews } from './data/reviews';
+import { user } from '../database/User';
 
 class Database {
   constructor() {
     this.softwaresRef = database.collection('Softwares');
-    // this.bindUpdaterToSoftwares();
+    this.usersRef = database.collection('Users');
   }
 
-  // bindUpdaterToSoftwares() {
-  //   this.softwaresRef.onSnapshot(querySnapshot => {
-  //     querySnapshot.forEach(doc => {
-  //       console.log('Updated Softwares Collection: ', doc.data());
-  //     });
-  //   });
-  // }
+  setUserReference(userEmail) {
+    this.userRef = database.collection('Users').doc(`${userEmail}`);
+  }
 
-  bindUpdaterToSoftware(softwareID, onUpdateCb) {
-    this.softwaresRef
-      .doc(`${softwareID}`)
-      .onSnapshot({ includeMetadataChanges: true }, doc => {
-        onUpdateCb({ id: doc.id, ...doc.data() });
-        // console.log('Updated Software: ', doc.data());
-      });
+  onSoftwareUpdate(cb) {
+    this.handleSoftwareUpdate = cb;
+  }
+
+  onRatingWrite(cb) {
+    this.handleRatingWrite = cb;
+  }
+
+  bindUpdaterToSoftware(softwareID) {
+    this.softwaresRef.doc(`${softwareID}`).onSnapshot(doc => {
+      this.handleSoftwareUpdate({ id: doc.id, ...doc.data() });
+    });
   }
 
   bindUpdaterToReviews(softwareID) {
@@ -30,7 +32,6 @@ class Database {
       .doc(`${softwareID}`)
       .collection('Reviews')
       .onSnapshot(querySnapshot => {
-        // console.log('Updated Review');
         querySnapshot.forEach(doc => {
           // console.log('Updated Reviews for Software: ', doc.data());
         });
@@ -47,14 +48,14 @@ class Database {
       });
   }
 
-  getSoftwares(cb, onUpdateCb) {
+  getSoftwares(cb) {
     const softwares = [];
     this.softwaresRef
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
           this.bindUpdaterToReviews(doc.id);
-          this.bindUpdaterToSoftware(doc.id, onUpdateCb);
+          this.bindUpdaterToSoftware(doc.id);
           softwares.push({ id: doc.id, ...doc.data() });
         });
         cb(softwares);
@@ -64,11 +65,11 @@ class Database {
       });
   }
 
-  addRating(softwareID, data, cb) {
+  writeRating(softwareID, data) {
     this.softwaresRef
       .doc(`${softwareID}`)
       .collection('Reviews')
-      .doc(`${data.username}`)
+      .doc(`${user.email}`)
       .set({ ...data, date: firebase.firestore.Timestamp.now() });
     this.softwaresRef.doc(`${softwareID}`).update({
       total_reviews:
@@ -83,11 +84,11 @@ class Database {
           firebase.firestore.FieldValue.increment(1),
       })
       .then(() => {
-        this.updateAverageRating(softwareID, cb);
+        this.updateAverageRating(softwareID);
       });
   }
 
-  updateAverageRating(softwareID, cb) {
+  updateAverageRating(softwareID) {
     this.softwaresRef
       .doc(`${softwareID}`)
       .get()
@@ -100,21 +101,21 @@ class Database {
           denominator += stars_count[star];
         });
         const averageRating = denominator === 0 ? 0 : numerator / denominator;
-        this.updateAverageRatingHelper(softwareID, averageRating, cb);
+        this.updateAverageRatingHelper(softwareID, averageRating);
       })
       .catch(error => {
         console.log('Error: ', error);
       });
   }
 
-  updateAverageRatingHelper(softwareID, averageRating, cb) {
+  updateAverageRatingHelper(softwareID, averageRating) {
     this.softwaresRef
       .doc(`${softwareID}`)
       .update({
         average_rating: Number(averageRating.toFixed(1)),
       })
       .then(() => {
-        cb();
+        this.handleRatingWrite();
       })
       .catch(error => {
         console.log('Error: ', error);

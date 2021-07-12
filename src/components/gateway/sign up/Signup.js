@@ -2,6 +2,7 @@ import EmailVerificationModal from './email verification modal/EmailVerification
 import FormError from '../form error/FormError';
 import WaitMessage from '../../common/wait message/WaitMessage';
 import { Link } from 'react-router-dom';
+import BackLink from '../sign in/back link/BackLink';
 
 function Signup(props) {
   const {
@@ -14,12 +15,13 @@ function Signup(props) {
     onWait,
     handleChange,
     handleSubmit,
-    isEmailVerified,
+    from,
   } = props;
 
   return (
     <div className='gateway-wrapper'>
       <section className='gateway-form-section'>
+        <BackLink from={from} />
         <form className='gateway-form' onSubmit={handleSubmit}>
           <h1 className='main-h'>Sign Up</h1>
           <div>
@@ -62,6 +64,9 @@ function Signup(props) {
             className='gateway-link'
             to={{
               pathname: '/signin',
+              state: {
+                from,
+              },
             }}
           >
             Sign in{' '}
@@ -72,7 +77,6 @@ function Signup(props) {
       {signedUp ? (
         <EmailVerificationModal
           email={email}
-          isEmailVerified={isEmailVerified}
         />
       ) : null}
       {onWait ? <WaitMessage /> : null}

@@ -1,6 +1,6 @@
 import { Switch, Route } from 'react-router-dom';
 import SoftwareDetailsPage from '../page/SoftwareDetailsPage';
-import RatePage from '../rate/page/RatePage';
+import RatePageLogic from '../rate/page/RatePageLogic';
 import ReviewsRouter from '../reviews/router/ReviewsRouter';
 
 function SoftwareDetailsRouter(props) {
@@ -14,7 +14,7 @@ function SoftwareDetailsRouter(props) {
       <Route
         path='/software_details/:id/rate'
         exact
-        render={() => <RatePage software={software} />}
+        render={() => <RatePageLogic software={software} />}
       />
       <Route
         path='/software_details/:id'

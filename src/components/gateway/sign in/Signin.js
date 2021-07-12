@@ -51,6 +51,9 @@ function Signin(props) {
             className='gateway-link'
             to={{
               pathname: '/signup',
+              state: {
+                from,
+              },
             }}
           >
             Sign up{' '}

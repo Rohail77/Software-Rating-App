@@ -3,19 +3,19 @@ import RatingInput from './rating input/RatingInput';
 import { db } from '../../../../../../database/Database';
 import WaitMessage from '../../../../../common/wait message/WaitMessage';
 import ReviewLimitMessage from './limit message/ReviewLimitMessage';
+import { user } from '../../../../../../database/User';
 
 class ReviewForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
       review: '',
       rating: 0,
       onWait: false,
     };
     this.data = {
-      maxReviewLength: 3000
-    }
+      maxReviewLength: 3000,
+    };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setRating = this.setRating.bind(this);
@@ -51,40 +51,36 @@ class ReviewForm extends Component {
   }
 
   saveData() {
-    const { username, rating, review } = this.state;
-    db.addRating(
-      this.props.softwareID,
-      {
-        username,
-        rating,
-        review,
-      },
-      this.afterSave
-    );
+    const { rating, review } = this.state;
+    db.writeRating(this.props.softwareID, {
+      username: user.name,
+      rating,
+      review,
+    });
+    db.onRatingWrite(this.afterSave);
   }
 
   afterSave() {
+    const { showConfirmationModal, getUpdatedReviews } = this.props;
     this.setState(
       {
-        username: '',
         review: '',
         rating: 0,
         onWait: false,
       },
-      this.props.showConfirmationModal
+      showConfirmationModal
     );
+    getUpdatedReviews();
   }
 
   isIncomplete() {
-    const { rating, review, username } = this.state;
+    const { rating, review } = this.state;
     const { maxReviewLength } = this.data;
-    return (
-      rating === 0 || review.length >= maxReviewLength || username.length <= 0
-    );
+    return rating === 0 || review.length >= maxReviewLength;
   }
 
   render() {
-    const { rating, username, review, onWait } = this.state;
+    const { rating, review, onWait } = this.state;
     const { maxReviewLength } = this.data;
 
     return (
@@ -104,19 +100,7 @@ class ReviewForm extends Component {
             maxLength={maxReviewLength}
           ></textarea>
         </div>
-        <div>
-          <label htmlFor='username'>
-            {' '}
-            Your name <span className='required-arterisk'>*</span>{' '}
-          </label>
-          <input
-            type='text'
-            name='username'
-            id='username'
-            onChange={this.handleChange}
-            value={username}
-          />
-        </div>
+
         <button
           type='submit'
           className={`submit-btn${

@@ -15,7 +15,7 @@ function SoftwareDetailsPage(props) {
     id,
     description,
   } = props.software;
-  const { reviews, dataFetched } = props;
+  const { reviews, reviewsFetched } = props;
 
   return (
     <div className='wrapper software-details-wrapper'>
@@ -47,7 +47,7 @@ function SoftwareDetailsPage(props) {
         />
       </section>
 
-      {dataFetched ? (
+      {reviewsFetched ? (
         <ReviewsSection
           software={{
             name,

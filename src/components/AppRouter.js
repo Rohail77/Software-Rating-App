@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
-import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { UserContext } from '../context/userContext';
+import EditReviewsPage from './edit reviews/EditReviewsPage';
 import SigninLogic from './gateway/sign in/SigninLogic';
 import SignupLogic from './gateway/sign up/SignupLogic';
 import MainPageLogic from './main/page/MainPageLogic';
@@ -14,7 +15,6 @@ function AppRouter(props) {
   }
 
   return (
-    <Router>
       <Switch>
         <Route
           path='/software_details/:id'
@@ -35,14 +35,22 @@ function AppRouter(props) {
             return <MainPageLogic {...props} />;
           }}
         />
+        <Route
+          path='/reviews_history'
+          exact
+          render={() => {
+            return <EditReviewsPage />;
+          }}
+        />
         <UserContext.Consumer>
           {user => (
             <Fragment>
               <Route
                 path='/signup'
                 exact
-                render={() => {
-                  return <SignupLogic setLogin={user.setLogin} />;
+                render={props => {
+                  const { from } = props.location.state;
+                  return <SignupLogic setLogin={user.setLogin} from={from} />;
                 }}
               />
               <Route
@@ -58,7 +66,6 @@ function AppRouter(props) {
         </UserContext.Consumer>
         <Route component={NotFound} />
       </Switch>
-    </Router>
   );
 }
 

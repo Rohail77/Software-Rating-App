@@ -1,7 +1,7 @@
 import { Component, Fragment } from 'react';
 import { authorization } from '../auth/Authorization';
-import SigninLogic from '../sign in/SigninLogic';
 import Signup from './Signup';
+import { user } from '../../../database/User';
 
 class SignupLogic extends Component {
   constructor(props) {
@@ -14,7 +14,6 @@ class SignupLogic extends Component {
       hasError: false,
       errorMsg: '',
       onWait: false,
-      emailVerified: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -45,6 +44,8 @@ class SignupLogic extends Component {
     if (error) {
       this.showError(error);
     } else {
+      const { email, name } = this.state;
+      user.writeUser({ email, name });
       this.setState({
         onWait: false,
         signedUp: true,
@@ -70,20 +71,16 @@ class SignupLogic extends Component {
   }
 
   render() {
-    const { emailVerified } = this.state;
+    const { from } = this.props;
 
     return (
       <Fragment>
-        {emailVerified ? (
-          <SigninLogic />
-        ) : (
-          <Signup
-            {...this.state}
-            handleChange={this.handleChange}
-            handleSubmit={this.handleSubmit}
-            isEmailVerified={this.isEmailVerified}
-          />
-        )}
+        <Signup
+          {...this.state}
+          handleChange={this.handleChange}
+          handleSubmit={this.handleSubmit}
+          from={from}
+        />
       </Fragment>
     );
   }
