@@ -43,14 +43,14 @@ class SigninLogic extends Component {
       authorization.signout();
       this.showError(error);
     } else {
-      const { setLogin } = this.props;
+      const { handleLogin } = this.props;
       this.setState(
         {
           onWait: false,
           hasError: false,
           errorMsg: '',
         },
-        () => setLogin(true)
+        () => handleLogin(true)
       );
     }
   }

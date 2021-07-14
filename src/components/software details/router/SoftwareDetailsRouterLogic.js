@@ -1,10 +1,9 @@
 import { Component } from 'react';
-import { GetReviewsContext } from '../../../context/GetReviewsContext';
 
-import { db } from '../../../database/Database';
+import { db } from '../../../database/Softwares';
 import SoftwareDetailsRouter from './SoftwareDetailsRouter';
 import { user } from '../../../database/User';
-import {CanUserReviewContext} from '../../../context/CanUserReviewContext';
+import { CanUserReviewContext } from '../../../context/CanUserReviewContext';
 
 class SoftwareDetailsRouterLogic extends Component {
   constructor(props) {
@@ -15,11 +14,21 @@ class SoftwareDetailsRouterLogic extends Component {
       canUserReview: false,
     };
     this.getReviews = this.getReviews.bind(this);
+    this.setCanUserReview = this.setCanUserReview.bind(this);
   }
 
   componentDidMount() {
     this.getReviews();
-    this.canUserReview();
+    const { id } = this.props.software;
+    if (user.isSignedin()) user.canReview(id, this.setCanUserReview);
+  }
+
+  setCanUserReview(canUserReview) {
+    const { id } = this.props.software;
+    if (canUserReview) db.bindUpdaterToReview(id, this.getReviews);
+    this.setState({
+      canUserReview,
+    });
   }
 
   getReviews() {
@@ -33,16 +42,6 @@ class SoftwareDetailsRouterLogic extends Component {
     });
   }
 
-  canUserReview() {
-    const { id } = this.props.software;
-    user.canReview(id, canUserReview => {
-      console.log(canUserReview);
-      this.setState({
-        canUserReview,
-      });
-    });
-  }
-
   waitForReviews() {
     this.setState({
       reviewsFetched: false,
@@ -51,11 +50,14 @@ class SoftwareDetailsRouterLogic extends Component {
 
   render() {
     return (
-      <GetReviewsContext.Provider value={this.getReviews}>
-        <CanUserReviewContext.Provider value={this.state.canUserReview}>
-          <SoftwareDetailsRouter {...this.props} {...this.state} />
-        </CanUserReviewContext.Provider>
-      </GetReviewsContext.Provider>
+      <CanUserReviewContext.Provider
+        value={{
+          canUserReview: this.state.canUserReview,
+          setCanUserReview: this.setCanUserReview,
+        }}
+      >
+        <SoftwareDetailsRouter {...this.props} {...this.state} />
+      </CanUserReviewContext.Provider>
     );
   }
 }

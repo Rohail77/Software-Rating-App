@@ -1,16 +1,22 @@
-import { Component} from 'react';
+import { Component } from 'react';
 import ConfirmationModal from './page components/confirmation modal/ConfirmationModal';
 import ReviewForm from './page components/review form/ReviewForm';
 import { Link } from 'react-router-dom';
 import HomeLink from '../../../common/home link/HomeLink';
 import Software from './page components/software info/Software';
-import { GetReviewsContext } from '../../../../context/GetReviewsContext';
+import { UserReviewsContext } from '../../../../context/UserReviewsContext';
+import { UpdateSoftwareContext } from '../../../../context/UpdateSoftwareContext';
 
 class RatePage extends Component {
-
   render() {
-    const { name, developer, id, formSubmitted } = this.props;
-
+    const {
+      name,
+      developer,
+      id,
+      formSubmitted,
+      setCanUserReview,
+      showConfirmationModal,
+    } = this.props;
     return (
       <div className='wrapper rate-wrapper'>
         <div className='breadcrumbs'>
@@ -37,20 +43,26 @@ class RatePage extends Component {
 
         <Software name={name} developer={developer} />
 
-        <GetReviewsContext.Consumer>
-          {getReviews => {
-            return (
-              <ReviewForm
-                showConfirmationModal={this.showConfirmationModal}
-                softwareID={id}
-                getUpdatedReviews={getReviews}
-              />
-            );
-          }}
-        </GetReviewsContext.Consumer>
+        <UserReviewsContext.Consumer>
+          {({ getUpdatedUserReviews }) => (
+            <UpdateSoftwareContext.Consumer>
+              {updateSoftware => (
+                <ReviewForm
+                  showConfirmationModal={showConfirmationModal}
+                  softwareID={id}
+                  getUpdatedUserReviews={getUpdatedUserReviews}
+                  updateSoftware={updateSoftware}
+                />
+              )}
+            </UpdateSoftwareContext.Consumer>
+          )}
+        </UserReviewsContext.Consumer>
 
         {formSubmitted ? (
-          <ConfirmationModal softwareID={id} />
+          <ConfirmationModal
+            softwareID={id}
+            setCanUserReview={setCanUserReview}
+          />
         ) : null}
       </div>
     );

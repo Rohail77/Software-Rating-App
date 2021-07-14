@@ -12,7 +12,7 @@ class AccountOptions extends Component {
           </a>
         </li>
         <li>
-          <Link className='account__option' to='/reviews_history'>
+          <Link className='account__option' to='/edit_reviews'>
             Your ratings
           </Link>
         </li>

@@ -6,12 +6,11 @@ function RatingStar({ setRating, starNumber, starType }) {
 
   return (
     <li>
-      <a href='a'>
+      <a href='a' onClick={handleClick}>
         <img
           className='star'
           src={`/images/${starType} star.svg`}
           alt={`${starType} star`}
-          onClick={handleClick}
         />
       </a>
     </li>

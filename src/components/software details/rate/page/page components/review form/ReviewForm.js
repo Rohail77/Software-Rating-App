@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import RatingInput from './rating input/RatingInput';
-import { db } from '../../../../../../database/Database';
+import { db } from '../../../../../../database/Softwares';
 import WaitMessage from '../../../../../common/wait message/WaitMessage';
 import ReviewLimitMessage from './limit message/ReviewLimitMessage';
 import { user } from '../../../../../../database/User';
@@ -19,8 +19,12 @@ class ReviewForm extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setRating = this.setRating.bind(this);
-    this.afterSave = this.afterSave.bind(this);
     this.saveData = this.saveData.bind(this);
+    this.updateReviewedSoftwares = this.updateReviewedSoftwares.bind(this);
+    this.incrementTotalReviews = this.incrementTotalReviews.bind(this);
+    this.incrementStarCount = this.incrementStarCount.bind(this);
+    this.updateAverageRating = this.updateAverageRating.bind(this);
+    this.afterSave = this.afterSave.bind(this);
   }
 
   handleChange(event) {
@@ -52,16 +56,47 @@ class ReviewForm extends Component {
 
   saveData() {
     const { rating, review } = this.state;
-    db.writeRating(this.props.softwareID, {
-      username: user.name,
-      rating,
-      review,
+    const { softwareID } = this.props;
+    db.writeRating(
+      softwareID,
+      {
+        username: user.name,
+        rating,
+        review,
+      },
+      this.updateReviewedSoftwares
+    );
+  }
+
+  updateReviewedSoftwares() {
+    const { softwareID } = this.props;
+    user.updateReviewedSoftwares(softwareID, () => {
+      const { review } = this.state;
+      this.props.getUpdatedUserReviews();
+      review === '' ? this.incrementStarCount() : this.incrementTotalReviews();
     });
-    db.onRatingWrite(this.afterSave);
+  }
+
+  incrementTotalReviews() {
+    const { softwareID } = this.props;
+    db.incrementTotalReviews(softwareID, this.incrementStarCount);
+  }
+
+  incrementStarCount() {
+    const { softwareID } = this.props;
+    const { rating } = this.state;
+    db.updateStarCount(softwareID, rating, 'INC', this.updateAverageRating);
+  }
+
+  updateAverageRating() {
+    const { softwareID } = this.props;
+    db.updateAverageRating(softwareID, this.afterSave);
   }
 
   afterSave() {
-    const { showConfirmationModal, getUpdatedReviews } = this.props;
+    const { showConfirmationModal, updateSoftware, softwareID } = this.props;
+    updateSoftware(softwareID);
+
     this.setState(
       {
         review: '',
@@ -70,7 +105,6 @@ class ReviewForm extends Component {
       },
       showConfirmationModal
     );
-    getUpdatedReviews();
   }
 
   isIncomplete() {

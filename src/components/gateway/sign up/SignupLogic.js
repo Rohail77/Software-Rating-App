@@ -1,7 +1,6 @@
 import { Component, Fragment } from 'react';
 import { authorization } from '../auth/Authorization';
 import Signup from './Signup';
-import { user } from '../../../database/User';
 
 class SignupLogic extends Component {
   constructor(props) {
@@ -33,8 +32,8 @@ class SignupLogic extends Component {
   }
 
   signup() {
-    const { email, password } = this.state;
-    authorization.signup({ email, password }, this.onSignup);
+    const { email, password, name } = this.state;
+    authorization.signup({ email, password, name }, this.onSignup);
     this.setState({
       onWait: true,
     });
@@ -44,8 +43,6 @@ class SignupLogic extends Component {
     if (error) {
       this.showError(error);
     } else {
-      const { email, name } = this.state;
-      user.writeUser({ email, name });
       this.setState({
         onWait: false,
         signedUp: true,

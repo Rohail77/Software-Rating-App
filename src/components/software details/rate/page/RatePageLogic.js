@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { CanUserReviewContext } from '../../../../context/CanUserReviewContext';
+import AlreadyRatedMessage from './already rated message/AlreadyRatedMessage';
 import RatePage from './RatePage';
 
 class RatePageLogic extends Component {
@@ -24,15 +25,19 @@ class RatePageLogic extends Component {
 
     return (
       <CanUserReviewContext.Consumer>
-        {canUserReview =>
-          canUserReview ? (
+        {value =>
+          value.canUserReview ? (
             <RatePage
               name={name}
               id={id}
               developer={developer}
               formSubmitted={formSubmitted}
+              showConfirmationModal={this.showConfirmationModal}
+              setCanUserReview={value.setCanUserReview}
             />
-          ) : null
+          ) : (
+            <AlreadyRatedMessage softwareID={id} />
+          )
         }
       </CanUserReviewContext.Consumer>
     );

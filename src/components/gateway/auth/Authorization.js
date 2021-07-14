@@ -6,22 +6,11 @@ export class Authorization {
     auth.signOut();
   }
 
-  isEmailVerified() {
-    return auth.currentUser.emailVerified;
-  }
-
-  isSignedin() {
-    return auth.currentUser;
-  }
-
-  getEmail() {
-    return auth.currentUser.email;
-  }
-
-  signup({ email, password }, cb) {
+  signup({ email, password, name }, cb) {
     auth
       .createUserWithEmailAndPassword(email, password)
       .then(userCredential => {
+        user.writeUser({ email, name, reviewedSoftwares: [] });
         sendVerificationEmail(cb);
       })
       .catch(error => {
@@ -32,6 +21,7 @@ export class Authorization {
       auth.currentUser
         .sendEmailVerification()
         .then(() => {
+          user.signout();
           cb(null);
         })
         .catch(error => {
@@ -44,12 +34,13 @@ export class Authorization {
     auth
       .signInWithEmailAndPassword(email, password)
       .then(userCredential => {
-        if (this.isEmailVerified()) cb();
-        else {
-          cb({
-            msg: `You have not verified your email. Please verify your email by clicking the link we emailed you at your provided email address (${email}).`,
-          });
-        }
+        // if (user.isEmailVerified())
+        cb();
+        // else {
+        //   cb({
+        //     msg: `You have not verified your email. Please verify your email by clicking the link we emailed you at your provided email address (${email}).`,
+        //   });
+        // }
       })
       .catch(error => {
         cb({ msg: error.message });
@@ -65,10 +56,9 @@ export class Authorization {
       if (aUser) {
         console.log('user signed in');
         this.handleLoginDetection(true);
-        user.setUser();
       } else {
-        this.handleLoginDetection(false);
         console.log('user signed out');
+        this.handleLoginDetection(false);
       }
     });
   }

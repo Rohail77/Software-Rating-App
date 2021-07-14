@@ -52,6 +52,31 @@ body {
   margin: 2em auto;
 }
 
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  background-color: #2b2929;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 0.3em 0.4em;
+  font-size: 1.4rem;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  top: -28px;
+  left: 10px;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+}
+
 .stars-list {
   display: flex;
 }
@@ -566,7 +591,6 @@ body {
 .rate-wrapper {
   max-width: 500px;
 }
-
 .rate-wrapper .software {
   margin: 2.5em 0;
 }
@@ -677,6 +701,9 @@ body {
     transform: rotate(360deg);
   }
 }
+/*=================================
+    Rate Form Modals Styling
+===================================*/
 .rate-wrapper .confirmation-modal-overlay {
   position: fixed;
   top: 0;
@@ -688,7 +715,8 @@ body {
   justify-content: center;
   background: #000000b3;
 }
-.rate-wrapper .confirmation-modal {
+.rate-wrapper .confirmation-modal,
+.already-rated-modal {
   background-color: #f6f6f6;
   padding: 1em;
   margin: 0 0.5em;
@@ -717,6 +745,38 @@ body {
 .rate-wrapper .confirmation-modal a + a {
   margin-left: 0.6em;
 }
+.already-rated-modal-wrapper {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000000b3;
+}
+.already-rated-modal {
+  max-width: 450px;
+  width: max(50%, 300px);
+}
+.already-rated-modal p {
+  line-height: 2.1rem;
+}
+.already-rated-modal-wrapper .cta-btns {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1em;
+}
+.already-rated-modal-wrapper .cta-btns .exit-btn {
+  margin-right: 1em;
+}
+.already-rated-modal-wrapper .cta-btns a {
+  color: white;
+  background-color: #dc1f1f;
+  padding: 0.35em 0.6em;
+  border-radius: 3px;
+}
 
 /*===============================
     Edit Reviews Page Styling
@@ -739,6 +799,22 @@ body {
 }
 .edit-reviews-wrapper .past-review + .past-review {
   margin-top: 3em;
+}
+.edit-reviews-wrapper .past-review .no-change-msg {
+  color: #dc1f1f;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-top: 1em;
+}
+.edit-reviews-wrapper .past-review__form {
+  position: relative;
+}
+.edit-reviews-wrapper .past-review__form__overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
 }
 .edit-reviews-wrapper .past-review__basic-info-and-ctas {
   display: flex;
@@ -768,7 +844,7 @@ body {
   width: 22px;
   height: 22px;
 }
-.edit-reviews-wrapper .past-review .stars-list .star + .star {
+.edit-reviews-wrapper .past-review .stars-list li + li {
   margin-left: 0.3em;
 }
 .edit-reviews-wrapper .past-review__software .software__review-date {
@@ -787,7 +863,12 @@ body {
   line-height: 2rem;
   background-color: #f8fbf8;
 }
-
+.edit-reviews-wrapper .no-reviews-msg {
+  text-align: center;
+}
+.edit-reviews-wrapper .wait-msg {
+  background-color: #2b2929ba;
+}
 /*===============================
     Not Found Page Stytling
 ===============================*/
@@ -1080,6 +1161,19 @@ body {
   .gateway-wrapper .gateway-para {
     border-left: none;
     padding-left: 0;
+  }
+  .already-rated-modal {
+    width: 100%;
+  }
+  .already-rated-modal .cta-btns {
+    flex-direction: column;
+  }
+  .already-rated-modal .cta-btns a {
+    width: 100%;
+    text-align: center;
+  }
+  .already-rated-modal .cta-btns .exit-btn {
+    margin: 0 0 0.5em 0;
   }
 }
 @media (max-width: 250px) {

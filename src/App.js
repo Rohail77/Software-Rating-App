@@ -1,10 +1,13 @@
 import { Component } from 'react';
 import './App.css';
 import AppRouter from './components/AppRouter';
-import { db } from './database/Database';
+import { db } from './database/Softwares';
 import { UserContext } from './context/userContext';
 import { authorization } from './components/gateway/auth/Authorization';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { user } from './database/User';
+import { UserReviewsContext } from './context/UserReviewsContext';
+import { UpdateSoftwareContext } from './context/UpdateSoftwareContext';
 
 class App extends Component {
   constructor(props) {
@@ -12,16 +15,13 @@ class App extends Component {
     this.state = {
       softwares: [],
       onWait: true,
-      loggedin: false
+      loggedin: false,
+      userReviews: [],
+      fetchingUserReviews: false,
     };
     this.updateSoftware = this.updateSoftware.bind(this);
-    this.setLogin = this.setLogin.bind(this);
-  }
-
-  setLogin(value) {
-    this.setState({
-      loggedin: value,
-    });
+    this.handleLogin = this.handleLogin.bind(this);
+    this.getUserReviews = this.getUserReviews.bind(this);
   }
 
   componentDidMount() {
@@ -31,16 +31,46 @@ class App extends Component {
         onWait: false,
       })
     );
-    db.onSoftwareUpdate(this.updateSoftware);
-    authorization.onLoginDetection(this.setLogin);
+    authorization.onLoginDetection(this.handleLogin);
   }
 
-  updateSoftware(updatedSoftware) {
-    this.setState(state => ({
-      softwares: state.softwares.map(software => {
-        return software.id === updatedSoftware.id ? updatedSoftware : software;
-      }),
-    }));
+  updateSoftware(id) {
+    db.getSoftware(id, updatedSoftware => {
+      this.setState(state => ({
+        softwares: state.softwares.map(software => {
+          return software.id === updatedSoftware.id
+            ? updatedSoftware
+            : software;
+        }),
+      }));
+    });
+  }
+
+  handleLogin(loggedin) {
+    if (loggedin) user.set();
+    this.setState(
+      {
+        loggedin,
+      },
+      () => {
+        if (this.state.loggedin) {
+          this.getUserReviews();
+          user.bindUpdaterToReviews(this.getUserReviews);
+        }
+      }
+    );
+  }
+
+  getUserReviews() {
+    this.setState({
+      fetchingUserReviews: true,
+    });
+    user.getReviews(userReviews => {
+      this.setState({
+        userReviews,
+        fetchingUserReviews: false,
+      });
+    });
   }
 
   render() {
@@ -48,8 +78,19 @@ class App extends Component {
 
     return (
       <Router>
-        <UserContext.Provider value={{ loggedin, setLogin: this.setLogin }}>
-          <AppRouter {...this.state} />
+        <UserContext.Provider
+          value={{ loggedin, handleLogin: this.handleLogin }}
+        >
+          <UserReviewsContext.Provider
+            value={{
+              userReviews: this.state.userReviews,
+              fetchingUserReviews: this.state.fetchingUserReviews,
+            }}
+          >
+            <UpdateSoftwareContext.Provider value={this.updateSoftware}>
+              <AppRouter {...this.state} />
+            </UpdateSoftwareContext.Provider>
+          </UserReviewsContext.Provider>
         </UserContext.Provider>
       </Router>
     );

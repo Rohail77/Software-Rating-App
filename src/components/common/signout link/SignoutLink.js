@@ -22,7 +22,7 @@ class SignoutLink extends Component {
             className='signout-link'
             onClick={event => {
               event.preventDefault();
-              this.handleClick(user.setLogin);
+              this.handleClick(user.handleLogin);
             }}
             to='/'
           >
