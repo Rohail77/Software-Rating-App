@@ -15,16 +15,18 @@ class PastReview extends Component {
       review,
       editable: false,
       error: false,
+      clickable: true,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setRating = this.setRating.bind(this);
     this.setEditable = this.setEditable.bind(this);
     this.reset = this.reset.bind(this);
-    this.updateAverageRating = this.updateAverageRating.bind(this);
     this.hideNoChangeMessage = this.hideNoChangeMessage.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.updateSoftware = this.updateSoftware.bind(this);
+    this.updateStarCount = this.updateStarCount.bind(this);
+    this.updateSoftwareLocal = this.updateSoftwareLocal.bind(this);
   }
 
   handleChange(event) {
@@ -38,24 +40,34 @@ class PastReview extends Component {
     if (this.reviewUpdated()) {
       const { softwareID } = this.props.userReview;
       const { rating, review } = this.state;
-      user.updateReview(softwareID, { rating, review }, this.updateSoftware);
+      user.updateReview(softwareID, { rating, review });
+      this.updateSoftware();
     } else {
       this.showNoChangeMessage();
     }
-  }
-
-  updateSoftware() {
-    if (this.shouldDecrementTotalReviews()) this.decrementTotalReviews();
-    else if (this.shouldIncrementTotalReviews()) this.incrementTotalReviews();
-    if (this.shouldChangeStarCount()) this.updateStarCount();
-    // const { softwareID } = this.props.userReview;
-    // this.props.updateSoftware(softwareID);
   }
 
   reviewUpdated() {
     const { review, rating } = this.state;
     const { userReview } = this.props;
     return review !== userReview.review || rating !== userReview.rating;
+  }
+
+  updateSoftware() {
+    this.updateTotalReviews()
+      .then(this.updateStarCount)
+      .then(this.updateSoftwareLocal)
+      .catch(error => console.log(error));
+  }
+
+  updateTotalReviews() {
+    const { softwareID } = this.props.userReview;
+
+    if (this.shouldDecrementTotalReviews())
+      return db.decrementTotalReviews(softwareID);
+    else if (this.shouldIncrementTotalReviews())
+      return db.incrementTotalReviews(softwareID);
+    else return Promise.resolve();
   }
 
   shouldDecrementTotalReviews() {
@@ -68,14 +80,16 @@ class PastReview extends Component {
     return review !== '' && this.props.userReview.review === '';
   }
 
-  decrementTotalReviews() {
-    const { softwareID } = this.props.userReview;
-    db.decrementTotalReviews(softwareID);
-  }
-
-  incrementTotalReviews() {
-    const { softwareID } = this.props.userReview;
-    db.incrementTotalReviews(softwareID);
+  updateStarCount() {
+    if (this.shouldChangeStarCount()) {
+      const { softwareID } = this.props.userReview;
+      const { rating } = this.state;
+      return db
+        .replaceStarCount(softwareID, rating, this.props.userReview.rating)
+        .then(() => db.updateAverageRating(softwareID));
+    } else {
+      return new Promise.resolve();
+    }
   }
 
   shouldChangeStarCount() {
@@ -83,31 +97,24 @@ class PastReview extends Component {
     return rating !== this.props.userReview.rating;
   }
 
-  updateStarCount() {
+  updateSoftwareLocal() {
     const { softwareID } = this.props.userReview;
-    const { rating } = this.state;
-
-    db.replaceStarCount(
-      softwareID,
-      rating,
-      this.props.userReview.rating,
-      this.updateAverageRating
-    );
-  }
-
-  updateAverageRating() {
-    const { softwareID } = this.props.userReview;
-    db.updateAverageRating(softwareID);
+    this.props.updateSoftware(softwareID);
   }
 
   handleDelete() {
     const { softwareID } = this.props.userReview;
+    const { getUpdatedUserReviews } = this.props;
     const { rating, review } = this.state;
-    user.deleteReview(softwareID, () => {
+    this.setState({
+      clickable: false,
+    });
+    user.deleteReview(softwareID).then(() => {
+      getUpdatedUserReviews();
       if (review !== '') db.decrementTotalReviews(softwareID);
-      db.updateStarCount(softwareID, rating, 'DEC', () => {
-        db.updateAverageRating(softwareID);
-      });
+      db.updateStarCount(softwareID, rating, 'DEC')
+        .then(() => db.updateAverageRating(softwareID))
+        .then(this.updateSoftwareLocal);
     });
   }
 
@@ -118,6 +125,7 @@ class PastReview extends Component {
   }
 
   setEditable(value) {
+    console.log(value);
     this.setState({
       editable: value,
     });
@@ -149,7 +157,7 @@ class PastReview extends Component {
 
   render() {
     const { date, softwareName } = this.props.userReview;
-    const { editable, rating, review, error } = this.state;
+    const { editable, rating, review, error, clickable } = this.state;
 
     return (
       <li className='past-review'>
@@ -170,6 +178,8 @@ class PastReview extends Component {
             <NonEditableFormButtons
               setEditable={this.setEditable}
               handleDelete={this.handleDelete}
+              focusTextField={this.focusTextField}
+              clickable={clickable}
             />
           )}
         </div>
@@ -180,6 +190,7 @@ class PastReview extends Component {
           editable={editable}
           handleChange={this.handleChange}
           setRating={this.setRating}
+          textInputRef={this.textInputRef}
         />
       </li>
     );

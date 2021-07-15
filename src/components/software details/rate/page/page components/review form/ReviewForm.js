@@ -20,7 +20,7 @@ class ReviewForm extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setRating = this.setRating.bind(this);
     this.saveData = this.saveData.bind(this);
-    this.updateReviewedSoftwares = this.updateReviewedSoftwares.bind(this);
+    this.addSoftwareToUserReviews = this.addSoftwareToUserReviews.bind(this);
     this.incrementTotalReviews = this.incrementTotalReviews.bind(this);
     this.incrementStarCount = this.incrementStarCount.bind(this);
     this.updateAverageRating = this.updateAverageRating.bind(this);
@@ -57,40 +57,37 @@ class ReviewForm extends Component {
   saveData() {
     const { rating, review } = this.state;
     const { softwareID } = this.props;
-    db.writeRating(
-      softwareID,
-      {
-        username: user.name,
-        rating,
-        review,
-      },
-      this.updateReviewedSoftwares
-    );
+    db.writeRating(softwareID, {
+      username: user.name,
+      rating,
+      review,
+    }).then(this.addSoftwareToUserReviews);
+    review === '' ? this.incrementStarCount() : this.incrementTotalReviews();
   }
 
-  updateReviewedSoftwares() {
+  addSoftwareToUserReviews() {
     const { softwareID } = this.props;
-    user.updateReviewedSoftwares(softwareID, () => {
-      const { review } = this.state;
+    user.addSoftwareToReview(softwareID).then(() => {
       this.props.getUpdatedUserReviews();
-      review === '' ? this.incrementStarCount() : this.incrementTotalReviews();
     });
   }
 
   incrementTotalReviews() {
     const { softwareID } = this.props;
-    db.incrementTotalReviews(softwareID, this.incrementStarCount);
+    db.incrementTotalReviews(softwareID).then(this.incrementStarCount);
   }
 
   incrementStarCount() {
     const { softwareID } = this.props;
     const { rating } = this.state;
-    db.updateStarCount(softwareID, rating, 'INC', this.updateAverageRating);
+    db.updateStarCount(softwareID, rating, 'INC').then(
+      this.updateAverageRating
+    );
   }
 
   updateAverageRating() {
     const { softwareID } = this.props;
-    db.updateAverageRating(softwareID, this.afterSave);
+    db.updateAverageRating(softwareID).then(this.afterSave);
   }
 
   afterSave() {

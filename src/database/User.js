@@ -53,8 +53,8 @@ class User {
       });
   }
 
-  updateReview(softwareID, updatedReview, cb) {
-    database
+  updateReview(softwareID, updatedReview) {
+    return database
       .collection('Softwares')
       .doc(softwareID)
       .collection('Reviews')
@@ -62,28 +62,22 @@ class User {
       .update({
         date: firebase.firestore.Timestamp.now(),
         ...updatedReview,
-      })
-      .then(() => {
-        if (cb) cb();
       });
   }
 
-  deleteReview(softwareID, cb) {
-    this.userRef
+  deleteReview(softwareID) {
+    return this.userRef
       .update({
         reviewedSoftwares:
           firebase.firestore.FieldValue.arrayRemove(softwareID),
       })
       .then(() => {
-        database
+        return database
           .collection('Softwares')
           .doc(softwareID)
           .collection('Reviews')
           .doc(this.email)
-          .delete()
-          .then(() => {
-            if (cb) cb();
-          });
+          .delete();
       })
       .catch(error => console.log(error));
   }
@@ -106,7 +100,14 @@ class User {
     this.userRef
       .get()
       .then(doc => {
-        doc.data().reviewedSoftwares.forEach((softwareID, index, array) => {
+        return doc.data().reviewedSoftwares;
+      })
+      .then(reviewedSoftwares => {
+        if (reviewedSoftwares.length === 0) {
+          cb(userReviews);
+          return;
+        }
+        reviewedSoftwares.forEach((softwareID, index) => {
           let softwareName;
           database
             .collection('Softwares')
@@ -114,40 +115,34 @@ class User {
             .get()
             .then(doc => {
               softwareName = doc.data().name;
-              database
+              return database
                 .collection('Softwares')
                 .doc(softwareID)
                 .collection('Reviews')
                 .doc(this.email)
-                .get()
-                .then(doc => {
-                  userReviews.unshift({
-                    softwareID,
-                    softwareName,
-                    ...doc.data(),
-                    date: formatDate(doc.data().date.toDate()),
-                  });
-                  if (index + 1 === array.length) {
-                    cb(userReviews);
-                  }
-                });
+                .get();
+            })
+            .then(doc => {
+              userReviews.unshift({
+                softwareID,
+                softwareName,
+                ...doc.data(),
+                date: formatDate(doc.data().date.toDate()),
+              });
+              if (index + 1 === reviewedSoftwares.length) cb(userReviews);
             });
         });
       })
       .catch(error => console.log(error));
   }
 
-  updateReviewedSoftwares(softwareID, cb) {
-    database
+  addSoftwareToReview(softwareID, cb) {
+    return database
       .collection('Users')
       .doc(user.email)
       .update({
         reviewedSoftwares: firebase.firestore.FieldValue.arrayUnion(softwareID),
-      })
-      .then(() => {
-        if (cb) cb();
-      })
-      .catch(error => console.log(error));
+      });
   }
 
   writeUser(user, cb) {

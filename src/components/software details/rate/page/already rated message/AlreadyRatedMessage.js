@@ -16,9 +16,9 @@ class AlreadyRatedMessage extends Component {
             <Link className='exit-btn' to={`/software_details/${softwareID}`}>
               Exit
             </Link>
-            <a href='a' className='edit-btn'>
+            <Link className='edit-btn' to='/edit_reviews'>
               Edit reviews
-            </a>
+            </Link>
           </div>
         </section>
       </div>

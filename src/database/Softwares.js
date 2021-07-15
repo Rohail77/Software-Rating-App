@@ -1,22 +1,12 @@
 import { database } from '../config/database_config';
 import firebase from 'firebase';
 import { user } from './User';
-import { formatDate } from './common functions/CommonFunctions';
+import { formatDate, getAverage } from './common functions/CommonFunctions';
 
 class Database {
   constructor() {
     this.softwaresRef = database.collection('Softwares');
     this.usersRef = database.collection('Users');
-  }
-
-  onSoftwareUpdate(cb) {
-    this.handleSoftwareUpdate = cb;
-  }
-
-  bindUpdaterToSoftware(softwareID) {
-    this.softwaresRef.doc(softwareID).onSnapshot(doc => {
-      this.handleSoftwareUpdate({ id: doc.id, ...doc.data() });
-    });
   }
 
   bindUpdaterToReview(softwareID, cb) {
@@ -35,7 +25,6 @@ class Database {
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-          // this.bindUpdaterToSoftware(doc.id);
           softwares.push({ id: doc.id, ...doc.data() });
         });
         cb(softwares);
@@ -86,100 +75,58 @@ class Database {
       });
   }
 
-  writeRating(softwareID, data, cb) {
-    this.softwaresRef
+  writeRating(softwareID, data) {
+    return this.softwaresRef
       .doc(softwareID)
       .collection('Reviews')
       .doc(user.email)
-      .set({ ...data, date: firebase.firestore.Timestamp.now() })
-      .then(() => {
-        if (cb) cb();
-      })
-      .catch(error => console.log(error));
+      .set({ ...data, date: firebase.firestore.Timestamp.now() });
   }
 
-  incrementTotalReviews(softwareID, cb) {
-    this.softwaresRef
-      .doc(softwareID)
-      .update({
-        total_reviews: firebase.firestore.FieldValue.increment(1),
-      })
-      .then(() => {
-        if (cb) cb();
-      })
-      .catch(error => console.log(error));
+  incrementTotalReviews(softwareID) {
+    return this.softwaresRef.doc(softwareID).update({
+      total_reviews: firebase.firestore.FieldValue.increment(1),
+    });
   }
 
-  decrementTotalReviews(softwareID, cb) {
-    this.softwaresRef
-      .doc(softwareID)
-      .update({
-        total_reviews: firebase.firestore.FieldValue.increment(-1),
-      })
-      .then(() => {
-        if (cb) cb();
-      })
-      .catch(error => console.log(error));
+  decrementTotalReviews(softwareID) {
+    return this.softwaresRef.doc(softwareID).update({
+      total_reviews: firebase.firestore.FieldValue.increment(-1),
+    });
   }
 
-  updateStarCount(softwareID, starType, updateType, cb) {
-    this.softwaresRef
-      .doc(softwareID)
-      .update({
-        ['stars_count.' + starType]:
-          updateType === 'INC'
-            ? firebase.firestore.FieldValue.increment(1)
-            : firebase.firestore.FieldValue.increment(-1),
-      })
-      .then(() => {
-        if (cb) cb();
-      })
-      .catch(error => console.log(error));
+  updateStarCount(softwareID, starType, updateType) {
+    return this.softwaresRef.doc(softwareID).update({
+      ['stars_count.' + starType]:
+        updateType === 'INC'
+          ? firebase.firestore.FieldValue.increment(1)
+          : firebase.firestore.FieldValue.increment(-1),
+    });
   }
 
-  replaceStarCount(softwareID, incrementStarType, decrementStarType, cb) {
-    this.softwaresRef
-      .doc(softwareID)
-      .update({
-        ['stars_count.' + incrementStarType]:
-          firebase.firestore.FieldValue.increment(1),
-        ['stars_count.' + decrementStarType]:
-          firebase.firestore.FieldValue.increment(-1),
-      })
-      .then(() => {
-        if (cb) cb();
-      })
-      .catch(error => console.log(error));
+  async replaceStarCount(softwareID, incrementStarType, decrementStarType) {
+    await this.softwaresRef.doc(softwareID).update({
+      ['stars_count.' + incrementStarType]:
+        firebase.firestore.FieldValue.increment(1),
+    });
+    return await this.softwaresRef.doc(softwareID).update({
+      ['stars_count.' + decrementStarType]:
+        firebase.firestore.FieldValue.increment(-1),
+    });
   }
 
-  updateAverageRating(softwareID, cb = null) {
-    this.softwaresRef
+  updateAverageRating(softwareID) {
+    return this.softwaresRef
       .doc(softwareID)
       .get()
       .then(doc => {
-        const stars_count = doc.data().stars_count;
-        let numerator = 0;
-        let denominator = 0;
-        Object.keys(stars_count).forEach(star => {
-          numerator += Number.parseInt(star) * stars_count[star];
-          denominator += stars_count[star];
+        return getAverage(doc.data().stars_count);
+      })
+      .then(averageRating => {
+        return this.softwaresRef.doc(softwareID).update({
+          average_rating: Number(averageRating.toFixed(1)),
         });
-        const averageRating = denominator === 0 ? 0 : numerator / denominator;
-        this.updateAverageRatingHelper(softwareID, averageRating, cb);
-      })
-      .catch(error => console.log(error));
-  }
-
-  updateAverageRatingHelper(softwareID, averageRating, cb = null) {
-    this.softwaresRef
-      .doc(softwareID)
-      .update({
-        average_rating: Number(averageRating.toFixed(1)),
-      })
-      .then(() => {
-        if (cb) cb();
-      })
-      .catch(error => console.log(error));
+      });
   }
 }
 

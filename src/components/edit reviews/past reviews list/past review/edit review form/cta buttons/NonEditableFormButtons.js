@@ -9,17 +9,19 @@ class NonEditableFormButtons extends Component {
 
   edit(event) {
     event.preventDefault();
-    const { setEditable } = this.props;
+    const { setEditable} = this.props;
     setEditable(true);
   }
-  
+
   delete(event) {
     event.preventDefault();
     const { handleDelete } = this.props;
-    handleDelete()
+    handleDelete();
   }
 
   render() {
+    const { clickable } = this.props;
+
     return (
       <div className='past-review__ctas'>
         <a href='edit' className='edit-btn tooltip' onClick={this.edit}>
@@ -30,6 +32,7 @@ class NonEditableFormButtons extends Component {
           <img src='/images/delete.svg' alt='dustbin' />
           <span className='tooltip-text'>Delete</span>
         </a>
+        {clickable ? null : <div className='past-review__ctas__wrapper'> </div>}
       </div>
     );
   }

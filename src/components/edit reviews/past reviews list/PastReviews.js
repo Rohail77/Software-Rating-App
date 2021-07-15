@@ -6,7 +6,7 @@ import WaitMessage from '../../common/wait message/WaitMessage';
 
 class PastReviews extends Component {
   render() {
-    const { userReviews, fetchingUserReviews } =
+    const { userReviews, fetchingUserReviews, getUpdatedUserReviews } =
       this.props;
 
     return (
@@ -21,6 +21,7 @@ class PastReviews extends Component {
                   <PastReview
                     userReview={userReview}
                     updateSoftware={updateSoftware}
+                    getUpdatedUserReviews={getUpdatedUserReviews}
                     key={uuidv4()}
                   />
                 ));

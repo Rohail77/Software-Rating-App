@@ -85,6 +85,7 @@ class App extends Component {
             value={{
               userReviews: this.state.userReviews,
               fetchingUserReviews: this.state.fetchingUserReviews,
+              getUpdatedUserReviews: this.getUserReviews,
             }}
           >
             <UpdateSoftwareContext.Provider value={this.updateSoftware}>

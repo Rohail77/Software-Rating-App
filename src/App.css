@@ -310,6 +310,9 @@ body {
   padding: 0.5em 0.75em;
   border-radius: 9px 0 0 9px;
 }
+.main-wrapper .search__img:hover {
+  background-color: #e23d3d;
+}
 .main-wrapper .search input {
   padding: 0.9em 1em 0.9em 5em;
   border: 0.5px solid #000000;
@@ -323,11 +326,20 @@ body {
 .main-wrapper .softwares-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-gap: 1em;
+  grid-gap: 0 1em;
   margin-top: 3em;
 }
 .main-wrapper .software {
-  margin-bottom: 3em;
+  margin-bottom: 2em;
+}
+.main-wrapper .software a {
+  padding: 1em;
+  width: 100%;
+}
+.main-wrapper .software a:hover {
+  box-shadow: 0px 0px 10px 0px #d2d2d2;
+  transform: translateY(-1px);
+  transition: all 0.2s ease-out;
 }
 .main-wrapper .software__logo {
   width: clamp(60px, 4.5vw, 75px);
@@ -797,8 +809,8 @@ body {
   text-align: center;
   margin: 1.5em 0;
 }
-.edit-reviews-wrapper .past-review + .past-review {
-  margin-top: 3em;
+.edit-reviews-wrapper .past-review {
+  margin-bottom: 3em;
 }
 .edit-reviews-wrapper .past-review .no-change-msg {
   color: #dc1f1f;
@@ -809,13 +821,6 @@ body {
 .edit-reviews-wrapper .past-review__form {
   position: relative;
 }
-.edit-reviews-wrapper .past-review__form__overlay {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-}
 .edit-reviews-wrapper .past-review__basic-info-and-ctas {
   display: flex;
   justify-content: space-between;
@@ -824,9 +829,17 @@ body {
 .edit-reviews-wrapper .past-review__ctas {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  position: relative;
+}
+.edit-reviews-wrapper .past-review__ctas__wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 .edit-reviews-wrapper .past-review__ctas .edit-btn,
-.edit-reviews-wrapper .past-review__ctas .save-btn {
+.edit-reviews-wrapper .past-review__ctas .cancel-btn {
   margin-right: 1em;
 }
 .edit-reviews-wrapper .past-review__ctas .save-btn,
@@ -839,6 +852,16 @@ body {
 }
 .edit-reviews-wrapper .past-review .stars-list {
   margin: 1em 0;
+}
+.edit-reviews-wrapper .past-review .stars-list-parent {
+  position: relative;
+}
+.edit-reviews-wrapper .past-review .stars-list-cover {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 .edit-reviews-wrapper .past-review .stars-list .star {
   width: 22px;

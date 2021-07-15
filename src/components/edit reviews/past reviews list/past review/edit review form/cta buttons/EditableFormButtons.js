@@ -22,11 +22,11 @@ class EditableFormButtons extends Component {
   render() {
     return (
       <div className='past-review__ctas'>
-        <a href='save' className='save-btn' onClick={this.save}>
-          Save
-        </a>
         <a href='cancel' className='cancel-btn' onClick={this.reset}>
           Cancel
+        </a>
+        <a href='save' className='save-btn' onClick={this.save}>
+          Save
         </a>
       </div>
     );

@@ -7,18 +7,16 @@ class EditReviewForm extends Component {
 
     return (
       <form className='past-review__form'>
-        <div
-          className='past-review__form__overlay'
-          style={{ display: editable ? 'none' : 'block' }}
-        >
-          {' '}
+        <div className='stars-list-parent'>
+          <RatingStarsList rating={rating} setRating={setRating} />
+          <div className={editable ? '' : `stars-list-cover`}></div>
         </div>
-        <RatingStarsList rating={rating} setRating={setRating} />
         <textarea
           className='past-review__text'
           name='review'
           value={review}
           onChange={handleChange}
+          disabled={editable ? false : true}
         ></textarea>
       </form>
     );
