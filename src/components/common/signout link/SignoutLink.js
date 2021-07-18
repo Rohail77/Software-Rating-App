@@ -1,38 +1,29 @@
-import { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../../context/userContext';
 import { authorization } from '../../gateway/auth/Authorization';
 
-class SignoutLink extends Component {
-  constructor(props) {
-    super(props);
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick(cb) {
+function SignoutLink() {
+  const handleClick = cb => {
     authorization.signout();
     cb(false);
-  }
-
-  render() {
-    return (
-      <UserContext.Consumer>
-        {user => (
-          <Link
-            className='signout-link'
-            onClick={event => {
-              event.preventDefault();
-              this.handleClick(user.handleLogin);
-            }}
-            to='/'
-          >
-            <img src='/images/signout.svg' alt='signout' />
-            <span>Signout</span>
-          </Link>
-        )}
-      </UserContext.Consumer>
-    );
-  }
+  };
+  return (
+    <UserContext.Consumer>
+      {user => (
+        <Link
+          className='signout-link'
+          onClick={event => {
+            event.preventDefault();
+            handleClick(user.handleLogin);
+          }}
+          to='/'
+        >
+          <span>Signout</span>
+          <img src='/images/signout.svg' alt='signout' />
+        </Link>
+      )}
+    </UserContext.Consumer>
+  );
 }
 
 export default SignoutLink;

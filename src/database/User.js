@@ -4,40 +4,74 @@ import firebase from 'firebase';
 
 class User {
   set(cb = null) {
-    this.email = auth.currentUser.email;
-    this.userRef = database.collection('Users').doc(this.email);
-    this.setName(cb);
+    this.userRef = database.collection('Users').doc(this.id);
   }
 
-  setName(cb = null) {
-    this.userRef.get().then(doc => {
-      this.name = doc.data().name;
-      if (cb) cb();
-    });
+  get id() {
+    return auth.currentUser.uid;
   }
 
-  isEmailVerified() {
-    return auth.currentUser.emailVerified;
+  get email() {
+    return auth.currentUser.email;
   }
 
-  updateUserName(newName) {
-    this.userRef
-      .update({
-        name: newName,
+  get name() {
+    return auth.currentUser.displayName;
+  }
+
+  updateUsername(newName) {
+    return auth.currentUser
+      .updateProfile({
+        displayName: newName,
       })
-      .catch(error => {
-        console.log(error);
+      .then(() => {
+        return this.userRef.get();
+      })
+      .then(doc => {
+        return doc.data().reviewedSoftwares;
+      })
+      .then(reviewedSoftwares => {
+        reviewedSoftwares.forEach((softwareID, index) => {
+          database
+            .collection('Softwares')
+            .doc(softwareID)
+            .collection('Reviews')
+            .doc(this.id)
+            .update({
+              username: newName,
+            });
+          if (index === reviewedSoftwares.length - 1) return;
+        });
+      })
+      .catch(error => console.log(error));
+  }
+
+  delete(password) {
+    const credential = firebase.auth.EmailAuthProvider.credential(
+      user.email,
+      password
+    );
+    return auth.currentUser
+      .reauthenticateWithCredential(credential)
+      .then(() => this.userRef.delete())
+      .then(() => {
+        auth.currentUser.delete();
       });
   }
 
-  deleteUser() {
-    this.userRef
-      .delete()
+  updatePassword(oldPassword, newPassword) {
+    const credential = firebase.auth.EmailAuthProvider.credential(
+      user.email,
+      oldPassword
+    );
+    return auth.currentUser
+      .reauthenticateWithCredential(credential)
       .then(() => {
-        console.log('User deleted Successfully');
-      })
-      .catch(error => {
-        console.log(error);
+        if (oldPassword === newPassword) {
+          throw new Error('No change to update');
+        } else {
+          return auth.currentUser.updatePassword(newPassword);
+        }
       });
   }
 
@@ -46,7 +80,7 @@ class User {
       .collection('Softwares')
       .doc(softwareID)
       .collection('Reviews')
-      .doc(this.email)
+      .doc(this.id)
       .get()
       .then(doc => {
         doc.exists ? cb(false) : cb(true);
@@ -58,7 +92,7 @@ class User {
       .collection('Softwares')
       .doc(softwareID)
       .collection('Reviews')
-      .doc(this.email)
+      .doc(this.id)
       .update({
         date: firebase.firestore.Timestamp.now(),
         ...updatedReview,
@@ -76,7 +110,7 @@ class User {
           .collection('Softwares')
           .doc(softwareID)
           .collection('Reviews')
-          .doc(this.email)
+          .doc(this.id)
           .delete();
       })
       .catch(error => console.log(error));
@@ -84,14 +118,17 @@ class User {
 
   bindUpdaterToReviews(updater) {
     this.userRef.get().then(doc => {
-      doc.data().reviewedSoftwares.forEach(softwareID => {
-        database
-          .collection('Softwares')
-          .doc(softwareID)
-          .collection('Reviews')
-          .doc(this.email)
-          .onSnapshot(updater);
-      });
+      if (!doc.exists) console.log('document doesnt exist');
+      if (doc.exists) {
+        doc.data().reviewedSoftwares.forEach(softwareID => {
+          database
+            .collection('Softwares')
+            .doc(softwareID)
+            .collection('Reviews')
+            .doc(this.id)
+            .onSnapshot(updater);
+        });
+      }
     });
   }
 
@@ -100,10 +137,14 @@ class User {
     this.userRef
       .get()
       .then(doc => {
+        if (!doc.exists) {
+          cb(userReviews);
+          return false;
+        }
         return doc.data().reviewedSoftwares;
       })
       .then(reviewedSoftwares => {
-        if (reviewedSoftwares.length === 0) {
+        if (!reviewedSoftwares || reviewedSoftwares.length === 0) {
           cb(userReviews);
           return;
         }
@@ -119,7 +160,7 @@ class User {
                 .collection('Softwares')
                 .doc(softwareID)
                 .collection('Reviews')
-                .doc(this.email)
+                .doc(this.id)
                 .get();
             })
             .then(doc => {
@@ -136,23 +177,20 @@ class User {
       .catch(error => console.log(error));
   }
 
-  addSoftwareToReview(softwareID, cb) {
+  addSoftwareToReviews(softwareID) {
     return database
       .collection('Users')
-      .doc(user.email)
+      .doc(user.id)
       .update({
         reviewedSoftwares: firebase.firestore.FieldValue.arrayUnion(softwareID),
       });
   }
 
-  writeUser(user, cb) {
-    database
+  write(user) {
+    return database
       .collection('Users')
-      .doc(user.email)
-      .set(user)
-      .then(() => {
-        if (cb) cb();
-      })
+      .doc(this.id)
+      .set({ reviewedSoftwares: [] })
       .catch(error => {
         console.log(error);
       });
@@ -160,6 +198,10 @@ class User {
 
   isSignedin() {
     return auth.currentUser;
+  }
+
+  isEmailVerified() {
+    return auth.currentUser.emailVerified;
   }
 }
 

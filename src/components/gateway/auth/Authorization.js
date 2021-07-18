@@ -10,24 +10,27 @@ export class Authorization {
     auth
       .createUserWithEmailAndPassword(email, password)
       .then(userCredential => {
-        user.writeUser({ email, name, reviewedSoftwares: [] });
-        sendVerificationEmail(cb);
+        user.write();
+        userCredential.user.updateProfile({
+          displayName: name,
+        });
+        this.sendVerificationEmail(cb);
       })
       .catch(error => {
         cb({ msg: error.message });
       });
+  }
 
-    function sendVerificationEmail(cb) {
-      auth.currentUser
-        .sendEmailVerification()
-        .then(() => {
-          user.signout();
-          cb(null);
-        })
-        .catch(error => {
-          cb({ msg: error.message });
-        });
-    }
+  sendVerificationEmail(cb) {
+    auth.currentUser
+      .sendEmailVerification()
+      .then(() => {
+        this.signout();
+        cb(null);
+      })
+      .catch(error => {
+        cb({ msg: error.message });
+      });
   }
 
   signin({ email, password }, cb) {

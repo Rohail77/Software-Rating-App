@@ -49,7 +49,7 @@ body {
 
 .wrapper {
   width: 80%;
-  margin: 2em auto;
+  margin: 0 auto;
 }
 
 .tooltip {
@@ -85,8 +85,7 @@ body {
 .reviews-link,
 .active-page-link,
 .see-more-link,
-.gateway-wrapper .gateway-para .gateway-link,
-.main-wrapper header .signin-link {
+.gateway-wrapper .gateway-para .gateway-link {
   color: #dc1f1f;
   text-decoration: underline;
 }
@@ -99,7 +98,7 @@ body {
 .reviews-wrapper .breadcrumbs,
 .rate-wrapper .breadcrumbs,
 .review-wrapper .breadcrumbs {
-  margin: 0 auto;
+  margin: 2em auto 0 auto;
 }
 
 .reviews-wrapper h2,
@@ -110,6 +109,7 @@ body {
 .reviews-wrapper .reviews,
 .software-details-wrapper .reviews {
   max-width: 550px;
+  margin-bottom: 2em;
 }
 .reviews-wrapper .reviews .reviews-heading,
 .software-details-wrapper .reviews .reviews-heading {
@@ -226,6 +226,7 @@ body {
   width: fit-content;
   font-size: 1.4rem;
   font-weight: 700;
+  margin-top: 2em;
 }
 .breadcrumbs > * + * {
   margin-left: 0.4em;
@@ -245,60 +246,70 @@ body {
 /*=========================
     Main Page Styling
 =========================*/
-.main-wrapper .home-link {
-  color: #dc1f1f;
-  text-decoration: underline;
+.main-header {
+  padding: 0.8em 0;
+  font-size: 1.4rem;
+  background-color: #3f3d3d;
+  margin-bottom: 2em;
 }
-.main-wrapper .main-header {
+
+.main-header__flex {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.main-header .signin-link,
+.main-header .home-link {
+  color: white;
+}
+.main-header .account-container {
   position: relative;
 }
-.main-wrapper .account {
+.main-header .account {
   font-size: 1.4rem;
   display: flex;
   align-items: center;
 }
-.main-wrapper .avatar-container {
+.main-header .avatar-container {
   border-radius: 50%;
-  border: 1px solid #2b2929;
   width: 35px;
   height: 35px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-right: 0.5em;
+  background-color: white;
 }
-.main-wrapper .account__options {
-  background-color: #2a2929;
+.main-header .account__options {
+  background-color: #3f3d3d;
   padding: 1.5em 1.5em;
   border-radius: 4px;
-  font-size: 1.3rem;
   position: absolute;
-  top: 40px;
-  right: -15px;
+  top: 100%;
+  right: -25px;
   z-index: 12;
+  width: 130px;
+  box-shadow: 0px 16px 24px 2px rgb(25 25 25 / 18%);
 }
-.main-wrapper .account__options a {
+.main-header .account__options a {
   color: white;
 }
-.main-wrapper .account__options .signout-link {
+.main-header .account__options .signout-link {
   display: flex;
 }
-.main-wrapper .account__options .signout-link img {
-  margin-right: 0.2em;
+.main-header .account__options .signout-link img {
+  margin-left: 0.4em;
 }
-.main-wrapper .account__options li + li {
+.main-header .account__options li + li {
   margin-top: 1.2em;
 }
-.main-wrapper header .signin-link {
+.main-header header .signin-link {
   font-weight: 700;
   font-size: 1.4rem;
 }
 .main-wrapper .search {
   position: relative;
-  margin: 1.5em auto 0 auto;
+  margin: 0 auto;
   width: 300px;
 }
 .main-wrapper .search__img {
@@ -330,7 +341,7 @@ body {
   margin-top: 3em;
 }
 .main-wrapper .software {
-  margin-bottom: 2em;
+  margin-bottom: 1em;
 }
 .main-wrapper .software a {
   padding: 1em;
@@ -508,7 +519,7 @@ body {
 ==============================*/
 
 .reviews-wrapper .reviews {
-  margin: 0 auto;
+  margin: 0 auto 2em auto;
   max-width: 600px;
 }
 .reviews-wrapper .reviews .rate-link {
@@ -594,7 +605,7 @@ body {
   max-width: 550px;
 }
 .review-wrapper .review {
-  margin: 0 auto;
+  margin: 0 auto 2em auto;
 }
 
 /*========================
@@ -620,6 +631,9 @@ body {
   width: 39px;
   min-width: 25px;
   height: 32px;
+}
+.rate-wrapper .review-form {
+  margin-bottom: 2em;
 }
 .rate-wrapper .review-form textarea,
 .rate-wrapper .review-form input {
@@ -670,7 +684,7 @@ body {
   letter-spacing: 1px;
 }
 .rate-wrapper .review-form .submit-btn--disabled {
-  background-color: #dc1f1fba;
+  background-color: #ca4f4f;
   pointer-events: none;
 }
 .rate-wrapper .review-form .required-arterisk {
@@ -812,6 +826,9 @@ body {
 .edit-reviews-wrapper .past-review {
   margin-bottom: 3em;
 }
+.edit-reviews-wrapper .past-review__software .software__logo {
+  min-width: 60px;
+}
 .edit-reviews-wrapper .past-review .no-change-msg {
   color: #dc1f1f;
   font-size: 1.4rem;
@@ -824,13 +841,19 @@ body {
 .edit-reviews-wrapper .past-review__basic-info-and-ctas {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
 }
 .edit-reviews-wrapper .past-review__ctas {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: auto auto;
   position: relative;
 }
+
+.edit-reviews-wrapper .past-review__ctas img {
+  width: 28px;
+  height: 28px;
+}
+
 .edit-reviews-wrapper .past-review__ctas__wrapper {
   position: absolute;
   top: 0;
@@ -840,7 +863,7 @@ body {
 }
 .edit-reviews-wrapper .past-review__ctas .edit-btn,
 .edit-reviews-wrapper .past-review__ctas .cancel-btn {
-  margin-right: 1em;
+  margin-right: 2em;
 }
 .edit-reviews-wrapper .past-review__ctas .save-btn,
 .edit-reviews-wrapper .past-review__ctas .cancel-btn {
@@ -866,6 +889,11 @@ body {
 .edit-reviews-wrapper .past-review .stars-list .star {
   width: 22px;
   height: 22px;
+  min-width: 22px;
+  filter: drop-shadow(1px 1px 4px #bdbdbd);
+}
+.edit-reviews-wrapper .past-review .stars-list .star--button {
+  filter: drop-shadow(2px 4px 4px #bdbdbd);
 }
 .edit-reviews-wrapper .past-review .stars-list li + li {
   margin-left: 0.3em;
@@ -880,11 +908,10 @@ body {
   min-height: 100px;
   max-height: 100px;
   padding: 0.5em 1em;
-  border: none;
+  border: 1px solid #cccccc;
   border-radius: 6px;
   font-size: 1.4rem;
-  line-height: 2rem;
-  background-color: #f8fbf8;
+  line-height: 2.2rem;
 }
 .edit-reviews-wrapper .no-reviews-msg {
   text-align: center;
@@ -892,6 +919,134 @@ body {
 .edit-reviews-wrapper .wait-msg {
   background-color: #2b2929ba;
 }
+
+/*============================
+     Account Page Styling
+==============================*/
+.account-wrapper .forms label,
+.account-wrapper .forms label input,
+.account-wrapper .danger-zone__cta input {
+  display: block;
+}
+.account-wrapper input::placeholder {
+  font-size: 1.2rem;
+}
+.account-wrapper button,
+input[type='submit'] {
+  color: white;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 3px;
+}
+.account-wrapper .forms,
+.account-wrapper .danger-zone {
+  max-width: 550px;
+}
+.account-wrapper .danger-zone__error-msg,
+.account-wrapper .forms .success-msg,
+.account-wrapper .forms .error-msg {
+  font-size: 1.4rem;
+  margin: 0.5em 0;
+  font-weight: 700;
+}
+.account-wrapper .forms .success-msg {
+  color: green;
+}
+.account-wrapper .forms .error-msg,
+.account-wrapper .danger-zone__error-msg {
+  color: #dc1f1f;
+}
+.account-wrapper .forms {
+  margin: 3em 0;
+  display: grid;
+  grid-gap: 2.5em;
+}
+.account-wrapper .forms label {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 0.6em;
+}
+.account-wrapper .forms .input-field,
+.account-wrapper .danger-zone__cta input {
+  border-radius: 5px;
+  border: 0.5px solid #686767;
+  font-size: 1.4rem;
+  padding: 0.5em 1em 0.5em 1.5em;
+  width: min(100%, 340px);
+}
+.account-wrapper .forms .ctas {
+  display: flex;
+  justify-self: flex-end;
+}
+.account-wrapper .password-form .ctas {
+  grid-row: 1;
+  grid-column: 2;
+}
+.account-wrapper .forms .ctas .save-btn {
+  background-color: #3f3d3d;
+  margin-right: 1em;
+}
+.account-wrapper .forms .ctas .cancel-btn {
+  background-color: #dc1f1f;
+}
+.account-wrapper .email-form,
+.account-wrapper .password-form,
+.account-wrapper .name-form {
+  display: grid;
+  grid-template-columns: 1fr 0.3fr;
+  align-items: flex-end;
+  grid-gap: 0 1em;
+  grid-column: 1/-1;
+}
+.account-wrapper .password-form {
+  grid-gap: 1em;
+}
+.account-wrapper .name-form .change-btn,
+.account-wrapper .password-form .change-btn {
+  background-color: #3f3d3d;
+}
+.account-wrapper .danger-zone {
+  margin-bottom: 2em;
+}
+.account-wrapper .danger-zone__h {
+  font-size: 2.2rem;
+  font-weight: 700;
+  padding-left: 0.8em;
+  border-left: 3px solid #dc1f1f;
+}
+.account-wrapper .danger-zone__delete-h {
+  font-size: 1.7rem;
+  font-weight: 400;
+  margin: 1.5em 0 0.8em 0;
+}
+.account-wrapper .danger-zone__cta {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 0.8em;
+}
+.account-wrapper .danger-zone__delete-btn {
+  background-color: #dc1f1f;
+  margin-left: 2em;
+}
+.account-wrapper .danger-zone__delete-btn--disabled {
+  background-color: #dc1f1fc7;
+  pointer-events: none;
+}
+.account-wrapper .danger-zone__error-msg {
+  border-left: 2px solid;
+  padding-left: 1em;
+}
+
+.account-wrapper .danger-zone__warning-para {
+  font-size: 1.35rem;
+  font-weight: 500;
+  max-width: 350px;
+  line-height: 2rem;
+}
+.account-wrapper .wait-msg {
+  background-color: #2b2929ba;
+}
+
 /*===============================
     Not Found Page Stytling
 ===============================*/
@@ -1084,7 +1239,7 @@ body {
   }
 }
 @media (max-width: 650px) {
-  .main-wrapper .search {
+  .main-header {
     margin: 1.5em 0;
   }
 
@@ -1106,7 +1261,7 @@ body {
     width: 90%;
   }
   .main-wrapper .account__options {
-    right: 0;
+    right: -5px;
   }
   .main-wrapper .search {
     width: 100%;
@@ -1197,6 +1352,24 @@ body {
   }
   .already-rated-modal .cta-btns .exit-btn {
     margin: 0 0 0.5em 0;
+  }
+  .edit-reviews-wrapper .past-review__basic-info-and-ctas {
+    align-items: initial;
+    flex-direction: column;
+  }
+  .edit-reviews-wrapper .past-review__ctas {
+    display: flex;
+    margin-top: 1em;
+  }
+  .account-wrapper .email-form,
+  .account-wrapper .password-form,
+  .account-wrapper .name-form {
+    grid-gap: 1em 0;
+    grid-template-columns: initial;
+  }
+  .account-wrapper .password-form .ctas {
+    grid-row: initial;
+    grid-column: initial;
   }
 }
 @media (max-width: 250px) {

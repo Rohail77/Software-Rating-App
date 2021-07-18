@@ -1,4 +1,4 @@
-import { createRef } from 'react';
+import { createRef, Fragment } from 'react';
 import Search from './page components/search/Search';
 import Software from './page components/software info/Software';
 import { v4 as uuidv4 } from 'uuid';
@@ -19,36 +19,37 @@ function MainPage({ setSoftwareSearchString, softwares, onWait }) {
   }
 
   return (
-    <div className='wrapper main-wrapper'>
+    <Fragment>
       <header className='main-header'>
-        <div className='breadcrumbs'>
-          <Link
-            className='page-link active-page-link'
-            to={{
-              pathname: '/',
-            }}
-            onClick={onHomePageClick}
-          >
-            Home
-          </Link>
+        <div className='main-header__flex main-wrapper wrapper'>
+            <Link
+              className='home-link'
+              to={{
+                pathname: '/',
+              }}
+              onClick={onHomePageClick}
+            >
+              Home
+            </Link>
+          <AccountUISelector />
         </div>
-
-        <AccountUISelector />
       </header>
-      <Search
-        setSoftwareSearchString={setSoftwareSearchString}
-        softwareSearchInput={softwareSearchInput}
-      />
-      {onWait ? (
-        <WaitMessage />
-      ) : (
-        <ul className='softwares-list'>
-          {softwares.map(software => (
-            <Software software={software} key={uuidv4()} />
-          ))}
-        </ul>
-      )}
-    </div>
+      <div className='wrapper main-wrapper'>
+        <Search
+          setSoftwareSearchString={setSoftwareSearchString}
+          softwareSearchInput={softwareSearchInput}
+        />
+        {onWait ? (
+          <WaitMessage />
+        ) : (
+          <ul className='softwares-list'>
+            {softwares.map(software => (
+              <Software software={software} key={uuidv4()} />
+            ))}
+          </ul>
+        )}
+      </div>
+    </Fragment>
   );
 }
 

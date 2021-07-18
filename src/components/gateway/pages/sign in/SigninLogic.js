@@ -1,54 +1,57 @@
 import { Component, Fragment } from 'react';
-import { authorization } from '../auth/Authorization';
-import Signup from './Signup';
+import { Redirect } from 'react-router-dom';
+import { authorization } from '../../auth/Authorization';
+import Signin from './Signin';
 
-class SignupLogic extends Component {
+class SigninLogic extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
       email: '',
       password: '',
-      signedUp: false,
       hasError: false,
       errorMsg: '',
       onWait: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.onSignup = this.onSignup.bind(this);
+    this.onSignin = this.onSignin.bind(this);
   }
 
   handleSubmit(event) {
     event.preventDefault();
     this.validationCheck()
       ? this.showError({ msg: 'Please fill all the form fields.' })
-      : this.signup();
+      : this.signin();
   }
 
   validationCheck() {
-    const { email, password, name } = this.state;
-    return email === '' || password === '' || name === '';
+    const { email, password } = this.state;
+    return email === '' || password === '';
   }
 
-  signup() {
-    const { email, password, name } = this.state;
-    authorization.signup({ email, password, name }, this.onSignup);
+  signin() {
+    const { email, password } = this.state;
+    authorization.signin({ email, password }, this.onSignin);
     this.setState({
       onWait: true,
     });
   }
 
-  onSignup(error) {
+  onSignin(error) {
     if (error) {
+      authorization.signout();
       this.showError(error);
     } else {
-      this.setState({
-        onWait: false,
-        signedUp: true,
-        hasError: false,
-        errorMsg: '',
-      });
+      const { handleLogin } = this.props;
+      this.setState(
+        {
+          onWait: false,
+          hasError: false,
+          errorMsg: '',
+        },
+        () => handleLogin(true)
+      );
     }
   }
 
@@ -68,11 +71,11 @@ class SignupLogic extends Component {
   }
 
   render() {
-    const { from } = this.props;
-
+    const { loggedin, from } = this.props;
     return (
       <Fragment>
-        <Signup
+        {loggedin ? <Redirect to='/' /> : null}
+        <Signin
           {...this.state}
           handleChange={this.handleChange}
           handleSubmit={this.handleSubmit}
@@ -83,4 +86,4 @@ class SignupLogic extends Component {
   }
 }
 
-export default SignupLogic;
+export default SigninLogic;

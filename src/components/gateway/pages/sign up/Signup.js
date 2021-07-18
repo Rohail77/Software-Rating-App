@@ -1,8 +1,8 @@
-import EmailVerificationModal from './email verification modal/EmailVerificationModal';
-import FormError from '../form error/FormError';
-import WaitMessage from '../../common/wait message/WaitMessage';
+import EmailVerificationModal from './page components/email verification modal/EmailVerificationModal';
+import FormError from '../../common components/FormError';
+import WaitMessage from '../../../common/wait message/WaitMessage';
 import { Link } from 'react-router-dom';
-import BackLink from '../sign in/back link/BackLink';
+import BackLink from '../../common components/BackLink';
 
 function Signup(props) {
   const {

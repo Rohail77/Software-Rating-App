@@ -1,7 +1,12 @@
 import Review from './Review';
 import { v4 as uuidv4 } from 'uuid';
 
-function ReviewsList({ reviews, softwareID, fromSoftwareDetailsPage }) {
+function ReviewsList({
+  reviews,
+  softwareID,
+  fromSoftwareDetailsPage,
+  noReviewsPage,
+}) {
   const data = {
     maxLength: 300,
     maxLengthDifference: 100,
@@ -18,6 +23,7 @@ function ReviewsList({ reviews, softwareID, fromSoftwareDetailsPage }) {
           fromSoftwareDetailsPage={
             fromSoftwareDetailsPage ? fromSoftwareDetailsPage : false
           }
+          noReviewsPage={noReviewsPage ? noReviewsPage : false}
         />
       ))}
     </ul>

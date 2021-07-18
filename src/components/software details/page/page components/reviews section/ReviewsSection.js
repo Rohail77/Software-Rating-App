@@ -21,6 +21,7 @@ function ReviewsSection({ software, reviews }) {
         reviews={reviews.slice(0, 3)}
         softwareID={software.id}
         fromSoftwareDetailsPage={true}
+        noReviewsPage={reviews.length <= 3 ? true : false}
       />
 
       {software.total_reviews <= 3 ? null : (

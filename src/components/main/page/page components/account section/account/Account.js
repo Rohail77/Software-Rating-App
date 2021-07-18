@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import { createRef, Component } from 'react';
 import AccountOptions from './AccountOptions';
 
 class Account extends Component {
@@ -7,7 +7,29 @@ class Account extends Component {
     this.state = {
       dropdownOpen: false,
     };
+    this.accountRef = createRef();
     this.toggleDropdown = this.toggleDropdown.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
+  }
+
+  componentDidMount() {
+    document.addEventListener('mousedown', this.handleClickOutside);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+
+  handleClickOutside(event) {
+    if (
+      this.accountRef.current &&
+      (!this.accountRef.current.contains(event.target) ||
+        !this.accountRef.current === event.target)
+    ) {
+      this.setState(state => ({
+        dropdownOpen: false,
+      }));
+    }
   }
 
   toggleDropdown(event) {
@@ -21,15 +43,15 @@ class Account extends Component {
     const { dropdownOpen } = this.state;
 
     return (
-      <Fragment>
-        <a className='account' href='a' onClick={this.toggleDropdown}>
+      <div className='account-container' ref={this.accountRef}>
+        <a className='account' href='account options' onClick={this.toggleDropdown}>
           <div className='avatar-container'>
             <img src='/images/avatar.svg' alt='avatar' />
           </div>
           <img src='/images/down arrow.svg' alt='down arrrow' />
         </a>
         {dropdownOpen ? <AccountOptions /> : null}
-      </Fragment>
+      </div>
     );
   }
 }

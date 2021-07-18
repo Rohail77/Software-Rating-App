@@ -1,7 +1,8 @@
 import { Route, Switch } from 'react-router-dom';
-import EditReviewsPage from './edit reviews/EditReviewsPage';
-import SigninContextConsumer from './gateway/sign in/SigninContextConsumer';
-import SignupContextConsumer from './gateway/sign up/SignupContextConsumer';
+import AccountPage from './account/page/AccountPage';
+import EditReviewsPage from './edit reviews/page/EditReviewsPage';
+import SigninContextConsumer from './gateway/pages/sign in/SigninContextConsumer';
+import SignupContextConsumer from './gateway/pages/sign up/SignupContextConsumer';
 import MainPageLogic from './main/page/MainPageLogic';
 import NotFound from './not found page/NotFound';
 import SoftwareDetailsRouterLogic from './software details/router/SoftwareDetailsRouterLogic';
@@ -21,11 +22,20 @@ function AppRouter(props) {
           return <MainPageLogic {...props} />;
         }}
       />
+
       <Route
         path='/edit_reviews'
         exact
         render={() => {
           return <EditReviewsPage />;
+        }}
+      />
+
+      <Route
+        path='/account'
+        exact
+        render={() => {
+          return <AccountPage />;
         }}
       />
 
@@ -53,9 +63,7 @@ function AppRouter(props) {
           const { id } = props.match.params;
           const software = getSoftware(id);
           return software ? (
-            <SoftwareDetailsRouterLogic
-              software={software}
-            />
+            <SoftwareDetailsRouterLogic software={software} />
           ) : (
             <NotFound />
           );

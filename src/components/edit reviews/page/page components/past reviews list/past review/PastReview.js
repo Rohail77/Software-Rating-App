@@ -1,10 +1,10 @@
 import { Component } from 'react';
-import SoftwareLogo from '../../../common/software basic info/software logo and details/SoftwareLogo';
+import SoftwareLogo from '../../../../../common/software basic info/software logo and details/SoftwareLogo';
 import EditableFormButtons from './edit review form/cta buttons/EditableFormButtons';
 import NonEditableFormButtons from './edit review form/cta buttons/NonEditableFormButtons';
 import EditReviewForm from './edit review form/EditReviewForm';
-import { user } from '../../../../database/User';
-import { db } from '../../../../database/Softwares';
+import { user } from '../../../../../../database/User';
+import { db } from '../../../../../../database/Softwares';
 
 class PastReview extends Component {
   constructor(props) {
@@ -125,7 +125,6 @@ class PastReview extends Component {
   }
 
   setEditable(value) {
-    console.log(value);
     this.setState({
       editable: value,
     });

@@ -13,7 +13,7 @@ class Database {
     this.softwaresRef
       .doc(softwareID)
       .collection('Reviews')
-      .doc(user.email)
+      .doc(user.id)
       .onSnapshot(doc => {
         cb();
       });
@@ -51,6 +51,7 @@ class Database {
         querySnapshot.forEach(doc => {
           if (doc.data().review !== '') {
             reviews.push({
+              id: doc.id,
               ...doc.data(),
               date: formatDate(doc.data().date.toDate()),
             });
@@ -79,7 +80,7 @@ class Database {
     return this.softwaresRef
       .doc(softwareID)
       .collection('Reviews')
-      .doc(user.email)
+      .doc(user.id)
       .set({ ...data, date: firebase.firestore.Timestamp.now() });
   }
 

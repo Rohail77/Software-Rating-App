@@ -7,6 +7,7 @@ function Review(props) {
     maxLengthDifference,
     softwareID,
     fromSoftwareDetailsPage,
+    noReviewsPage,
   } = props;
   const lengthDifference = review.review.length - maxLength;
 
@@ -30,9 +31,10 @@ function Review(props) {
         <Link
           className='see-more-link'
           to={{
-            pathname: `/software_details/${softwareID}/reviews/review/${review.username}`,
+            pathname: `/software_details/${softwareID}/reviews/${review.id}`,
             state: {
               fromSoftwareDetailsPage,
+              noReviewsPage
             },
           }}
         >

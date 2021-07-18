@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom';
-import { UserReviewsContext } from '../../context/UserReviewsContext';
-import HomeLink from '../common/home link/HomeLink';
-import NoReviewsMessage from './no reviews message/NoReviewsMessage';
-import PastReviews from './past reviews list/PastReviews';
+import { UserReviewsContext } from '../../../context/UserReviewsContext';
+import HomeLink from '../../common/home link/HomeLink';
+import NoReviewsMessage from './page components/no reviews message/NoReviewsMessage';
+import PastReviews from './page components/past reviews list/PastReviews';
 
 function EditReviewsPage() {
-
   return (
     <div className='wrapper edit-reviews-wrapper'>
       <header>
@@ -13,7 +12,7 @@ function EditReviewsPage() {
           <HomeLink />
           <span> \ </span>
           <Link className='page-link active-page-link' to='/edit_reviews'>
-            Your ratings
+            Rated Apps
           </Link>
         </div>
       </header>

@@ -66,9 +66,10 @@ class ReviewForm extends Component {
   }
 
   addSoftwareToUserReviews() {
-    const { softwareID } = this.props;
-    user.addSoftwareToReview(softwareID).then(() => {
-      this.props.getUpdatedUserReviews();
+    const { softwareID, getUpdatedUserReviews } = this.props;
+    user.addSoftwareToReviews(softwareID).then(() => {
+      getUpdatedUserReviews();
+      user.bindUpdaterToReviews(getUpdatedUserReviews);
     });
   }
 

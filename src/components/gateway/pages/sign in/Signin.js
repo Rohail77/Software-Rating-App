@@ -1,6 +1,6 @@
-import WaitMessage from '../../common/wait message/WaitMessage';
-import FormError from '../form error/FormError';
-import BackLink from './back link/BackLink';
+import WaitMessage from '../../../common/wait message/WaitMessage';
+import FormError from '../../common components/FormError';
+import BackLink from '../../common components/BackLink';
 import { Link } from 'react-router-dom';
 
 function Signin(props) {
