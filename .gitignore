@@ -2,9 +2,9 @@
 
 # dependencies
 /node_modules
-/src/config/database_config.js
 /.pnp
 .pnp.js
+.env
 
 # testing
 /coverage
