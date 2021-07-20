@@ -1,12 +1,12 @@
 import { Component } from 'react';
 import SoftwareLogo from '../../../../../common/software basic info/software logo and details/SoftwareLogo';
-import EditableFormButtons from './edit review form/cta buttons/EditableFormButtons';
-import NonEditableFormButtons from './edit review form/cta buttons/NonEditableFormButtons';
-import EditReviewForm from './edit review form/EditReviewForm';
+import EditableFormButtons from './edit rating form/cta buttons/EditableFormButtons';
+import NonEditableFormButtons from './edit rating form/cta buttons/NonEditableFormButtons';
+import EditRatingForm from './edit rating form/EditRatingForm';
 import { user } from '../../../../../../database/User';
 import { db } from '../../../../../../database/Softwares';
 
-class PastReview extends Component {
+class PastRating extends Component {
   constructor(props) {
     super(props);
     const { rating, review } = this.props.userReview;
@@ -65,9 +65,9 @@ class PastReview extends Component {
 
     if (this.shouldDecrementTotalReviews())
       return db.decrementTotalReviews(softwareID);
-    else if (this.shouldIncrementTotalReviews())
+    if (this.shouldIncrementTotalReviews())
       return db.incrementTotalReviews(softwareID);
-    else return Promise.resolve();
+    return Promise.resolve();
   }
 
   shouldDecrementTotalReviews() {
@@ -87,9 +87,8 @@ class PastReview extends Component {
       return db
         .replaceStarCount(softwareID, rating, this.props.userReview.rating)
         .then(() => db.updateAverageRating(softwareID));
-    } else {
-      return new Promise.resolve();
     }
+    return new Promise.resolve();
   }
 
   shouldChangeStarCount() {
@@ -103,12 +102,18 @@ class PastReview extends Component {
   }
 
   handleDelete() {
+    this.setState(
+      {
+        clickable: false,
+      },
+      this.deleteReview
+    );
+  }
+
+  deleteReview() {
+    const { rating, review } = this.state;
     const { softwareID } = this.props.userReview;
     const { getUpdatedUserReviews } = this.props;
-    const { rating, review } = this.state;
-    this.setState({
-      clickable: false,
-    });
     user.deleteReview(softwareID).then(() => {
       getUpdatedUserReviews();
       if (review !== '') db.decrementTotalReviews(softwareID);
@@ -177,13 +182,12 @@ class PastReview extends Component {
             <NonEditableFormButtons
               setEditable={this.setEditable}
               handleDelete={this.handleDelete}
-              focusTextField={this.focusTextField}
               clickable={clickable}
             />
           )}
         </div>
         {error ? <p className='no-change-msg'>* No change To update</p> : null}
-        <EditReviewForm
+        <EditRatingForm
           rating={rating}
           review={review}
           editable={editable}
@@ -196,4 +200,4 @@ class PastReview extends Component {
   }
 }
 
-export default PastReview;
+export default PastRating;

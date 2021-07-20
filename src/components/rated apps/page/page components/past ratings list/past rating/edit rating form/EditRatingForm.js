@@ -1,6 +1,6 @@
 import RatingStarsList from '../../../../../../software details/rate/page/page components/review form/rating input/rating stars list/RatingStarsList';
 
-function EditReviewForm(props) {
+function EditRatingForm(props) {
   const { review, rating, handleChange, editable, setRating } = props;
 
   return (
@@ -20,4 +20,4 @@ function EditReviewForm(props) {
   );
 }
 
-export default EditReviewForm;
+export default EditRatingForm;

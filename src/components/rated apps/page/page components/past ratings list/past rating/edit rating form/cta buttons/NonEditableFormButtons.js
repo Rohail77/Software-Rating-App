@@ -1,13 +1,11 @@
-function NonEditableFormButtons({ clickable }) {
+function NonEditableFormButtons({ setEditable, handleDelete, clickable }) {
   const edit = event => {
     event.preventDefault();
-    const { setEditable } = this.props;
     setEditable(true);
   };
 
   const del = event => {
     event.preventDefault();
-    const { handleDelete } = this.props;
     handleDelete();
   };
 

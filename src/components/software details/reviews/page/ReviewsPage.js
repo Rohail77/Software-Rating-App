@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import SoftwareInfo from './page components/software info/SoftwareInfo';
 import ReviewsList from '../../common components/reviews/review list/ReviewsList';
-import ReviewPages from './page components/reviews section/review pages/ReviewPages';
+import Pages from '../../../common/pages/Pages';
 import RateLink from '../../common components/common links/RateLink';
 import ReviewsInfo from './page components/reviews section/reviews info/ReviewsInfo';
 import { Link } from 'react-router-dom';
@@ -14,6 +14,9 @@ class ReviewsPage extends Component {
       currentPage: 1,
       star: 'all',
       reviews: this.props.reviews,
+    };
+    this.data = {
+      reviewsPerPage: 2,
     };
     this.filterReviews = this.filterReviews.bind(this);
     this.updateCurrentPage = this.updateCurrentPage.bind(this);
@@ -42,24 +45,22 @@ class ReviewsPage extends Component {
 
   getReviewsForCurrentPage() {
     const { reviews } = this.state;
+    const { reviewsPerPage } = this.data;
     return reviews.slice(
-      this.getInitialReviewNumberForCurrentPage(),
-      this.getInitialReviewNumberForCurrentPage() + 10
+      this.getInitialReviewIndexForCurrentPage(),
+      this.getInitialReviewIndexForCurrentPage() + reviewsPerPage
     );
   }
-  getInitialReviewNumberForCurrentPage() {
+  getInitialReviewIndexForCurrentPage() {
+    const { reviewsPerPage } = this.data;
     const { currentPage } = this.state;
-    return (currentPage - 1) * 10;
-  }
-
-  getTotalPages() {
-    const { reviews } = this.state;
-    return Math.ceil(reviews.length / 10);
+    return (currentPage - 1) * reviewsPerPage;
   }
 
   render() {
     const { software } = this.props;
     const { reviews } = this.state;
+    const { reviewsPerPage } = this.data;
 
     return (
       <div className='wrapper reviews-wrapper'>
@@ -104,9 +105,10 @@ class ReviewsPage extends Component {
             reviews={this.getReviewsForCurrentPage()}
             softwareID={software.id}
           />
-          {this.getTotalPages() === 0 ? null : (
-            <ReviewPages
-              totalPages={this.getTotalPages()}
+          {reviews.length === 0 ? null : (
+            <Pages
+              totalItems={reviews.length}
+              itemsPerPage={reviewsPerPage}
               currentPage={this.state.currentPage}
               updateCurrentPage={this.updateCurrentPage}
             />

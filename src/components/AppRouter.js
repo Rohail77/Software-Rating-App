@@ -1,17 +1,16 @@
 import { Route, Switch } from 'react-router-dom';
 import AccountPage from './account/page/AccountPage';
-import EditReviewsPage from './edit reviews/page/EditReviewsPage';
-import SigninContextConsumer from './gateway/pages/sign in/SigninContextConsumer';
-import SignupContextConsumer from './gateway/pages/sign up/SignupContextConsumer';
 import MainPageLogic from './main/page/MainPageLogic';
 import NotFound from './not found page/NotFound';
 import SoftwareDetailsRouterLogic from './software details/router/SoftwareDetailsRouterLogic';
+import RatedAppsContextConsumer from './rated apps/page/RatedAppsContextConsumer';
+import SigninLogic from './gateway/pages/sign in/SigninLogic';
+import SignupLogic from './gateway/pages/sign up/SignupLogic';
 
 function AppRouter(props) {
-  function getSoftware(id) {
-    const { softwares } = props;
-    return softwares.find(software => software.id === id);
-  }
+  const { onWait, softwares } = props;
+
+  const getSoftware = id => softwares.find(software => software.id === id);
 
   return (
     <Switch>
@@ -19,15 +18,15 @@ function AppRouter(props) {
         path='/'
         exact
         render={() => {
-          return <MainPageLogic {...props} />;
+          return <MainPageLogic onWait={onWait} softwares={softwares} />;
         }}
       />
 
       <Route
-        path='/edit_reviews'
+        path='/rated_apps'
         exact
         render={() => {
-          return <EditReviewsPage />;
+          return <RatedAppsContextConsumer />;
         }}
       />
 
@@ -44,7 +43,7 @@ function AppRouter(props) {
         exact
         render={props => {
           const { from } = props.location.state;
-          return <SignupContextConsumer from={from} />;
+          return <SignupLogic from={from} />;
         }}
       />
 
@@ -53,7 +52,7 @@ function AppRouter(props) {
         exact
         render={props => {
           const { from } = props.location.state;
-          return <SigninContextConsumer from={from} />;
+          return <SigninLogic from={from} />;
         }}
       />
 

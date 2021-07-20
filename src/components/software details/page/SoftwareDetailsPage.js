@@ -24,13 +24,12 @@ function SoftwareDetailsPage(props) {
         <span> \ </span>
         <Link
           className='page-link active-page-link'
-          to={{
-            pathname: `/software_details/${id}`,
-          }}
+          to={`/software_details/${id}`}
         >
           {name}
         </Link>
       </div>
+      
       <SoftwareInfo
         name={name}
         developer={developer}

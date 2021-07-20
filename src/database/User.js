@@ -43,7 +43,7 @@ class User {
           if (index === reviewedSoftwares.length - 1) return;
         });
       })
-      .catch(error => console.log(error));
+      .catch(error => console.log('Error: ', error));
   }
 
   delete(password) {
@@ -113,12 +113,11 @@ class User {
           .doc(this.id)
           .delete();
       })
-      .catch(error => console.log(error));
+      .catch(error => console.log('Error: ', error));
   }
 
   bindUpdaterToReviews(updater) {
     this.userRef.get().then(doc => {
-      if (!doc.exists) console.log('document doesnt exist');
       if (doc.exists) {
         doc.data().reviewedSoftwares.forEach(softwareID => {
           database
@@ -174,7 +173,7 @@ class User {
             });
         });
       })
-      .catch(error => console.log(error));
+      .catch(error => console.log('Error: ', error));
   }
 
   addSoftwareToReviews(softwareID) {
@@ -191,9 +190,7 @@ class User {
       .collection('Users')
       .doc(this.id)
       .set({ reviewedSoftwares: [] })
-      .catch(error => {
-        console.log(error);
-      });
+      .catch(error => console.log('Error: ', error));
   }
 
   isSignedin() {

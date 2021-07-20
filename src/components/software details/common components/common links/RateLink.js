@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
-import { UserContext } from '../../../../context/userContext';
+import { user } from '../../../../database/User';
 
 function RateLink({ softwareID }) {
-  const getDestinationInformation = function (loggedin) {
-    return loggedin
+  const getDestinationInformation = () =>
+    user.isSignedin()
       ? {
           pathname: `/software_details/${softwareID}/rate`,
         }
@@ -13,21 +13,11 @@ function RateLink({ softwareID }) {
             from: `/software_details/${softwareID}`,
           },
         };
-  };
 
   return (
-    <UserContext.Consumer>
-      {user => {
-        return (
-          <Link
-            className='rate-link'
-            to={getDestinationInformation(user.loggedin)}
-          >
-            Rate this app
-          </Link>
-        );
-      }}
-    </UserContext.Consumer>
+    <Link className='rate-link' to={getDestinationInformation()}>
+      Rate this app
+    </Link>
   );
 }
 

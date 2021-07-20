@@ -10,7 +10,7 @@ function AccountOptions({ accountOptionsRef }) {
         </Link>
       </li>
       <li>
-        <Link className='account__option' to='/edit_reviews'>
+        <Link className='account__option' to='/rated_apps'>
           Rated Apps
         </Link>
       </li>

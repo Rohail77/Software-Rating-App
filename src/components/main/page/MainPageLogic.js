@@ -5,14 +5,26 @@ class MainPageLogic extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      currentPage: 1,
       softwareSearchString: '',
     };
+    this.data = {
+      softwaresPerPage: 8,
+    };
     this.setSoftwareSearchString = this.setSoftwareSearchString.bind(this);
+    this.updateCurrentPage = this.updateCurrentPage.bind(this);
+  }
+
+  updateCurrentPage(newPageNumber) {
+    this.setState({
+      currentPage: newPageNumber,
+    });
   }
 
   setSoftwareSearchString(string) {
     this.setState({
       softwareSearchString: string,
+      currentPage: 1,
     });
   }
 
@@ -30,14 +42,18 @@ class MainPageLogic extends Component {
   }
 
   render() {
-
-    const {onWait} = this.props;
+    const { onWait } = this.props;
+    const { currentPage } = this.state;
+    const { softwaresPerPage } = this.data;
 
     return (
       <MainPage
         softwares={this.getFilteredSoftwares()}
         setSoftwareSearchString={this.setSoftwareSearchString}
         onWait={onWait}
+        updateCurrentPage={this.updateCurrentPage}
+        currentPage={currentPage}
+        softwaresPerPage={softwaresPerPage}
       />
     );
   }

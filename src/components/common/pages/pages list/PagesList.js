@@ -1,9 +1,9 @@
-import ReviewPage from './review page/ReviewPage';
+import Page from './page/Page';
 import { v4 as uuidv4 } from 'uuid';
 import PreviousPageButton from './page navigation buttons/PreviousPageButton';
 import NextPageButton from './page navigation buttons/NextPageButton';
 
-function ReviewPagesList({ currentPage, totalPages, updateCurrentPage }) {
+function PagesList({ currentPage, totalPages, updateCurrentPage }) {
   function endPagesNotReached() {
     return currentPage + 2 <= totalPages;
   }
@@ -40,14 +40,14 @@ function ReviewPagesList({ currentPage, totalPages, updateCurrentPage }) {
   }
 
   return (
-    <ul className='review-pages__list'>
+    <ul className='pages__list'>
       <PreviousPageButton
         isDisabled={disablePreviousPageButton()}
         currentPage={currentPage}
         updateCurrentPage={updateCurrentPage}
       />
       {getPageNumbers().map(pageNumber => (
-        <ReviewPage
+        <Page
           pageNumber={pageNumber}
           updateCurrentPage={updateCurrentPage}
           isActive={pageNumber === currentPage}
@@ -63,4 +63,4 @@ function ReviewPagesList({ currentPage, totalPages, updateCurrentPage }) {
   );
 }
 
-export default ReviewPagesList;
+export default PagesList;

@@ -1,4 +1,4 @@
-function ReviewPage({ pageNumber, isActive, updateCurrentPage }) {
+function Page({ pageNumber, isActive, updateCurrentPage }) {
   function handleClick(event) {
     event.preventDefault();
     updateCurrentPage(pageNumber);
@@ -7,7 +7,7 @@ function ReviewPage({ pageNumber, isActive, updateCurrentPage }) {
     <li>
       <button
         className={`page page--clickable${
-          isActive ? ' active-review-page' : ''
+          isActive ? ' active-page' : ''
         }`}
         onClick={handleClick}
       >
@@ -17,4 +17,4 @@ function ReviewPage({ pageNumber, isActive, updateCurrentPage }) {
   );
 }
 
-export default ReviewPage;
+export default Page;

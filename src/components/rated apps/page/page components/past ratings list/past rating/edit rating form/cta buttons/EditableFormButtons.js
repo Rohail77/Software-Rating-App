@@ -1,19 +1,17 @@
-function EditableFormButtons() {
+function EditableFormButtons({ reset, handleSubmit }) {
   const save = event => {
     event.preventDefault();
-    const { handleSubmit } = this.props;
     handleSubmit();
   };
 
-  const reset = event => {
+  const _reset = event => {
     event.preventDefault();
-    const { reset } = this.props;
     reset();
   };
 
   return (
     <div className='past-review__ctas'>
-      <a href='cancel' className='cancel-btn' onClick={reset}>
+      <a href='cancel' className='cancel-btn' onClick={_reset}>
         Cancel
       </a>
       <a href='save' className='save-btn' onClick={save}>

@@ -1,4 +1,4 @@
-import { Component, Fragment } from 'react';
+import { Component} from 'react';
 import { authorization } from '../../auth/Authorization';
 import Signup from './Signup';
 
@@ -71,14 +71,12 @@ class SignupLogic extends Component {
     const { from } = this.props;
 
     return (
-      <Fragment>
-        <Signup
-          {...this.state}
-          handleChange={this.handleChange}
-          handleSubmit={this.handleSubmit}
-          from={from}
-        />
-      </Fragment>
+      <Signup
+        {...this.state}
+        handleChange={this.handleChange}
+        handleSubmit={this.handleSubmit}
+        from={from}
+      />
     );
   }
 }

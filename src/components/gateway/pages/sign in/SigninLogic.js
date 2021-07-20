@@ -12,6 +12,7 @@ class SigninLogic extends Component {
       hasError: false,
       errorMsg: '',
       onWait: false,
+      signedin: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -43,15 +44,12 @@ class SigninLogic extends Component {
       authorization.signout();
       this.showError(error);
     } else {
-      const { handleLogin } = this.props;
-      this.setState(
-        {
-          onWait: false,
-          hasError: false,
-          errorMsg: '',
-        },
-        () => handleLogin(true)
-      );
+      this.setState({
+        onWait: false,
+        hasError: false,
+        errorMsg: '',
+        signedin: true,
+      });
     }
   }
 
@@ -71,10 +69,11 @@ class SigninLogic extends Component {
   }
 
   render() {
-    const { loggedin, from } = this.props;
+    const { from } = this.props;
+    const { signedin } = this.state;
     return (
       <Fragment>
-        {loggedin ? <Redirect to='/' /> : null}
+        {signedin ? <Redirect to='/' /> : null}
         <Signin
           {...this.state}
           handleChange={this.handleChange}

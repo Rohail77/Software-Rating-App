@@ -2,7 +2,6 @@ import { Component } from 'react';
 import './App.css';
 import AppRouter from './components/AppRouter';
 import { db } from './database/Softwares';
-import { UserContext } from './context/userContext';
 import { authorization } from './components/gateway/auth/Authorization';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { user } from './database/User';
@@ -74,26 +73,19 @@ class App extends Component {
   }
 
   render() {
-    const { loggedin } = this.state;
-
-
     return (
       <Router>
-        <UserContext.Provider
-          value={{ loggedin, handleLogin: this.handleLogin }}
+        <UserReviewsContext.Provider
+          value={{
+            userReviews: this.state.userReviews,
+            fetchingUserReviews: this.state.fetchingUserReviews,
+            getUpdatedUserReviews: this.getUserReviews,
+          }}
         >
-          <UserReviewsContext.Provider
-            value={{
-              userReviews: this.state.userReviews,
-              fetchingUserReviews: this.state.fetchingUserReviews,
-              getUpdatedUserReviews: this.getUserReviews,
-            }}
-          >
-            <UpdateSoftwareContext.Provider value={this.updateSoftware}>
-              <AppRouter {...this.state} />
-            </UpdateSoftwareContext.Provider>
-          </UserReviewsContext.Provider>
-        </UserContext.Provider>
+          <UpdateSoftwareContext.Provider value={this.updateSoftware}>
+            <AppRouter {...this.state} />
+          </UpdateSoftwareContext.Provider>
+        </UserReviewsContext.Provider>
       </Router>
     );
   }

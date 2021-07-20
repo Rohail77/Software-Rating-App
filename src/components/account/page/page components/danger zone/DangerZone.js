@@ -100,7 +100,7 @@ class DangerZone extends Component {
               <p className='danger-zone__error-msg__para'>{errorMsg}</p>
             </div>
           ) : null}
-          <p className='danger-zone__warning-para'>Deleting you account will not delete your ratings history. Delete it manually if you desire to.</p>
+          <p className='danger-zone__warning-para'>Deleting your account will not delete your ratings history. Delete it manually if you desire to.</p>
         </section>
       </Fragment>
     );

@@ -16,9 +16,7 @@ export class Authorization {
         });
         this.sendVerificationEmail(cb);
       })
-      .catch(error => {
-        cb({ msg: error.message });
-      });
+      .catch(error => cb({ msg: error.message }));
   }
 
   sendVerificationEmail(cb) {
@@ -28,9 +26,7 @@ export class Authorization {
         this.signout();
         cb(null);
       })
-      .catch(error => {
-        cb({ msg: error.message });
-      });
+      .catch(error => cb({ msg: error.message }));
   }
 
   signin({ email, password }, cb) {
@@ -45,9 +41,7 @@ export class Authorization {
         //   });
         // }
       })
-      .catch(error => {
-        cb({ msg: error.message });
-      });
+      .catch(error => cb({ msg: error.message }));
   }
 
   onLoginDetection(cb) {

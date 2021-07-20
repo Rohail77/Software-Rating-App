@@ -220,6 +220,48 @@ body {
   align-items: center;
   margin: 0 0 1.3em -0.3em;
 }
+.pages {
+  text-align: center;
+  margin-top: 2.5em;
+}
+.pages__list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+.pages__list .page,
+.pages__list .page--clickable {
+  border-radius: 4px;
+  min-height: 35px;
+  min-width: 36px;
+  text-align: center;
+  border: 1px solid black;
+  font-weight: 700;
+  background: white;
+}
+.pages__list .page--clickable:hover {
+  background-color: #e5e5e5;
+}
+.pages__list .active-page {
+  background-color: #dc1f1f;
+  color: white;
+}
+.pages__list .active-page:hover {
+  background-color: #dc1f1f;
+}
+.pages__list li + li {
+  margin-left: 0.4em;
+}
+.pages__list img {
+  min-width: 9px;
+}
+.pages__info {
+  font-size: 1.4rem;
+}
+.pages__info__total-pages {
+  font-weight: 700;
+}
 .breadcrumbs {
   display: flex;
   flex-wrap: wrap;
@@ -334,14 +376,16 @@ body {
   color: #5e5e5e;
   font-weight: 300;
 }
+.main-wrapper .no-results-msg {
+  font-size: 2rem;
+  text-align: center;
+  margin-top: 2em;
+}
 .main-wrapper .softwares-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-gap: 0 1em;
-  margin-top: 3em;
-}
-.main-wrapper .software {
-  margin-bottom: 1em;
+  grid-gap: 2em 1em;
+  margin: 3em 0;
 }
 .main-wrapper .software a {
   padding: 1em;
@@ -378,6 +422,9 @@ body {
 }
 .main-wrapper .software .stars-list .star + .star {
   margin-left: 0.3em;
+}
+.main-wrapper .pages {
+  margin-bottom: 2.5em;
 }
 
 /*====================================
@@ -547,48 +594,7 @@ body {
 .reviews-wrapper .review__para {
   font-size: clamp(1.5rem, 4.5vw, 1.6rem);
 }
-.reviews-wrapper .review-pages {
-  text-align: center;
-  margin-top: 2.5em;
-}
-.reviews-wrapper .review-pages__list {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 0.5em;
-}
-.reviews-wrapper .review-pages__list .page,
-.reviews-wrapper .review-pages__list .page--clickable {
-  border-radius: 4px;
-  min-height: 35px;
-  min-width: 36px;
-  text-align: center;
-  border: 1px solid black;
-  font-weight: 700;
-  background: white;
-}
-.reviews-wrapper .review-pages__list .page--clickable:hover {
-  background-color: #e5e5e5;
-}
-.reviews-wrapper .review-pages__list .active-review-page {
-  background-color: #dc1f1f;
-  color: white;
-}
-.reviews-wrapper .review-pages__list .active-review-page:hover {
-  background-color: #dc1f1f;
-}
-.reviews-wrapper .review-pages__list li + li {
-  margin-left: 0.4em;
-}
-.reviews-wrapper .review-pages__list img {
-  min-width: 9px;
-}
-.reviews-wrapper .review-pages__info {
-  font-size: 1.4rem;
-}
-.reviews-wrapper .review-pages__total-pages {
-  font-weight: 700;
-}
+
 .reviews-wrapper .no-reviews-msg {
   margin-top: 2em;
   font-size: 1.6rem;
@@ -808,100 +814,99 @@ body {
     Edit Reviews Page Styling
 ===============================*/
 
-.edit-reviews-wrapper {
+.rated-apps-wrapper {
   max-width: 600px;
   margin: 0 auto;
 }
 
-.edit-reviews-wrapper header {
+.rated-apps-wrapper header {
   margin-top: 2em;
 }
-.edit-reviews-wrapper header .breadcrumbs {
+.rated-apps-wrapper header .breadcrumbs {
   margin: 0 auto;
 }
-.edit-reviews-wrapper .ratings-h {
+.rated-apps-wrapper .ratings-h {
   text-align: center;
   margin: 1.5em 0;
 }
-.edit-reviews-wrapper .past-review {
+.rated-apps-wrapper .past-review {
   margin-bottom: 3em;
 }
-.edit-reviews-wrapper .past-review__software .software__logo {
+.rated-apps-wrapper .past-review__software .software__logo {
   min-width: 60px;
 }
-.edit-reviews-wrapper .past-review .no-change-msg {
+.rated-apps-wrapper .past-review .no-change-msg {
   color: #dc1f1f;
   font-size: 1.4rem;
   font-weight: 600;
   margin-top: 1em;
 }
-.edit-reviews-wrapper .past-review__form {
+.rated-apps-wrapper .past-review__form {
   position: relative;
 }
-.edit-reviews-wrapper .past-review__basic-info-and-ctas {
+.rated-apps-wrapper .past-review__basic-info-and-ctas {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
 }
-.edit-reviews-wrapper .past-review__ctas {
+.rated-apps-wrapper .past-review__ctas {
   display: grid;
   grid-template-columns: auto auto;
   position: relative;
 }
 
-.edit-reviews-wrapper .past-review__ctas img {
+.rated-apps-wrapper .past-review__ctas img {
   width: 28px;
   height: 28px;
 }
 
-.edit-reviews-wrapper .past-review__ctas__wrapper {
+.rated-apps-wrapper .past-review__ctas__wrapper {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
 }
-.edit-reviews-wrapper .past-review__ctas .edit-btn,
-.edit-reviews-wrapper .past-review__ctas .cancel-btn {
+.rated-apps-wrapper .past-review__ctas .edit-btn,
+.rated-apps-wrapper .past-review__ctas .cancel-btn {
   margin-right: 2em;
 }
-.edit-reviews-wrapper .past-review__ctas .save-btn,
-.edit-reviews-wrapper .past-review__ctas .cancel-btn {
+.rated-apps-wrapper .past-review__ctas .save-btn,
+.rated-apps-wrapper .past-review__ctas .cancel-btn {
   background-color: #dc1f1f;
   padding: 0.5em;
   border-radius: 4px;
   color: white;
   font-size: 1.4rem;
 }
-.edit-reviews-wrapper .past-review .stars-list {
+.rated-apps-wrapper .past-review .stars-list {
   margin: 1em 0;
 }
-.edit-reviews-wrapper .past-review .stars-list-parent {
+.rated-apps-wrapper .past-review .stars-list-parent {
   position: relative;
 }
-.edit-reviews-wrapper .past-review .stars-list-cover {
+.rated-apps-wrapper .past-review .stars-list-cover {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
 }
-.edit-reviews-wrapper .past-review .stars-list .star {
+.rated-apps-wrapper .past-review .stars-list .star {
   width: 22px;
   height: 22px;
   min-width: 22px;
-  filter: drop-shadow(1px 1px 4px #bdbdbd);
 }
-.edit-reviews-wrapper .past-review .stars-list .star--button {
+.rated-apps-wrapper .past-review .stars-list .star--button {
   filter: drop-shadow(2px 4px 4px #bdbdbd);
 }
-.edit-reviews-wrapper .past-review .stars-list li + li {
+.rated-apps-wrapper .past-review .stars-list li + li {
   margin-left: 0.3em;
 }
-.edit-reviews-wrapper .past-review__software .software__review-date {
+.rated-apps-wrapper .past-review__software .software__review-date {
   font-size: 1.25rem;
 }
-.edit-reviews-wrapper .past-review__text {
+.rated-apps-wrapper .past-review__text {
   display: block;
   max-width: 100%;
   min-width: 100%;
@@ -913,10 +918,14 @@ body {
   font-size: 1.4rem;
   line-height: 2.2rem;
 }
-.edit-reviews-wrapper .no-reviews-msg {
+.rated-apps-wrapper .no-ratings-msg {
   text-align: center;
+  margin-top: 3em;
 }
-.edit-reviews-wrapper .wait-msg {
+.rated-apps-wrapper .pages {
+  margin-bottom: 2.5em;
+}
+.rated-apps-wrapper .wait-msg {
   background-color: #2b2929ba;
 }
 
@@ -1240,7 +1249,7 @@ input[type='submit'] {
 }
 @media (max-width: 650px) {
   .main-header {
-    margin: 1.5em 0;
+    margin: 0 0 1.5em 0;
   }
 
   .software-details-wrapper .software .feedback-content {
@@ -1353,11 +1362,11 @@ input[type='submit'] {
   .already-rated-modal .cta-btns .exit-btn {
     margin: 0 0 0.5em 0;
   }
-  .edit-reviews-wrapper .past-review__basic-info-and-ctas {
+  .rated-apps-wrapper .past-review__basic-info-and-ctas {
     align-items: initial;
     flex-direction: column;
   }
-  .edit-reviews-wrapper .past-review__ctas {
+  .rated-apps-wrapper .past-review__ctas {
     display: flex;
     margin-top: 1em;
   }
@@ -1386,7 +1395,9 @@ input[type='submit'] {
     margin-left: 0.4em;
   }
 
-  .reviews-wrapper .review-pages__list .page {
+  .reviews-wrapper,
+  .rated-apps-wrapper,
+  .pages__list .page {
     min-width: 30px;
   }
 }

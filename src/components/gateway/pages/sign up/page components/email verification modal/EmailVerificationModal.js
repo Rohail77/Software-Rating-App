@@ -5,8 +5,7 @@ function EmailVerificationModal({ email }) {
     <div className='email-verification-modal-wrapper'>
       <section className='email-verification-modal'>
         <p>
-          We sent a verfication email to {email}. After verification, click the
-          button below to sign in.
+          We sent a verfication email to {email}. You can signin after verification.
         </p>
         <Link
           to={{
@@ -16,7 +15,7 @@ function EmailVerificationModal({ email }) {
             },
           }}
         >
-          I have Verified{' '}
+          Sign in{' '}
         </Link>
       </section>
     </div>

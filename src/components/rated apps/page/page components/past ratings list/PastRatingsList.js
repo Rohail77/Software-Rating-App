@@ -1,10 +1,10 @@
 import { Fragment } from 'react';
-import PastReview from './past review/PastReview';
+import PastRating from './past rating/PastRating';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdateSoftwareContext } from '../../../../../context/UpdateSoftwareContext';
 import WaitMessage from '../../../../common/wait message/WaitMessage';
 
-function PastReviews(props) {
+function PastRatingsList(props) {
   const { userReviews, fetchingUserReviews, getUpdatedUserReviews } = props;
 
   return (
@@ -16,7 +16,7 @@ function PastReviews(props) {
           <UpdateSoftwareContext.Consumer>
             {updateSoftware => {
               return userReviews.map(userReview => (
-                <PastReview
+                <PastRating
                   userReview={userReview}
                   updateSoftware={updateSoftware}
                   getUpdatedUserReviews={getUpdatedUserReviews}
@@ -31,4 +31,4 @@ function PastReviews(props) {
   );
 }
 
-export default PastReviews;
+export default PastRatingsList;
