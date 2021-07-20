@@ -1,7 +1,5 @@
 function NextPageButton({ updateCurrentPage, currentPage, isDisabled }) {
-  function handleClick() {
-    updateCurrentPage(currentPage + 1);
-  }
+  const handleClick = () => updateCurrentPage(currentPage + 1);
 
   return (
     <li>

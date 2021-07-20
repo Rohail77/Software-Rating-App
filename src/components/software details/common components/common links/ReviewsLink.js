@@ -4,9 +4,7 @@ function ReviewsLink({ softwareID }) {
   return (
     <Link
       className='reviews-link'
-      to={{
-        pathname: `/software_details/${softwareID}/reviews`,
-      }}
+      to={`/software_details/${softwareID}/reviews`}
     >
       {' '}
       See all reviews

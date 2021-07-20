@@ -1,4 +1,4 @@
-import RatingStarsList from '../../../../../../software details/rate/page/page components/review form/rating input/rating stars list/RatingStarsList';
+import RatingStarsList from '../../../../../../common/rating stars list/RatingStarsList';
 
 function EditRatingForm(props) {
   const { review, rating, handleChange, editable, setRating } = props;

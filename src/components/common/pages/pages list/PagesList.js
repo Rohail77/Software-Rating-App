@@ -4,11 +4,9 @@ import PreviousPageButton from './page navigation buttons/PreviousPageButton';
 import NextPageButton from './page navigation buttons/NextPageButton';
 
 function PagesList({ currentPage, totalPages, updateCurrentPage }) {
-  function endPagesNotReached() {
-    return currentPage + 2 <= totalPages;
-  }
+  const endPagesNotReached = () => currentPage + 2 <= totalPages;
 
-  function getPageNumbers() {
+  const getPageNumbers = () => {
     const pageNumbers = [];
 
     if (endPagesNotReached()) {
@@ -29,15 +27,11 @@ function PagesList({ currentPage, totalPages, updateCurrentPage }) {
       }
     }
     return pageNumbers;
-  }
+  };
 
-  function disablePreviousPageButton() {
-    return currentPage === 1;
-  }
+  const disablePreviousPageButton = () => currentPage === 1;
 
-  function disableNextPageButton() {
-    return currentPage === totalPages;
-  }
+  const disableNextPageButton = () => currentPage === totalPages;
 
   return (
     <ul className='pages__list'>

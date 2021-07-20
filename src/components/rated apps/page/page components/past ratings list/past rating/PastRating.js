@@ -4,7 +4,7 @@ import EditableFormButtons from './edit rating form/cta buttons/EditableFormButt
 import NonEditableFormButtons from './edit rating form/cta buttons/NonEditableFormButtons';
 import EditRatingForm from './edit rating form/EditRatingForm';
 import { user } from '../../../../../../database/User';
-import { db } from '../../../../../../database/Softwares';
+import { softwares } from '../../../../../../database/Softwares';
 
 class PastRating extends Component {
   constructor(props) {
@@ -64,9 +64,9 @@ class PastRating extends Component {
     const { softwareID } = this.props.userReview;
 
     if (this.shouldDecrementTotalReviews())
-      return db.decrementTotalReviews(softwareID);
+      return softwares.decrementTotalReviews(softwareID);
     if (this.shouldIncrementTotalReviews())
-      return db.incrementTotalReviews(softwareID);
+      return softwares.incrementTotalReviews(softwareID);
     return Promise.resolve();
   }
 
@@ -84,11 +84,11 @@ class PastRating extends Component {
     if (this.shouldChangeStarCount()) {
       const { softwareID } = this.props.userReview;
       const { rating } = this.state;
-      return db
+      return softwares
         .replaceStarCount(softwareID, rating, this.props.userReview.rating)
-        .then(() => db.updateAverageRating(softwareID));
+        .then(() => softwares.updateAverageRating(softwareID));
     }
-    return new Promise.resolve();
+    return Promise.resolve();
   }
 
   shouldChangeStarCount() {
@@ -116,9 +116,10 @@ class PastRating extends Component {
     const { getUpdatedUserReviews } = this.props;
     user.deleteReview(softwareID).then(() => {
       getUpdatedUserReviews();
-      if (review !== '') db.decrementTotalReviews(softwareID);
-      db.updateStarCount(softwareID, rating, 'DEC')
-        .then(() => db.updateAverageRating(softwareID))
+      if (review !== '') softwares.decrementTotalReviews(softwareID);
+      softwares
+        .updateStarCount(softwareID, rating, 'DEC')
+        .then(() => softwares.updateAverageRating(softwareID))
         .then(this.updateSoftwareLocal);
     });
   }

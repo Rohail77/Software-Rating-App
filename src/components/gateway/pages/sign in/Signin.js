@@ -48,7 +48,7 @@ function Signin(props) {
         <p className='gateway-para'>
           Don’t have an account?{' '}
           <Link
-            className='gateway-link'
+            className='signup-link'
             to={{
               pathname: '/signup',
               state: {

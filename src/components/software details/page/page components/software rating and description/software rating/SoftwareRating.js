@@ -2,14 +2,14 @@ import Stars from '../../../../../common/stars list/Stars';
 import RatingsList from './RatingsList';
 
 function SoftwareRating({ average_rating, stars_count }) {
-  function getTotalStars() {
+  const getTotalStars = () => {
     let totalStars = 0;
-    for (const key in stars_count) {
+    Object.keys(stars_count).forEach(key => {
       totalStars += stars_count[key];
-    }
+    });
 
     return totalStars;
-  }
+  };
 
   return (
     <div className='software-rating'>

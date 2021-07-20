@@ -1,4 +1,4 @@
-import RatingStarsList from './rating stars list/RatingStarsList';
+import RatingStarsList from '../../../../../../common/rating stars list/RatingStarsList';
 
 function RatingInput(props) {
   return (

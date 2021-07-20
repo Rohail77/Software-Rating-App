@@ -1,6 +1,6 @@
 import { Component } from 'react';
 
-import { db } from '../../../database/Softwares';
+import { softwares } from '../../../database/Softwares';
 import SoftwareDetailsRouter from './SoftwareDetailsRouter';
 import { user } from '../../../database/User';
 import { CanUserReviewContext } from '../../../context/CanUserReviewContext';
@@ -20,12 +20,15 @@ class SoftwareDetailsRouterLogic extends Component {
   componentDidMount() {
     this.getReviews();
     const { id } = this.props.software;
-    if (user.isSignedin()) user.canReview(id, this.setCanUserReview);
+    if (user.isSignedin())
+      user
+        .canReview(id)
+        .then(canUserReview => this.setCanUserReview(canUserReview));
   }
 
   setCanUserReview(canUserReview) {
     const { id } = this.props.software;
-    if (canUserReview) db.bindUpdaterToReview(id, this.getReviews);
+    if (canUserReview) softwares.bindUpdaterToReview(id, this.getReviews);
     this.setState({
       canUserReview,
     });
@@ -34,7 +37,7 @@ class SoftwareDetailsRouterLogic extends Component {
   getReviews() {
     this.waitForReviews();
     const { id } = this.props.software;
-    db.getReviews(id, reviews => {
+    softwares.getReviews(id, reviews => {
       this.setState({
         reviews,
         reviewsFetched: true,

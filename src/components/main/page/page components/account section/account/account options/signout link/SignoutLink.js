@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { authorization } from '../../gateway/auth/Authorization';
+import { authorization } from '../../../../../../../gateway/auth/Authorization';
 
 function SignoutLink() {
   const handleClick = () => authorization.signout();

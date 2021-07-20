@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import './App.css';
 import AppRouter from './components/AppRouter';
-import { db } from './database/Softwares';
+import { softwares } from './database/Softwares';
 import { authorization } from './components/gateway/auth/Authorization';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { user } from './database/User';
@@ -24,7 +24,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    db.getSoftwares(softwares =>
+    softwares.getSoftwares(softwares =>
       this.setState({
         softwares: softwares,
         onWait: false,
@@ -34,7 +34,7 @@ class App extends Component {
   }
 
   updateSoftware(id) {
-    db.getSoftware(id, updatedSoftware => {
+    softwares.getSoftware(id, updatedSoftware => {
       this.setState(state => ({
         softwares: state.softwares.map(software => {
           return software.id === updatedSoftware.id

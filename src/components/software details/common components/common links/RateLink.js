@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { user } from '../../../../database/User';
 
-function RateLink({ softwareID }) {
+function RateLink({ softwareID, from }) {
   const getDestinationInformation = () =>
     user.isSignedin()
       ? {

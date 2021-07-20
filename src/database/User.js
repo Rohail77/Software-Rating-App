@@ -3,7 +3,7 @@ import { formatDate } from './common functions/CommonFunctions';
 import firebase from 'firebase';
 
 class User {
-  set(cb = null) {
+  set() {
     this.userRef = database.collection('Users').doc(this.id);
   }
 
@@ -75,15 +75,15 @@ class User {
       });
   }
 
-  canReview(softwareID, cb) {
-    database
+  canReview(softwareID) {
+    return database
       .collection('Softwares')
       .doc(softwareID)
       .collection('Reviews')
       .doc(this.id)
       .get()
       .then(doc => {
-        doc.exists ? cb(false) : cb(true);
+        return doc.exists ? false : true;
       });
   }
 

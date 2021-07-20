@@ -3,10 +3,10 @@ import ReviewsPage from '../page/ReviewsPage';
 import CompleteReview from '../complete review/page/CompleteReview';
 
 function ReviewsRouter(props) {
-  function getReview(id) {
+  const getReview = id => {
     const { reviews } = props;
     return reviews.find(review => review.id === id);
-  }
+  };
 
   const { software } = props;
 
@@ -36,24 +36,6 @@ function ReviewsRouter(props) {
           );
         }}
       />
-
-      {/* <Route
-        path='/software_details/:id/review/:username'
-        exact
-        render={props => {
-          const { username } = props.match.params;
-          const { fromSoftwareDetailsPage } = props.location.state;
-          return (
-            <CompleteReview
-              software={software}
-              review={getReview(username)}
-              fromSoftwareDetailsPage={
-                fromSoftwareDetailsPage ? fromSoftwareDetailsPage : false
-              }
-            />
-          );
-        }}
-      /> */}
     </Switch>
   );
 }

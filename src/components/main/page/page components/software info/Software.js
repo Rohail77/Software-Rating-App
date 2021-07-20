@@ -6,11 +6,7 @@ function software(props) {
   const { name, developer, average_rating, id } = props.software;
   return (
     <li className='software'>
-      <Link
-        to={{
-          pathname: `/software_details/${id}`,
-        }}
-      >
+      <Link to={`/software_details/${id}`}>
         <SoftwareBasicInfo name={name} developer={developer} />
         <Stars averageRating={average_rating} />
       </Link>

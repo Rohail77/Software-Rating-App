@@ -3,7 +3,7 @@ import firebase from 'firebase';
 import { user } from './User';
 import { formatDate, getAverage } from './common functions/CommonFunctions';
 
-class Database {
+class Softwares {
   constructor() {
     this.softwaresRef = database.collection('Softwares');
     this.usersRef = database.collection('Users');
@@ -124,6 +124,8 @@ class Database {
       });
   }
 }
+
+export const softwares = new Softwares();
 
 /*
 const softwares = [
@@ -429,5 +431,3 @@ const softwares = [
   },
 ];
 */
-
-export const db = new Database();

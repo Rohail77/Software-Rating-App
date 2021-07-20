@@ -26,6 +26,7 @@ class AccountPage extends Component {
       onWait: false,
     });
   }
+
   render() {
     const { onWait } = this.state;
 

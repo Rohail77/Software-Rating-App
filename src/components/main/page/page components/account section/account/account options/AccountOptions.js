@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import SignoutLink from '../../../../../common/signout link/SignoutLink';
+import SignoutLink from './signout link/SignoutLink';
 
 function AccountOptions({ accountOptionsRef }) {
   return (

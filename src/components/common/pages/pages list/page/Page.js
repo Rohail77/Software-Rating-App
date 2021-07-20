@@ -1,14 +1,13 @@
 function Page({ pageNumber, isActive, updateCurrentPage }) {
-  function handleClick(event) {
+  const handleClick = event => {
     event.preventDefault();
     updateCurrentPage(pageNumber);
-  }
+  };
+
   return (
     <li>
       <button
-        className={`page page--clickable${
-          isActive ? ' active-page' : ''
-        }`}
+        className={`page page--clickable${isActive ? ' active-page' : ''}`}
         onClick={handleClick}
       >
         {pageNumber}

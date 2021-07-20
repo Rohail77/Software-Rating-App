@@ -9,7 +9,7 @@ class MainPageLogic extends Component {
       softwareSearchString: '',
     };
     this.data = {
-      softwaresPerPage: 8,
+      softwaresPerPage: 20,
     };
     this.setSoftwareSearchString = this.setSoftwareSearchString.bind(this);
     this.updateCurrentPage = this.updateCurrentPage.bind(this);

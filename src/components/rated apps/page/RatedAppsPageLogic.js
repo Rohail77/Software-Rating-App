@@ -8,7 +8,7 @@ class RatedAppsPageLogic extends Component {
       currentPage: 1,
     };
     this.data = {
-      reviewsPerPage: 3,
+      reviewsPerPage: 7,
     };
     this.updateCurrentPage = this.updateCurrentPage.bind(this);
   }

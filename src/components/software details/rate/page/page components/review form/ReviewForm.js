@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import RatingInput from './rating input/RatingInput';
-import { db } from '../../../../../../database/Softwares';
+import { softwares } from '../../../../../../database/Softwares';
 import WaitMessage from '../../../../../common/wait message/WaitMessage';
 import ReviewLimitMessage from './limit message/ReviewLimitMessage';
 import { user } from '../../../../../../database/User';
@@ -57,11 +57,13 @@ class ReviewForm extends Component {
   saveData() {
     const { rating, review } = this.state;
     const { softwareID } = this.props;
-    db.writeRating(softwareID, {
-      username: user.name,
-      rating,
-      review,
-    }).then(this.addSoftwareToUserReviews);
+    softwares
+      .writeRating(softwareID, {
+        username: user.name,
+        rating,
+        review,
+      })
+      .then(this.addSoftwareToUserReviews);
     review === '' ? this.incrementStarCount() : this.incrementTotalReviews();
   }
 
@@ -75,20 +77,20 @@ class ReviewForm extends Component {
 
   incrementTotalReviews() {
     const { softwareID } = this.props;
-    db.incrementTotalReviews(softwareID).then(this.incrementStarCount);
+    softwares.incrementTotalReviews(softwareID).then(this.incrementStarCount);
   }
 
   incrementStarCount() {
     const { softwareID } = this.props;
     const { rating } = this.state;
-    db.updateStarCount(softwareID, rating, 'INC').then(
+    softwares.updateStarCount(softwareID, rating, 'INC').then(
       this.updateAverageRating
     );
   }
 
   updateAverageRating() {
     const { softwareID } = this.props;
-    db.updateAverageRating(softwareID).then(this.afterSave);
+    softwares.updateAverageRating(softwareID).then(this.afterSave);
   }
 
   afterSave() {

@@ -1,8 +1,8 @@
 import EmailVerificationModal from './page components/email verification modal/EmailVerificationModal';
 import FormError from '../../common components/FormError';
 import WaitMessage from '../../../common/wait message/WaitMessage';
-import { Link } from 'react-router-dom';
 import BackLink from '../../common components/BackLink';
+import SigninLink from '../../../common/signin link/SigninLink';
 
 function Signup(props) {
   const {
@@ -59,26 +59,10 @@ function Signup(props) {
           <input type='submit' className='submit-btn' />
         </form>
         <p className='gateway-para'>
-          Already registered?{' '}
-          <Link
-            className='gateway-link'
-            to={{
-              pathname: '/signin',
-              state: {
-                from,
-              },
-            }}
-          >
-            Sign in{' '}
-          </Link>{' '}
-          instead.
+          Already registered? <SigninLink from={from} />  instead.
         </p>
       </section>
-      {signedUp ? (
-        <EmailVerificationModal
-          email={email}
-        />
-      ) : null}
+      {signedUp ? <EmailVerificationModal email={email} /> : null}
       {onWait ? <WaitMessage /> : null}
     </div>
   );

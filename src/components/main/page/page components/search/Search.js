@@ -1,8 +1,8 @@
 function Search({ setSoftwareSearchString, softwareSearchInput }) {
-  function handleClick(event) {
+  const handleClick = event => {
     event.preventDefault();
     setSoftwareSearchString(softwareSearchInput.current.value);
-  }
+  };
 
   return (
     <div className='search'>

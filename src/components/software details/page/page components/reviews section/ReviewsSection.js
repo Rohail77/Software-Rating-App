@@ -8,7 +8,9 @@ function ReviewsSection({ software, reviews }) {
     <section className='reviews'>
       <h2 className='reviews-heading'>Reviews</h2>
       <p className='ask-for-review-para'>Write a review by rating this app</p>
-      <RateLink softwareID={software.id} />
+      <RateLink
+        softwareID={software.id}
+      />
 
       <div className='review-feedback-content'>
         <ReviewsCount total_reviews={software.total_reviews} />

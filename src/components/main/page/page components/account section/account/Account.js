@@ -1,5 +1,5 @@
 import { createRef, Component } from 'react';
-import AccountOptions from './AccountOptions';
+import AccountOptions from './account options/AccountOptions';
 
 class Account extends Component {
   constructor(props) {

@@ -33,13 +33,13 @@ export class Authorization {
     auth
       .signInWithEmailAndPassword(email, password)
       .then(userCredential => {
-        // if (user.isEmailVerified())
+        if (user.isEmailVerified())
         cb();
-        // else {
-        //   cb({
-        //     msg: `You have not verified your email. Please verify your email by clicking the link we emailed you at your provided email address (${email}).`,
-        //   });
-        // }
+        else {
+          cb({
+            msg: `You have not verified your email. Please verify your email by clicking the link we emailed you at your provided email address (${email}).`,
+          });
+        }
       })
       .catch(error => cb({ msg: error.message }));
   }
@@ -51,10 +51,8 @@ export class Authorization {
   setAuthorizationStateObserver() {
     auth.onAuthStateChanged(aUser => {
       if (aUser) {
-        console.log('user signed in');
         this.handleLoginDetection(true);
       } else {
-        console.log('user signed out');
         this.handleLoginDetection(false);
       }
     });

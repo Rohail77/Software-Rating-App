@@ -16,7 +16,7 @@ class ReviewsPage extends Component {
       reviews: this.props.reviews,
     };
     this.data = {
-      reviewsPerPage: 2,
+      reviewsPerPage: 12,
     };
     this.filterReviews = this.filterReviews.bind(this);
     this.updateCurrentPage = this.updateCurrentPage.bind(this);
@@ -67,20 +67,13 @@ class ReviewsPage extends Component {
         <div className='breadcrumbs'>
           <HomeLink isActive={false} />
           <span> \ </span>
-          <Link
-            className='page-link'
-            to={{
-              pathname: `/software_details/${software.id}`,
-            }}
-          >
+          <Link className='page-link' to={`/software_details/${software.id}`}>
             {software.name}
           </Link>
           <span> \ </span>
           <Link
             className='page-link active-page-link'
-            to={{
-              pathname: `/software_details/${software.id}/reviews`,
-            }}
+            to={`/software_details/${software.id}/reviews`}
           >
             Reviews
           </Link>
@@ -94,7 +87,9 @@ class ReviewsPage extends Component {
             Write a review by rating this app
           </p>
 
-          <RateLink softwareID={software.id} />
+          <RateLink
+            softwareID={software.id}
+          />
 
           <ReviewsInfo
             filterReviews={this.filterReviews}

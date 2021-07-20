@@ -42,13 +42,7 @@ function MainPage(props) {
     <Fragment>
       <header className='main-header'>
         <div className='main-header__flex main-wrapper wrapper'>
-          <Link
-            className='home-link'
-            to={{
-              pathname: '/',
-            }}
-            onClick={onHomePageClick}
-          >
+          <Link className='home-link' to='/' onClick={onHomePageClick}>
             Home
           </Link>
           <AccountUISelector />

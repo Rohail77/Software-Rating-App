@@ -1,8 +1,8 @@
 function RatingStar({ setRating, starNumber, starType }) {
-  function handleClick(event) {
+  const handleClick = event => {
     event.preventDefault();
     setRating(starNumber);
-  }
+  };
 
   return (
     <li>

@@ -2,7 +2,7 @@ import RatingStar from './RatingStar';
 import { v4 as uuidv4 } from 'uuid';
 
 function RatingStarsList({ rating, setRating }) {
-  function getStarTypes() {
+  const getStarTypes = () => {
     const starTypes = [];
     for (let starNumber = 0; starNumber < rating; starNumber++) {
       starTypes.push('red');
@@ -11,7 +11,7 @@ function RatingStarsList({ rating, setRating }) {
       starTypes.push('white');
     }
     return starTypes;
-  }
+  };
 
   return (
     <ul className='stars-list'>
