@@ -5,15 +5,15 @@ A softwares rating app built in React.
 
 A user can: 
 
-Rate and review a software after signup/signin.
+> Rate and review a software after signup/signin.
 
-See average rating and all reviews of a software. 
+> See average rating and all reviews of a software. 
 
-Filter between 1 star, 2 star, 3 star, 4 star, and 5 star reviews.
+> Filter between 1 star, 2 star, 3 star, 4 star, and 5 star reviews.
 
-View and change his account settings i.e. change username and password.
+> View and change his account settings i.e. change username and password.
 
-view and edit all his/her reviews.
+> View and edit all his/her reviews.
 
 ### `TOOLS USED:`
 
