@@ -1,23 +1,33 @@
 # Softwares Rating App
 ### `ABOUT THE APP:`
 
-A softwares rating app built in React. A user can: 
+A softwares rating app built in React. 
 
-Rate and review a software after signup/signin. 
+A user can: 
+
+Rate and review a software after signup/signin.
+
 See average rating and all reviews of a software. 
+
 Filter between 1 star, 2 star, 3 star, 4 star, and 5 star reviews.
+
 View and change his account settings i.e. change username and password.
+
 view and edit all his/her reviews.
 
 ### `TOOLS USED:`
 
 The code for the app was written in Visual Studio Code. 
+
 Create React App was used to generate the boilerplate for react app. 
+
 React router is used to navigate to different sections of app.
 
 ### `Firebase`
 Firebase cloud firestore was used to store all reviews and softwares data.
+
 Firebase authentication was used to authenticate users.
+
 Firebase hosting and Vercel were both used to host the app.
 
 ### `NOTE:`
