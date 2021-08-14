@@ -1,49 +1,43 @@
 # Softwares Rating App
-### `ABOUT THE APP:`
+## About The App
 
-A softwares rating app built in React. 
+A softwares rating app built in React. The app can be previewed on this link.
 
-A user can: 
+## Features
 
-> Rate and review a software after signup/signin.
+A user can:
+- Rate and review a software after signup/signin.
+- See average rating and all reviews of a software. 
+- Filter between 1 star, 2 star, 3 star, 4 star, and 5 star reviews.
+- View and change his account settings i.e. change username and password.
+- View and edit all his/her reviews.
 
-> See average rating and all reviews of a software. 
+## Tools Used
 
-> Filter between 1 star, 2 star, 3 star, 4 star, and 5 star reviews.
+- **Figma** for designing and prototyping the app.
+- **Visual Studio Code** to write the app code.
+- **Sass Preprocessor for styling.
+- **Create React App** to generate the boiler plate for the app.
+- **React-Router** to move to different sections of the app.
+- **Firebase's Cloud Firestore** to store all reviews and softwares data.
+- **Firebase Authentication** to authenticate (signin/signup) users.
 
-> View and change his account settings i.e. change username and password.
+## Hosting
+**Firebase's Hosting** and **Vercel** were both used to host the app. 
+- To preview app hosted on **firebase**, visit this link.   
+- To preview app hosted on **vercel**, visit this link.
 
-> View and edit all his/her reviews.
+## Useful Resources
 
-### `TOOLS USED:`
+The following resources were helpful in completing this project:
 
-The code for the app was written in Visual Studio Code. 
-
-Create React App was used to generate the boilerplate for react app. 
-
-React router is used to navigate to different sections of app.
-
-Sass preprocessor was used to style the app.
-
-### `FIREBASE FOR BACKEND:`
-Firebase cloud firestore was used to store all reviews and softwares data.
-
-Firebase authentication was used to authenticate users.
-
-Firebase hosting and Vercel were both used to host the app.
+- **Stack Overflow**.
+- **React Docs**.
+- **Firebase** documentation** to learn about it's authentication, firestore, and hosting services.
+- **React Router documentation**.
+- **React Router Tutorial** on Dev Ed's youtube channel.
 
 ### `NOTE:`
 
 This repository contains the development code of the app. To view the production build see the repository: 
 https://github.com/Rohail77/Softwares-Rating-App-Production
-
-In the project directory, you can run:
-
-`npm start`
-
-It runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-`npm run build`
-
-Builds the app for production to the `build` folder.\
