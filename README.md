@@ -1,5 +1,5 @@
 # Softwares Rating App
-## About The App
+## About the App
 
 A softwares rating app built in React. The app can be previewed on [this link](https://softwares-rating-app.vercel.app/).
 
