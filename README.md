@@ -31,11 +31,11 @@ A user can:
 
 The following resources were helpful in completing this project:
 
-- [**Stack Overflow](https://stackoverflow.com/).
+- [**Stack Overflow**](https://stackoverflow.com/).
 - [**React Docs**](https://reactjs.org/docs/getting-started.html).
 - **Firebase documentation** to learn about it's authentication, firestore, and hosting services.
 - [**React Router documentation**](https://reactrouter.com/web/guides/quick-start).
-- [**React Router Tutorial**](https://www.youtube.com/watch?v=Law7wfdg_ls) on [Dev Ed's youtube channel]((https://www.youtube.com/channel/UClb90NQQcskPUGDIXsQEz5Q)).
+- [**React Router Tutorial**](https://www.youtube.com/watch?v=Law7wfdg_ls) on [Dev Ed's youtube channel](https://www.youtube.com/channel/UClb90NQQcskPUGDIXsQEz5Q).
 
 ### `NOTE:`
 
