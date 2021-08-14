@@ -24,8 +24,8 @@ A user can:
 
 ## Hosting
 **Firebase's Hosting** and **Vercel** were both used to host the app. 
-- To preview app hosted on **firebase**, visit [this link](https://softwares-rating-app.vercel.app/).   
-- To preview app hosted on **vercel**, visit [this link](https://my-holiday-proje-1616778972307.web.app/).
+- To preview app hosted on **firebase**, visit [this link](https://my-holiday-proje-1616778972307.web.app/).   
+- To preview app hosted on **vercel**, visit [this link](https://softwares-rating-app.vercel.app/).
 
 ## Useful Resources
 
