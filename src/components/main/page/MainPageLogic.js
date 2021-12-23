@@ -1,36 +1,33 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import MainPage from './MainPage';
 
-class MainPageLogic extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentPage: 1,
-      softwareSearchString: '',
-    };
-    this.data = {
-      softwaresPerPage: 20,
-    };
-    this.setSoftwareSearchString = this.setSoftwareSearchString.bind(this);
-    this.updateCurrentPage = this.updateCurrentPage.bind(this);
-  }
+function MainPageLogic(props) {
+  const [state, setState] = useState({
+    currentPage: 1,
+    softwareSearchString: '',
+  });
+  const data = {
+    softwaresPerPage: 20,
+  };
 
-  updateCurrentPage(newPageNumber) {
-    this.setState({
+  const updateCurrentPage = newPageNumber => {
+    setState(state => ({
+      ...state,
       currentPage: newPageNumber,
-    });
-  }
+    }));
+  };
 
-  setSoftwareSearchString(string) {
-    this.setState({
+  const setSoftwareSearchString = string => {
+    setState(state => ({
+      ...state,
       softwareSearchString: string,
       currentPage: 1,
-    });
-  }
+    }));
+  };
 
-  getFilteredSoftwares() {
-    const { softwareSearchString } = this.state;
-    const { softwares } = this.props;
+  const getFilteredSoftwares = () => {
+    const { softwareSearchString } = state;
+    const { softwares } = props;
 
     return softwareSearchString === ''
       ? softwares
@@ -39,24 +36,21 @@ class MainPageLogic extends Component {
             .toLocaleLowerCase()
             .includes(softwareSearchString.toLocaleLowerCase());
         });
-  }
+  };
+  const { onWait } = props;
+  const { currentPage } = state;
+  const { softwaresPerPage } = data;
 
-  render() {
-    const { onWait } = this.props;
-    const { currentPage } = this.state;
-    const { softwaresPerPage } = this.data;
-
-    return (
-      <MainPage
-        softwares={this.getFilteredSoftwares()}
-        setSoftwareSearchString={this.setSoftwareSearchString}
-        onWait={onWait}
-        updateCurrentPage={this.updateCurrentPage}
-        currentPage={currentPage}
-        softwaresPerPage={softwaresPerPage}
-      />
-    );
-  }
+  return (
+    <MainPage
+      softwares={getFilteredSoftwares()}
+      setSoftwareSearchString={setSoftwareSearchString}
+      onWait={onWait}
+      updateCurrentPage={updateCurrentPage}
+      currentPage={currentPage}
+      softwaresPerPage={softwaresPerPage}
+    />
+  );
 }
 
 export default MainPageLogic;

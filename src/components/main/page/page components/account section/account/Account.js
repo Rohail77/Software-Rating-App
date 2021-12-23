@@ -1,59 +1,50 @@
-import { createRef, Component } from 'react';
+import { createRef, useEffect, useRef, useState } from 'react';
 import AccountOptions from './account options/AccountOptions';
 
-class Account extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      dropdownOpen: false,
-    };
-    this.accountRef = createRef();
-    this.toggleDropdown = this.toggleDropdown.bind(this);
-    this.handleClickOutside = this.handleClickOutside.bind(this);
-  }
+function Account(props) {
+  const [state, setState] = useState({
+    dropdownOpen: false,
+  });
 
-  componentDidMount() {
-    document.addEventListener('mousedown', this.handleClickOutside);
-  }
+  const accountRef = useRef();
 
-  componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClickOutside);
-  }
-
-  handleClickOutside(event) {
+  const handleClickOutside = event => {
     if (
-      this.accountRef.current &&
-      (!this.accountRef.current.contains(event.target) ||
-        !this.accountRef.current === event.target)
+      accountRef.current &&
+      (!accountRef.current.contains(event.target) ||
+        !accountRef.current === event.target)
     ) {
-      this.setState(state => ({
+      setState(state => ({
         dropdownOpen: false,
       }));
     }
-  }
+  };
 
-  toggleDropdown(event) {
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const toggleDropdown = event => {
     event.preventDefault();
-    this.setState(state => ({
+    setState(state => ({
       dropdownOpen: !state.dropdownOpen,
     }));
-  }
+  };
 
-  render() {
-    const { dropdownOpen } = this.state;
+  const { dropdownOpen } = state;
 
-    return (
-      <div className='account-container' ref={this.accountRef}>
-        <a className='account' href='account options' onClick={this.toggleDropdown}>
-          <div className='avatar-container'>
-            <img src='/images/avatar.svg' alt='avatar' />
-          </div>
-          <img src='/images/down arrow.svg' alt='down arrrow' />
-        </a>
-        {dropdownOpen ? <AccountOptions /> : null}
-      </div>
-    );
-  }
+  return (
+    <div className='account-container' ref={accountRef}>
+      <a className='account' href='account options' onClick={toggleDropdown}>
+        <div className='avatar-container'>
+          <img src='/images/avatar.svg' alt='avatar' />
+        </div>
+        <img src='/images/down arrow.svg' alt='down arrrow' />
+      </a>
+      {dropdownOpen ? <AccountOptions /> : null}
+    </div>
+  );
 }
 
 export default Account;
