@@ -56,7 +56,7 @@ function Signup(props) {
             />
           </div>
           {hasError ? <FormError error={errorMsg} /> : null}
-          <input type='submit' className='submit-btn' />
+          <input type='submit' className='submit-btn' value="Signup"/>
         </form>
         <p className='gateway-para'>
           Already registered? <SigninLink from={from} />  instead.

@@ -43,7 +43,7 @@ function Signin(props) {
           </div>
           {hasError ? <FormError error={errorMsg} /> : null}
 
-          <input type='submit' className='submit-btn' />
+          <input type='submit' className='submit-btn' value="Signin"/>
         </form>
         <p className='gateway-para'>
           Don’t have an account?{' '}

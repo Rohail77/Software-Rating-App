@@ -1,70 +1,43 @@
-# Getting Started with Create React App
+# Softwares Rating App
+## About the App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A softwares rating app built in React. The app can be previewed on [this link](https://softwares-rating-app.vercel.app/).
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+A user can:
+- Rate and review a software after signup/signin.
+- See average rating and all reviews of a software. 
+- Filter between 1 star, 2 star, 3 star, 4 star, and 5 star reviews.
+- View and change account settings i.e. username and password.
+- View and edit all his/her reviews.
 
-### `npm start`
+## Tools Used
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **Figma** for designing and prototyping the app.
+- **Visual Studio Code** to write the app code.
+- **Sass Preprocessor** for styling.
+- **Create React App** to generate the boiler plate for the app.
+- **React-Router** to move to different sections of the app.
+- **Firebase's Cloud Firestore** to store all reviews and softwares data.
+- **Firebase Authentication** to authenticate (signin/signup) users.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Hosting
+**Firebase's Hosting** and **Vercel** were both used to host the app. 
+- To preview app hosted on **firebase**, visit [this link](https://my-holiday-proje-1616778972307.web.app/).   
+- To preview app hosted on **vercel**, visit [this link](https://softwares-rating-app.vercel.app/).
 
-### `npm test`
+## Useful Resources
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The following resources were helpful in completing this project:
 
-### `npm run build`
+- [**Stack Overflow**](https://stackoverflow.com/).
+- [**React Docs**](https://reactjs.org/docs/getting-started.html).
+- **Firebase documentation** to learn about it's authentication, firestore, and hosting services.
+- [**React Router documentation**](https://reactrouter.com/web/guides/quick-start).
+- [**React Router Tutorial**](https://www.youtube.com/watch?v=Law7wfdg_ls) on [Dev Ed's youtube channel](https://www.youtube.com/channel/UClb90NQQcskPUGDIXsQEz5Q).
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### `NOTE:`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This repository contains the development code of the app. To view the production build see the repository: 
+https://github.com/Rohail77/Softwares-Rating-App-Production
