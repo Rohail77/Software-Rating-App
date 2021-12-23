@@ -55,15 +55,15 @@ function Signup(props) {
               onChange={handleChange}
             />
           </div>
-          {hasError ? <FormError error={errorMsg} /> : null}
-          <input type='submit' className='submit-btn' value="Signup"/>
+          {hasError && <FormError error={errorMsg} />}
+          <input type='submit' className='submit-btn' value='Signup' />
         </form>
         <p className='gateway-para'>
-          Already registered? <SigninLink from={from} />  instead.
+          Already registered? <SigninLink from={from} /> instead.
         </p>
       </section>
-      {signedUp ? <EmailVerificationModal email={email} /> : null}
-      {onWait ? <WaitMessage /> : null}
+      {signedUp && <EmailVerificationModal email={email} />}
+      {onWait && <WaitMessage />}
     </div>
   );
 }

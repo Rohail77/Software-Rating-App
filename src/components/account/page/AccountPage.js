@@ -1,54 +1,45 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import HomeLink from '../../common/home link/HomeLink';
 import WaitMessage from '../../common/wait message/WaitMessage';
 import DangerZone from './page components/danger zone/DangerZone';
 import Forms from './page components/forms/Forms';
 
-class AccountPage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      onWait: false,
-    };
-    this.wait = this.wait.bind(this);
-    this.stopWait = this.stopWait.bind(this);
-  }
+function AccountPage() {
+  const [state, setState] = useState({
+    onWait: false,
+  });
 
-  wait() {
-    this.setState({
+  const wait = () =>
+    setState({
       onWait: true,
     });
-  }
 
-  stopWait() {
-    this.setState({
+  const stopWait = () =>
+    setState({
       onWait: false,
     });
-  }
 
-  render() {
-    const { onWait } = this.state;
+  const { onWait } = state;
 
-    return (
-      <div className='wrapper account-wrapper'>
-        <header>
-          <div className='breadcrumbs'>
-            <HomeLink />
-            <span> \ </span>
-            <Link className='page-link active-page-link' to='/account'>
-              Account
-            </Link>
-          </div>
-        </header>
+  return (
+    <div className='wrapper account-wrapper'>
+      <header>
+        <div className='breadcrumbs'>
+          <HomeLink />
+          <span> \ </span>
+          <Link className='page-link active-page-link' to='/account'>
+            Account
+          </Link>
+        </div>
+      </header>
 
-        <Forms wait={this.wait} stopWait={this.stopWait} />
+      <Forms wait={wait} stopWait={stopWait} />
 
-        <DangerZone wait={this.wait} stopWait={this.stopWait} />
-        {onWait ? <WaitMessage /> : null}
-      </div>
-    );
-  }
+      <DangerZone wait={wait} stopWait={stopWait} />
+      {onWait ? <WaitMessage /> : null}
+    </div>
+  );
 }
 
 export default AccountPage;

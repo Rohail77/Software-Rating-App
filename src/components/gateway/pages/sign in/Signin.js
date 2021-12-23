@@ -41,9 +41,9 @@ function Signin(props) {
               onChange={handleChange}
             />
           </div>
-          {hasError ? <FormError error={errorMsg} /> : null}
+          {hasError && <FormError error={errorMsg} />}
 
-          <input type='submit' className='submit-btn' value="Signin"/>
+          <input type='submit' className='submit-btn' value='Signin' />
         </form>
         <p className='gateway-para'>
           Don’t have an account?{' '}
@@ -61,7 +61,7 @@ function Signin(props) {
           instead.
         </p>
       </section>
-      {onWait ? <WaitMessage /> : null}
+      {onWait && <WaitMessage />}
     </div>
   );
 }

@@ -1,55 +1,50 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import RatedAppsPage from './RatedAppsPage';
 
-class RatedAppsPageLogic extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentPage: 1,
-    };
-    this.data = {
-      reviewsPerPage: 7,
-    };
-    this.updateCurrentPage = this.updateCurrentPage.bind(this);
-  }
+function RatedAppsPageLogic(props) {
+  const [state, setState] = useState({
+    currentPage: 1,
+  });
 
-  updateCurrentPage(newPageNumber) {
-    this.setState({
+  const data = {
+    reviewsPerPage: 7,
+  };
+
+  const updateCurrentPage = newPageNumber => {
+    setState({
       currentPage: newPageNumber,
     });
-  }
+  };
 
-  getReviewsForCurrentPage() {
-    const { userReviews } = this.props;
-    const { reviewsPerPage } = this.data;
+  const getReviewsForCurrentPage = () => {
+    const { userReviews } = props;
+    const { reviewsPerPage } = data;
     return userReviews.slice(
-      this.getInitialReviewIndexForCurrentPage(),
-      this.getInitialReviewIndexForCurrentPage() + reviewsPerPage
+      getInitialReviewIndexForCurrentPage(),
+      getInitialReviewIndexForCurrentPage() + reviewsPerPage
     );
-  }
-  getInitialReviewIndexForCurrentPage() {
-    const { reviewsPerPage } = this.data;
-    const { currentPage } = this.state;
-    return (currentPage - 1) * reviewsPerPage;
-  }
+  };
 
-  render() {
-    const { currentPage } = this.state;
-    const { fetchingUserReviews, getUpdatedUserReviews, userReviews } =
-      this.props;
-    const { reviewsPerPage } = this.data;
-    return (
-      <RatedAppsPage
-        reviewsPerPage={reviewsPerPage}
-        totalReviews={userReviews.length}
-        currentPage={currentPage}
-        updateCurrentPage={this.updateCurrentPage}
-        fetchingUserReviews={fetchingUserReviews}
-        getUpdatedUserReviews={getUpdatedUserReviews}
-        userReviews={this.getReviewsForCurrentPage()}
-      />
-    );
-  }
+  const getInitialReviewIndexForCurrentPage = () => {
+    const { reviewsPerPage } = data;
+    const { currentPage } = state;
+    return (currentPage - 1) * reviewsPerPage;
+  };
+
+  const { currentPage } = state;
+  const { fetchingUserReviews, getUpdatedUserReviews, userReviews } = props;
+  const { reviewsPerPage } = data;
+  return (
+    <RatedAppsPage
+      reviewsPerPage={reviewsPerPage}
+      totalReviews={userReviews.length}
+      currentPage={currentPage}
+      updateCurrentPage={updateCurrentPage}
+      fetchingUserReviews={fetchingUserReviews}
+      getUpdatedUserReviews={getUpdatedUserReviews}
+      userReviews={getReviewsForCurrentPage()}
+    />
+  );
 }
 
 export default RatedAppsPageLogic;

@@ -1,186 +1,169 @@
-import { Component, createRef, Fragment } from 'react';
+import { createRef, Fragment, useEffect, useState } from 'react';
 import { user } from '../../../../../../database/User';
 
-class PasswordForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      oldPassword: '',
-      newPassword: '',
-      activated: false,
-      updated: false,
-      error: false,
-      errorMsg: '',
-    };
-    this.passwordFieldRef = createRef();
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.activateForm = this.activateForm.bind(this);
-    this.deactivateForm = this.deactivateForm.bind(this);
-    this.hideSuccessMessage = this.hideSuccessMessage.bind(this);
-    this.reset = this.reset.bind(this);
-    this.hideErrorMessage = this.hideErrorMessage.bind(this);
-  }
+function PasswordForm(props) {
+  const [state, setState] = useState({
+    oldPassword: '',
+    newPassword: '',
+    activated: false,
+    updated: false,
+    error: false,
+    errorMsg: '',
+  });
 
-  handleChange(event) {
-    const { name, value } = event.target;
-    this.setState({
-      [name]: value,
-    });
-  }
+  const passwordFieldRef = createRef();
 
-  handleSubmit(event) {
+  const handleChange = event =>
+    setState(state => ({
+      ...state,
+      [event.target.name]: event.target.value,
+    }));
+
+  const handleSubmit = event => {
     event.preventDefault();
-    if (this.validate()) {
-      const { oldPassword, newPassword } = this.state;
-      const { wait, stopWait } = this.props;
+    if (validate()) {
+      const { oldPassword, newPassword } = state;
+      const { wait, stopWait } = props;
       wait();
       user
         .updatePassword(oldPassword, newPassword)
         .then(() => {
           stopWait();
-          this.deactivateForm();
-          this.showSuccessMessage();
-          this.reset();
+          deactivateForm();
+          showSuccessMessage();
+          reset();
         })
         .catch(error => {
           stopWait();
-          this.showErrorMessage(error.message);
-          setTimeout(this.hideErrorMessage, 2000);
+          showErrorMessage(error.message);
+          setTimeout(hideErrorMessage, 2000);
         });
     } else {
-      this.showErrorMessage('The form is not filled completely');
-      setTimeout(this.hideErrorMessage, 2000);
+      showErrorMessage('The form is not filled completely');
+      setTimeout(hideErrorMessage, 2000);
     }
-  }
+  };
 
-  validate() {
-    const { oldPassword, newPassword } = this.state;
-    return oldPassword !== '' && newPassword !== '';
-  }
+  const validate = () => state.oldPassword !== '' && state.newPassword !== '';
 
-  showSuccessMessage() {
-    this.setState(
-      {
-        updated: true,
-      },
-      () => {
-        setTimeout(this.hideSuccessMessage, 2000);
-      }
-    );
-  }
+  const showSuccessMessage = () =>
+    setState(state => ({
+      ...state,
+      updated: true,
+    }));
 
-  hideSuccessMessage() {
-    this.setState({
+  useEffect(() => {
+    if (state.updated) setTimeout(hideSuccessMessage, 2000);
+  }, [state.updated]);
+
+  const hideSuccessMessage = () =>
+    setState(state => ({
+      ...state,
       updated: false,
-    });
-  }
+    }));
 
-  showErrorMessage(errorMsg) {
-    this.setState({
+  const showErrorMessage = errorMsg =>
+    setState(state => ({
+      ...state,
       error: true,
       errorMsg,
-    });
-  }
+    }));
 
-  hideErrorMessage() {
-    this.setState({
+  const hideErrorMessage = () =>
+    setState(state => ({
+      ...state,
       error: false,
       errorMsg: '',
-    });
-  }
+    }));
 
-  activateForm() {
-    this.setState(
-      {
-        activated: true,
-      },
-      () => this.passwordFieldRef.current.focus()
-    );
-  }
+  const activateForm = () => {
+    setState(state => ({
+      ...state,
+      activated: true,
+    }));
+    passwordFieldRef.current.focus();
+  };
 
-  deactivateForm() {
-    this.setState({
+  const deactivateForm = () =>
+    setState(state => ({
+      ...state,
       activated: false,
-    });
-  }
+    }));
 
-  reset() {
-    this.setState({
+  const reset = () =>
+    setState(state => ({
+      ...state,
       oldPassword: '',
       newPassword: '',
       activated: false,
-    });
-  }
+    }));
 
-  render() {
-    const { oldPassword, newPassword, activated, updated, error, errorMsg } =
-      this.state;
-    return (
-      <form className='password-form' onSubmit={this.handleSubmit}>
-        {activated ? (
-          <Fragment>
-            <div>
-              <label htmlFor='old-password'>Enter Old Password</label>
-              <input
-                className='input-field'
-                type='password'
-                name='oldPassword'
-                id='old-password'
-                value={oldPassword}
-                onChange={this.handleChange}
-                ref={this.passwordFieldRef}
-                maxLength={30}
-              />
-            </div>
-            <div>
-              <label htmlFor='new-password'>Enter New Password</label>
-              <input
-                className='input-field'
-                type='password'
-                name='newPassword'
-                id='new-password'
-                value={newPassword}
-                onChange={this.handleChange}
-                placeholder='At least 6 characters long'
-                maxLength={30}
-              />
-              {error ? <p className='error-msg'>* {errorMsg}</p> : null}
-            </div>
-          </Fragment>
-        ) : (
+  const { oldPassword, newPassword, activated, updated, error, errorMsg } =
+    state;
+  return (
+    <form className='password-form' onSubmit={handleSubmit}>
+      {activated ? (
+        <Fragment>
           <div>
-            <label htmlFor='password'>Password</label>
+            <label htmlFor='old-password'>Enter Old Password</label>
             <input
               className='input-field'
               type='password'
-              name='password'
-              id='password'
-              value='******'
-              onChange={this.handleChange}
-              ref={this.passwordFieldRef}
-              disabled={!activated}
+              name='oldPassword'
+              id='old-password'
+              value={oldPassword}
+              onChange={handleChange}
+              ref={passwordFieldRef}
+              maxLength={30}
             />
           </div>
-        )}
-        {activated ? (
-          <div className='ctas'>
-            <input type='submit' className='save-btn' value='Save'></input>
-            <button type='button' className='cancel-btn' onClick={this.reset}>
-              Cancel{' '}
-            </button>
+          <div>
+            <label htmlFor='new-password'>Enter New Password</label>
+            <input
+              className='input-field'
+              type='password'
+              name='newPassword'
+              id='new-password'
+              value={newPassword}
+              onChange={handleChange}
+              placeholder='At least 6 characters long'
+              maxLength={30}
+            />
+            {error && <p className='error-msg'>* {errorMsg}</p>}
           </div>
-        ) : (
-          <div className='ctas'>
-            <button className='change-btn' onClick={this.activateForm}>
-              Change{' '}
-            </button>
-          </div>
-        )}
-        {updated ? <p className='success-msg'>* Password Changed</p> : null}
-      </form>
-    );
-  }
+        </Fragment>
+      ) : (
+        <div>
+          <label htmlFor='password'>Password</label>
+          <input
+            className='input-field'
+            type='password'
+            name='password'
+            id='password'
+            value='******'
+            onChange={handleChange}
+            ref={passwordFieldRef}
+            disabled={!activated}
+          />
+        </div>
+      )}
+      {activated ? (
+        <div className='ctas'>
+          <input type='submit' className='save-btn' value='Save'></input>
+          <button type='button' className='cancel-btn' onClick={reset}>
+            Cancel{' '}
+          </button>
+        </div>
+      ) : (
+        <div className='ctas'>
+          <button className='change-btn' onClick={activateForm}>
+            Change{' '}
+          </button>
+        </div>
+      )}
+      {updated && <p className='success-msg'>* Password Changed</p>}
+    </form>
+  );
 }
 
 export default PasswordForm;

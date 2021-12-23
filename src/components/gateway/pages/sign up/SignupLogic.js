@@ -1,84 +1,77 @@
-import { Component} from 'react';
+import { useState } from 'react';
 import { authorization } from '../../auth/Authorization';
 import Signup from './Signup';
 
-class SignupLogic extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: '',
-      email: '',
-      password: '',
-      signedUp: false,
-      hasError: false,
-      errorMsg: '',
-      onWait: false,
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.onSignup = this.onSignup.bind(this);
-  }
+function SignupLogic(props) {
+  const [state, setState] = useState({
+    name: '',
+    email: '',
+    password: '',
+    signedUp: false,
+    hasError: false,
+    errorMsg: '',
+    onWait: false,
+  });
 
-  handleSubmit(event) {
+  const handleSubmit = event => {
     event.preventDefault();
-    this.validationCheck()
-      ? this.showError({ msg: 'Please fill all the form fields.' })
-      : this.signup();
-  }
+    validationCheck()
+      ? showError({ msg: 'Please fill all the form fields.' })
+      : signup();
+  };
 
-  validationCheck() {
-    const { email, password, name } = this.state;
+  const validationCheck = () => {
+    const { email, password, name } = state;
     return email === '' || password === '' || name === '';
-  }
+  };
 
-  signup() {
-    const { email, password, name } = this.state;
-    authorization.signup({ email, password, name }, this.onSignup);
-    this.setState({
+  const signup = () => {
+    const { email, password, name } = state;
+    authorization.signup({ email, password, name }, onSignup);
+    setState(state => ({
+      ...state,
       onWait: true,
-    });
-  }
+    }));
+  };
 
-  onSignup(error) {
+  const onSignup = error => {
     if (error) {
-      this.showError(error);
+      showError(error);
     } else {
-      this.setState({
+      setState(state => ({
+        ...state,
         onWait: false,
         signedUp: true,
         hasError: false,
         errorMsg: '',
-      });
+      }));
     }
-  }
+  };
 
-  showError(error) {
-    this.setState({
+  const showError = error =>
+    setState(state => ({
+      ...state,
       onWait: false,
       hasError: true,
       errorMsg: error.msg,
-    });
-  }
+    }));
 
-  handleChange(event) {
-    const { name, value } = event.target;
-    this.setState({
-      [name]: value,
-    });
-  }
+  const handleChange = event =>
+    setState(state => ({
+      ...state,
+      [event.target.name]: event.target.value,
+    }));
 
-  render() {
-    const { from } = this.props;
+  const { from } = props;
 
-    return (
-      <Signup
-        {...this.state}
-        handleChange={this.handleChange}
-        handleSubmit={this.handleSubmit}
-        from={from}
-      />
-    );
-  }
+  return (
+    <Signup
+      {...state}
+      handleChange={handleChange}
+      handleSubmit={handleSubmit}
+      from={from}
+    />
+  );
 }
 
 export default SignupLogic;
