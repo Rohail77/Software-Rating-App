@@ -1,47 +1,39 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import { CanUserReviewContext } from '../../../../context/CanUserReviewContext';
 import AlreadyRatedMessage from './already rated message/AlreadyRatedMessage';
 import RatePage from './RatePage';
 
-class RatePageLogic extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      formSubmitted: false,
-    };
+function RatePageLogic(props) {
+  const [state, setState] = useState({
+    formSubmitted: false,
+  });
 
-    this.showConfirmationModal = this.showConfirmationModal.bind(this);
-  }
-
-  showConfirmationModal() {
-    this.setState({
+  const showConfirmationModal = () =>
+    setState({
       formSubmitted: true,
     });
-  }
 
-  render() {
-    const { name, developer, id } = this.props.software;
-    const { formSubmitted } = this.state;
+  const { name, developer, id } = props.software;
+  const { formSubmitted } = state;
 
-    return (
-      <CanUserReviewContext.Consumer>
-        {value =>
-          value.canUserReview ? (
-            <RatePage
-              name={name}
-              id={id}
-              developer={developer}
-              formSubmitted={formSubmitted}
-              showConfirmationModal={this.showConfirmationModal}
-              setCanUserReview={value.setCanUserReview}
-            />
-          ) : (
-            <AlreadyRatedMessage softwareID={id} />
-          )
-        }
-      </CanUserReviewContext.Consumer>
-    );
-  }
+  return (
+    <CanUserReviewContext.Consumer>
+      {value =>
+        value.canUserReview ? (
+          <RatePage
+            name={name}
+            id={id}
+            developer={developer}
+            formSubmitted={formSubmitted}
+            showConfirmationModal={showConfirmationModal}
+            setCanUserReview={value.setCanUserReview}
+          />
+        ) : (
+          <AlreadyRatedMessage softwareID={id} />
+        )
+      }
+    </CanUserReviewContext.Consumer>
+  );
 }
 
 export default RatePageLogic;

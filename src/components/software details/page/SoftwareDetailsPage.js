@@ -29,7 +29,7 @@ function SoftwareDetailsPage(props) {
           {name}
         </Link>
       </div>
-      
+
       <SoftwareInfo
         name={name}
         developer={developer}
@@ -46,7 +46,7 @@ function SoftwareDetailsPage(props) {
         />
       </section>
 
-      {reviewsFetched ? (
+      {reviewsFetched && (
         <ReviewsSection
           software={{
             name,
@@ -56,7 +56,7 @@ function SoftwareDetailsPage(props) {
           }}
           reviews={reviews}
         />
-      ) : null}
+      )}
     </div>
   );
 }

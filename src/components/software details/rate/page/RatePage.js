@@ -50,12 +50,12 @@ function RatePage(props) {
         )}
       </UserReviewsContext.Consumer>
 
-      {formSubmitted ? (
+      {formSubmitted && (
         <ConfirmationModal
           softwareID={id}
           setCanUserReview={setCanUserReview}
         />
-      ) : null}
+      )}
     </div>
   );
 }
