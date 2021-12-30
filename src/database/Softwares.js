@@ -32,12 +32,6 @@ class Softwares {
       .catch(error => console.log('Error: ', error));
   }
 
-  // addSoftwares() {
-  //   softwares.forEach(software => {
-  //     database.collection('Softwares').add(software);
-  //   });
-  // }
-
   getReviews(softwareID, cb) {
     const reviews = [];
     this.softwaresRef
