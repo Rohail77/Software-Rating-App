@@ -4,6 +4,9 @@ import { softwares } from '../../../../../../database/Softwares';
 import WaitMessage from '../../../../../common/wait message/WaitMessage';
 import ReviewLimitMessage from './limit message/ReviewLimitMessage';
 import { user } from '../../../../../../database/User';
+import useUserReviews from '../../../../../../hooks/useUserReviews';
+import { update } from '../../../../../../features/softwaresSlice';
+import { useDispatch } from 'react-redux';
 
 function ReviewForm(props) {
   const [state, setState] = useState({
@@ -15,6 +18,8 @@ function ReviewForm(props) {
   const data = {
     maxReviewLength: 3000,
   };
+
+  const dispatch = useDispatch();
 
   const handleChange = event => {
     event.preventDefault();
@@ -59,8 +64,10 @@ function ReviewForm(props) {
     review === '' ? incrementStarCount() : incrementTotalReviews();
   };
 
+  const [, , getUpdatedUserReviews] = useUserReviews(true);
+
   const addSoftwareToUserReviews = () => {
-    const { softwareID, getUpdatedUserReviews } = props;
+    const { softwareID } = props;
     user.addSoftwareToReviews(softwareID).then(() => {
       getUpdatedUserReviews();
       user.bindUpdaterToReviews(getUpdatedUserReviews);
@@ -86,8 +93,8 @@ function ReviewForm(props) {
   };
 
   const afterSave = () => {
-    const { showConfirmationModal, updateSoftware, softwareID } = props;
-    updateSoftware(softwareID);
+    const { showConfirmationModal, softwareID } = props;
+    softwares.getSoftware(softwareID, software => dispatch(update(software)));
 
     setState({
       review: '',

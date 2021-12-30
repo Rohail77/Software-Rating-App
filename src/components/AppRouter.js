@@ -3,10 +3,10 @@ import AccountPage from './account/page/AccountPage';
 import MainPageLogic from './main/page/MainPageLogic';
 import NotFound from './not found page/NotFound';
 import SoftwareDetailsRouterLogic from './software details/router/SoftwareDetailsRouterLogic';
-import RatedAppsContextConsumer from './rated apps/page/RatedAppsContextConsumer';
 import SigninLogic from './gateway/pages/sign in/SigninLogic';
 import SignupLogic from './gateway/pages/sign up/SignupLogic';
 import useSoftwares from '../hooks/useSoftwares';
+import RatedAppsPageLogic from './rated apps/page/RatedAppsPageLogic';
 
 function AppRouter(props) {
   const [softwares] = useSoftwares();
@@ -27,7 +27,7 @@ function AppRouter(props) {
         path='/rated_apps'
         exact
         render={() => {
-          return <RatedAppsContextConsumer />;
+          return <RatedAppsPageLogic />;
         }}
       />
 

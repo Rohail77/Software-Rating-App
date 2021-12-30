@@ -5,6 +5,8 @@ import NonEditableFormButtons from './edit rating form/cta buttons/NonEditableFo
 import EditRatingForm from './edit rating form/EditRatingForm';
 import { user } from '../../../../../../database/User';
 import { softwares } from '../../../../../../database/Softwares';
+import { update } from '../../../../../../features/softwaresSlice';
+import { useDispatch } from 'react-redux';
 
 function PastRating(props) {
   const [state, setState] = useState({
@@ -14,6 +16,8 @@ function PastRating(props) {
     error: false,
     clickable: true,
   });
+
+  const dispatch = useDispatch();
 
   const handleChange = event => {
     const { name, value } = event.target;
@@ -85,7 +89,7 @@ function PastRating(props) {
 
   const updateSoftwareLocal = () => {
     const { softwareID } = props.userReview;
-    props.updateSoftware(softwareID);
+    softwares.getSoftware(softwareID, software => dispatch(update(software)));
   };
 
   const handleDelete = () => {

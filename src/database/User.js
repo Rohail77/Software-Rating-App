@@ -132,7 +132,7 @@ class User {
   }
 
   getReviews(cb) {
-    const userReviews = [];
+    let userReviews = [];
     this.userRef
       .get()
       .then(doc => {
@@ -163,12 +163,21 @@ class User {
                 .get();
             })
             .then(doc => {
-              userReviews.unshift({
-                softwareID,
-                softwareName,
-                ...doc.data(),
-                date: formatDate(doc.data().date.toDate()),
-              });
+              userReviews = [
+                {
+                  softwareID,
+                  softwareName,
+                  ...doc.data(),
+                  date: formatDate(doc.data().date.toDate()),
+                },
+                ...userReviews,
+              ];
+              // userReviews.unshift({
+              //   softwareID,
+              //   softwareName,
+              //   ...doc.data(),
+              //   date: formatDate(doc.data().date.toDate()),
+              // });
               if (index + 1 === reviewedSoftwares.length) cb(userReviews);
             });
         });
