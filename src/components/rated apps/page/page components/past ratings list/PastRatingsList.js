@@ -5,11 +5,11 @@ import { UpdateSoftwareContext } from '../../../../../context/UpdateSoftwareCont
 import WaitMessage from '../../../../common/wait message/WaitMessage';
 
 function PastRatingsList(props) {
-  const { userReviews, fetchingUserReviews, getUpdatedUserReviews } = props;
+  const { userReviews, fetchedUserReviews, getUpdatedUserReviews } = props;
 
   return (
     <Fragment>
-      {fetchingUserReviews ? (
+      {!fetchedUserReviews ? (
         <WaitMessage />
       ) : (
         <ul className='past-reviews-list'>

@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import RatedAppsPage from './RatedAppsPage';
+import useUserReviews from '../../../hooks/useUserReviews';
 
 function RatedAppsPageLogic(props) {
   const [state, setState] = useState({
     currentPage: 1,
   });
+
+  const [userReviews, fetchedUserReviews, getUpdatedUserReviews] =
+    useUserReviews(true);
 
   const data = {
     reviewsPerPage: 7,
@@ -17,7 +21,6 @@ function RatedAppsPageLogic(props) {
   };
 
   const getReviewsForCurrentPage = () => {
-    const { userReviews } = props;
     const { reviewsPerPage } = data;
     return userReviews.slice(
       getInitialReviewIndexForCurrentPage(),
@@ -32,7 +35,6 @@ function RatedAppsPageLogic(props) {
   };
 
   const { currentPage } = state;
-  const { fetchingUserReviews, getUpdatedUserReviews, userReviews } = props;
   const { reviewsPerPage } = data;
   return (
     <RatedAppsPage
@@ -40,7 +42,7 @@ function RatedAppsPageLogic(props) {
       totalReviews={userReviews.length}
       currentPage={currentPage}
       updateCurrentPage={updateCurrentPage}
-      fetchingUserReviews={fetchingUserReviews}
+      fetchedUserReviews={fetchedUserReviews}
       getUpdatedUserReviews={getUpdatedUserReviews}
       userReviews={getReviewsForCurrentPage()}
     />

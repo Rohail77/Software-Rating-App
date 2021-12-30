@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import useSoftwares from '../../../hooks/useSoftwares';
 import MainPage from './MainPage';
 
 function MainPageLogic(props) {
@@ -9,6 +10,8 @@ function MainPageLogic(props) {
   const data = {
     softwaresPerPage: 20,
   };
+
+  const [softwares, fetchedSoftwares] = useSoftwares();
 
   const updateCurrentPage = newPageNumber => {
     setState(state => ({
@@ -27,7 +30,6 @@ function MainPageLogic(props) {
 
   const getFilteredSoftwares = () => {
     const { softwareSearchString } = state;
-    const { softwares } = props;
 
     return softwareSearchString === ''
       ? softwares
@@ -37,7 +39,6 @@ function MainPageLogic(props) {
             .includes(softwareSearchString.toLocaleLowerCase());
         });
   };
-  const { onWait } = props;
   const { currentPage } = state;
   const { softwaresPerPage } = data;
 
@@ -45,7 +46,7 @@ function MainPageLogic(props) {
     <MainPage
       softwares={getFilteredSoftwares()}
       setSoftwareSearchString={setSoftwareSearchString}
-      onWait={onWait}
+      fetchedSoftwares={fetchedSoftwares}
       updateCurrentPage={updateCurrentPage}
       currentPage={currentPage}
       softwaresPerPage={softwaresPerPage}

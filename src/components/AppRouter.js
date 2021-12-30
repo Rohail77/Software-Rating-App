@@ -6,9 +6,10 @@ import SoftwareDetailsRouterLogic from './software details/router/SoftwareDetail
 import RatedAppsContextConsumer from './rated apps/page/RatedAppsContextConsumer';
 import SigninLogic from './gateway/pages/sign in/SigninLogic';
 import SignupLogic from './gateway/pages/sign up/SignupLogic';
+import useSoftwares from '../hooks/useSoftwares';
 
 function AppRouter(props) {
-  const { onWait, softwares } = props;
+  const [softwares] = useSoftwares();
 
   const getSoftware = id => softwares.find(software => software.id === id);
 
@@ -18,7 +19,7 @@ function AppRouter(props) {
         path='/'
         exact
         render={() => {
-          return <MainPageLogic onWait={onWait} softwares={softwares} />;
+          return <MainPageLogic />;
         }}
       />
 

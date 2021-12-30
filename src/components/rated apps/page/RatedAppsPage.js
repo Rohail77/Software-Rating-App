@@ -8,7 +8,7 @@ import PastRatingsList from './page components/past ratings list/PastRatingsList
 function RatedAppsPage(props) {
   const {
     userReviews,
-    fetchingUserReviews,
+    fetchedUserReviews,
     getUpdatedUserReviews,
     reviewsPerPage,
     currentPage,
@@ -34,7 +34,7 @@ function RatedAppsPage(props) {
           <PastRatingsList
             userReviews={userReviews}
             getUpdatedUserReviews={getUpdatedUserReviews}
-            fetchingUserReviews={fetchingUserReviews}
+            fetchedUserReviews={fetchedUserReviews}
           />
           <Pages
             totalItems={totalReviews}

@@ -9,6 +9,8 @@ import { UserReviewsContext } from './context/UserReviewsContext';
 import { UpdateSoftwareContext } from './context/UpdateSoftwareContext';
 import useSoftwares from './hooks/useSoftwares';
 import useUserReviews from './hooks/useUserReviews';
+import { useDispatch } from 'react-redux';
+import { update } from './features/softwaresSlice';
 
 function App(props) {
   const [state, setState] = useState({
@@ -16,10 +18,12 @@ function App(props) {
     loggedin: false,
   });
 
-  const [softwares, setSoftwares, fetchedSoftwares] = useSoftwares();
-  const [userReviews, getUserReviews, fetchedUserReviews] = useUserReviews(
+  const [, fetchedSoftwares] = useSoftwares();
+  const [userReviews, fetchedUserReviews, getUserReviews] = useUserReviews(
     state.loggedin
   );
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     authorization.onLoginDetection(handleLogin);
@@ -42,13 +46,9 @@ function App(props) {
   }, [fetchedSoftwares]);
 
   const updateSoftware = id => {
-    softwares_imp.getSoftware(id, updatedSoftware => {
-      setSoftwares(softwares =>
-        softwares.map(software =>
-          software.id === updatedSoftware.id ? updatedSoftware : software
-        )
-      );
-    });
+    softwares_imp.getSoftware(id, updatedSoftware =>
+      dispatch(update(updatedSoftware))
+    );
   };
 
   return (
@@ -61,7 +61,7 @@ function App(props) {
         }}
       >
         <UpdateSoftwareContext.Provider value={updateSoftware}>
-          <AppRouter {...state} softwares={softwares} />
+          <AppRouter {...state} />
         </UpdateSoftwareContext.Provider>
       </UserReviewsContext.Provider>
     </Router>

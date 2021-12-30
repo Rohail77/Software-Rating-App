@@ -11,7 +11,7 @@ function MainPage(props) {
   const {
     softwares,
     setSoftwareSearchString,
-    onWait,
+    fetchedSoftwares,
     updateCurrentPage,
     currentPage,
     softwaresPerPage,
@@ -53,7 +53,7 @@ function MainPage(props) {
           setSoftwareSearchString={setSoftwareSearchString}
           softwareSearchInput={softwareSearchInput}
         />
-        {onWait ? (
+        {!fetchedSoftwares ? (
           <WaitMessage />
         ) : softwaresForCurrentPage.length === 0 ? (
           <p className='no-results-msg'>No results!</p>

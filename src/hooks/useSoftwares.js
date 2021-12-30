@@ -1,14 +1,22 @@
-import { useEffect, useState } from 'react';
-import { softwares } from '../database/Softwares';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { softwares as softwares_imp } from '../database/Softwares';
+import { set } from '../features/softwaresSlice';
 
 function useSoftwares() {
-  const [state, setState] = useState(null);
+  const [softwares, fetched] = useSelector(state => [
+    state.softwares.list,
+    state.softwares.fetched,
+  ]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    softwares.getSoftwares(softwares => setState(softwares));
+    if (!fetched) {
+      softwares_imp.getSoftwares(softwares => dispatch(set(softwares)));
+    }
   }, []);
 
-  return state ? [state, setState, true] : [[], setState, false];
+  return [softwares, fetched];
 }
 
 export default useSoftwares;
