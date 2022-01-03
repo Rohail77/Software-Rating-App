@@ -28,7 +28,7 @@ function RatedAppsPage(props) {
           </Link>
         </div>
       </header>
-      {userReviews.length === 0 ? (
+      {fetchedUserReviews && userReviews.length === 0 ? (
         <NoRatingsMessage />
       ) : (
         <>

@@ -108,26 +108,23 @@ function PastRating(props) {
     updateSoftwareLocal();
   };
 
-  const setRating = rating => {
+  const setRating = rating =>
     setState(state => ({
       ...state,
       rating,
     }));
-  };
 
-  const setEditable = value => {
+  const setEditable = value =>
     setState(state => ({
       ...state,
       editable: value,
     }));
-  };
 
-  const showNoChangeMessage = () => {
+  const showNoChangeMessage = () =>
     setState(state => ({
       ...state,
       error: true,
     }));
-  };
 
   useEffect(() => {
     const hideNoChangeMessage = () =>

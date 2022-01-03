@@ -5,6 +5,7 @@ import SoftwareDescription from './page components/software rating and descripti
 import SoftwareRating from './page components/software rating and description/software rating/SoftwareRating';
 import ReviewsSection from './page components/reviews section/ReviewsSection';
 import useSoftwareReviews from '../../../hooks/useSoftwareReviews';
+import WaitMessage from '../../common/wait message/WaitMessage';
 
 function SoftwareDetailsPage(props) {
   const {
@@ -48,7 +49,9 @@ function SoftwareDetailsPage(props) {
         />
       </section>
 
-      {reviewsFetched && (
+      {!reviewsFetched ? (
+        <WaitMessage styles={{ marginTop: '4em', marginBottom: '3em' }} />
+      ) : (
         <ReviewsSection
           software={{
             name,

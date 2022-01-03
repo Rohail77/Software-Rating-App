@@ -44,7 +44,7 @@ function MainPage(props) {
           softwareSearchInput={softwareSearchInput}
         />
         {!fetchedSoftwares ? (
-          <WaitMessage />
+          <WaitMessage styles={{ marginTop: '6em' }} />
         ) : itemsForCurrentPage.length === 0 ? (
           <p className='no-results-msg'>No results!</p>
         ) : (

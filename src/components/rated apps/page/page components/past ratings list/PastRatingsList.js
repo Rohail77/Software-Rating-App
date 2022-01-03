@@ -8,7 +8,7 @@ function PastRatingsList(props) {
   return (
     <>
       {!fetchedUserReviews ? (
-        <WaitMessage />
+        <WaitMessage styles={{ marginTop: '6em' }} />
       ) : (
         <ul className='past-reviews-list'>
           {userReviews.map(userReview => (

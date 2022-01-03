@@ -713,18 +713,13 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
 }
 .rate-wrapper .wait-msg {
-  background: black;
+  background: #000000c4;
   opacity: 0.95;
 }
 .wait-msg img {
-  animation: spin 2s linear infinite;
+  animation: spin 1s linear infinite;
 }
 @keyframes spin {
   0% {
@@ -927,9 +922,6 @@ body {
 }
 .rated-apps-wrapper .pages {
   margin-bottom: 2.5em;
-}
-.rated-apps-wrapper .wait-msg {
-  background-color: #2b2929ba;
 }
 
 /*============================

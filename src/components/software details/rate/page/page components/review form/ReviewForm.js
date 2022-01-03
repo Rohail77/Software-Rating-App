@@ -7,8 +7,17 @@ import { user } from '../../../../../../database/User';
 import useUserReviews from '../../../../../../hooks/useUserReviews';
 import { update } from '../../../../../../features/softwaresSlice';
 import { useDispatch } from 'react-redux';
-import useSoftwareReviews from '../../../../../../hooks/useSoftwareReviews';
 import { requestAddUserReview } from '../../../../../../features/softwareReviewsSlice';
+
+const MAX_REVIEW_LENGTH = 3000;
+
+const waitMessageStyles = {
+  position: 'fixed',
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0,
+};
 
 function ReviewForm(props) {
   const [state, setState] = useState({
@@ -16,10 +25,6 @@ function ReviewForm(props) {
     rating: 0,
     onWait: false,
   });
-
-  const data = {
-    maxReviewLength: 3000,
-  };
 
   const dispatch = useDispatch();
 
@@ -42,12 +47,11 @@ function ReviewForm(props) {
     wait();
   };
 
-  const wait = () => {
+  const wait = () =>
     setState(state => ({
       ...state,
       onWait: true,
     }));
-  };
 
   useEffect(() => {
     if (state.onWait) saveData();
@@ -110,20 +114,18 @@ function ReviewForm(props) {
 
   const isIncomplete = () => {
     const { rating, review } = state;
-    const { maxReviewLength } = data;
-    return rating === 0 || review.length >= maxReviewLength;
+    return rating === 0 || review.length >= MAX_REVIEW_LENGTH;
   };
 
   const { rating, review, onWait } = state;
-  const { maxReviewLength } = data;
 
   return (
     <form className='review-form' onSubmit={handleSubmit}>
       <RatingInput setRating={setRating} rating={rating} />
       <div>
         <label htmlFor='review'>Review (optional) </label>
-        {review.length >= maxReviewLength && (
-          <ReviewLimitMessage maxReviewLength={maxReviewLength} />
+        {review.length >= MAX_REVIEW_LENGTH && (
+          <ReviewLimitMessage maxReviewLength={MAX_REVIEW_LENGTH} />
         )}
         <textarea
           name='review'
@@ -131,7 +133,7 @@ function ReviewForm(props) {
           placeholder='Tell us your experience with the app'
           onChange={handleChange}
           value={review}
-          maxLength={maxReviewLength}
+          maxLength={MAX_REVIEW_LENGTH}
         ></textarea>
       </div>
 
@@ -141,7 +143,7 @@ function ReviewForm(props) {
       >
         Submit
       </button>
-      {onWait && <WaitMessage />}
+      {!onWait && <WaitMessage styles={waitMessageStyles} />}
     </form>
   );
 }
