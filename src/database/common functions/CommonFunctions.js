@@ -1,6 +1,4 @@
-export function formatDate(date) {
-  return new Intl.DateTimeFormat('en-US').format(date);
-}
+export const formatDate = date => new Intl.DateTimeFormat('en-US').format(date);
 
 export function getAverage(stars_count) {
   let numerator = 0;

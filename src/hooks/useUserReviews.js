@@ -18,10 +18,9 @@ function useUserReviews(loggedin) {
     }
   }, [loggedin, fetched]);
 
-  const getUserReviews = () => {
-    user.getReviews(reviews => {
-      dispatch(set(reviews));
-    });
+  const getUserReviews = async () => {
+    const reviews = await user.getReviews();
+    dispatch(set(reviews));
   };
 
   return [reviews, fetched, getUserReviews];

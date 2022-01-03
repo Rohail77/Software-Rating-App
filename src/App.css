@@ -741,22 +741,19 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #000000b3;
+  background: #000000d6;
 }
 .rate-wrapper .confirmation-modal,
 .already-rated-modal {
-  background-color: #f6f6f6;
-  padding: 1em;
-  margin: 0 0.5em;
-  border-radius: 8px;
+  background-color: white;
+  padding: 1.2em 2em;
+  border-radius: 5px;
   font-size: 1.5rem;
   line-height: 2rem;
   max-width: 450px;
-  width: max(32%, 200px);
 }
 .rate-wrapper .confirmation-modal__buttons {
   display: flex;
-  justify-content: flex-end;
   margin-top: 0.5em;
 }
 .rate-wrapper .confirmation-modal a {

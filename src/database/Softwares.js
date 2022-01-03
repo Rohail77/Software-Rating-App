@@ -65,16 +65,6 @@ class Softwares {
         softwares.push({ id: doc.id, ...doc.data() })
       );
 
-      // softwares = await Promise.all(
-      //   softwares.map(async software => {
-      //     const reviews = await this.getReviews(software.id);
-      //     return {
-      //       ...software,
-      //       reviews,
-      //     };
-      //   })
-      // );
-
       return softwares;
     } catch (error) {
       console.log('Error: ', error);

@@ -15,3 +15,5 @@ export const removeExtraSpaces = str =>
     .join(' ');
 
 export const isEmpty = str => removeExtraSpaces(str) === '';
+
+export const alertError = error => alert(error);

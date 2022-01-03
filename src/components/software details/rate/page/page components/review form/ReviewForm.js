@@ -8,6 +8,7 @@ import useUserReviews from '../../../../../../hooks/useUserReviews';
 import { update } from '../../../../../../features/softwaresSlice';
 import { useDispatch } from 'react-redux';
 import { requestAddUserReview } from '../../../../../../features/softwareReviewsSlice';
+import { isEmpty } from '../../../../../../database/common functions/CommonFunctions';
 
 const MAX_REVIEW_LENGTH = 3000;
 
@@ -20,11 +21,13 @@ const waitMessageStyles = {
 };
 
 function ReviewForm(props) {
-  const [state, setState] = useState({
+  const initialState = {
     review: '',
     rating: 0,
     onWait: false,
-  });
+  };
+
+  const [state, setState] = useState(initialState);
 
   const dispatch = useDispatch();
 
@@ -57,45 +60,27 @@ function ReviewForm(props) {
     if (state.onWait) saveData();
   }, [state.onWait]);
 
-  const saveData = () => {
+  const saveData = async () => {
     const { rating, review } = state;
     const { softwareID } = props;
-    softwares
-      .writeRating(softwareID, {
-        username: user.name,
-        rating,
-        review,
-      })
-      .then(addSoftwareToUserReviews);
-    review === '' ? incrementStarCount() : incrementTotalReviews();
+    await softwares.writeRating(softwareID, {
+      username: user.name,
+      rating,
+      review,
+    });
+    addSoftwareToUserReviews();
+    if (!isEmpty(review)) await softwares.incrementTotalReviews(softwareID);
+    await softwares.updateStarCount(softwareID, rating, 'INC');
+    await softwares.updateAverageRating(softwareID);
+    afterSave();
   };
 
   const [, , getUpdatedUserReviews] = useUserReviews(true);
 
-  const addSoftwareToUserReviews = () => {
-    const { softwareID } = props;
-    user.addSoftwareToReviews(softwareID).then(() => {
-      getUpdatedUserReviews();
-      user.bindUpdaterToReviews(getUpdatedUserReviews);
-    });
-  };
-
-  const incrementTotalReviews = () => {
-    const { softwareID } = props;
-    softwares.incrementTotalReviews(softwareID).then(incrementStarCount);
-  };
-
-  const incrementStarCount = () => {
-    const { softwareID } = props;
-    const { rating } = state;
-    softwares
-      .updateStarCount(softwareID, rating, 'INC')
-      .then(updateAverageRating);
-  };
-
-  const updateAverageRating = () => {
-    const { softwareID } = props;
-    softwares.updateAverageRating(softwareID).then(afterSave);
+  const addSoftwareToUserReviews = async () => {
+    await user.addSoftwareToReviews(props.softwareID);
+    getUpdatedUserReviews();
+    user.bindUpdaterToReviews(getUpdatedUserReviews);
   };
 
   const afterSave = async () => {
@@ -103,14 +88,11 @@ function ReviewForm(props) {
     const software = await softwares.getSoftware(softwareID);
     dispatch(update(software));
     dispatch(requestAddUserReview(softwareID));
-
-    setState({
-      review: '',
-      rating: 0,
-      onWait: false,
-    });
+    reset();
     showConfirmationModal();
   };
+
+  const reset = () => setState(initialState);
 
   const isIncomplete = () => {
     const { rating, review } = state;
@@ -143,7 +125,7 @@ function ReviewForm(props) {
       >
         Submit
       </button>
-      {!onWait && <WaitMessage styles={waitMessageStyles} />}
+      {onWait && <WaitMessage styles={waitMessageStyles} />}
     </form>
   );
 }

@@ -1,10 +1,12 @@
 import { auth, database } from '../config/database_config';
 import { formatDate } from './common functions/CommonFunctions';
 import firebase from 'firebase';
+import { alertError } from '../utils/util-functions';
 
 class User {
   set() {
     this.userRef = database.collection('Users').doc(this.id);
+    this.softwaresRef = database.collection('Softwares');
   }
 
   get id() {
@@ -17,6 +19,10 @@ class User {
 
   get name() {
     return auth.currentUser.displayName;
+  }
+
+  reviewRef(softwareId) {
+    return this.softwaresRef.doc(softwareId).collection('Reviews').doc(this.id);
   }
 
   updateUsername(newName) {
@@ -87,103 +93,72 @@ class User {
       });
   }
 
-  updateReview(softwareID, updatedReview) {
-    return database
-      .collection('Softwares')
-      .doc(softwareID)
-      .collection('Reviews')
-      .doc(this.id)
-      .update({
-        date: firebase.firestore.Timestamp.now(),
-        ...updatedReview,
-      });
+  updateReview(softwareId, updatedReview) {
+    return this.reviewRef(softwareId).update({
+      date: firebase.firestore.Timestamp.now(),
+      ...updatedReview,
+    });
   }
 
-  async deleteReview(softwareID) {
+  async deleteReview(softwareId) {
     try {
       await this.userRef.update({
         reviewedSoftwares:
-          firebase.firestore.FieldValue.arrayRemove(softwareID),
+          firebase.firestore.FieldValue.arrayRemove(softwareId),
       });
-
-      return await database
-        .collection('Softwares')
-        .doc(softwareID)
-        .collection('Reviews')
-        .doc(this.id)
-        .delete();
+      return await this.reviewRef(softwareId).delete();
     } catch (error) {
       console.log('Error: ', error);
     }
   }
 
-  bindUpdaterToReviews(updater) {
-    this.userRef.get().then(doc => {
+  async bindUpdaterToReviews(updater) {
+    try {
+      const doc = await this.userRef.get();
       if (doc.exists) {
-        doc.data().reviewedSoftwares.forEach(softwareID => {
-          database
-            .collection('Softwares')
-            .doc(softwareID)
-            .collection('Reviews')
-            .doc(this.id)
-            .onSnapshot(updater);
+        doc.data().reviewedSoftwares.forEach(softwareId => {
+          this.reviewRef(softwareId).onSnapshot(updater);
         });
       }
-    });
+    } catch (error) {
+      alert(error);
+    }
   }
 
-  getReviews(cb) {
-    let userReviews = [];
-    this.userRef
-      .get()
-      .then(doc => {
-        if (!doc.exists) {
-          cb(userReviews);
-          return false;
-        }
-        return doc.data().reviewedSoftwares;
-      })
-      .then(reviewedSoftwares => {
-        if (!reviewedSoftwares || reviewedSoftwares.length === 0) {
-          cb(userReviews);
-          return;
-        }
-        reviewedSoftwares.forEach((softwareID, index) => {
+  async getReviews() {
+    try {
+      const doc = await this.userRef.get();
+
+      if (!doc.exists) return [];
+
+      const reviewedSoftwares = doc.data().reviewedSoftwares;
+
+      if (!reviewedSoftwares || reviewedSoftwares.length === 0) return [];
+
+      return await Promise.all(
+        reviewedSoftwares.map(async softwareId => {
           let softwareName;
-          database
+          let doc = await database
             .collection('Softwares')
-            .doc(softwareID)
-            .get()
-            .then(doc => {
-              softwareName = doc.data().name;
-              return database
-                .collection('Softwares')
-                .doc(softwareID)
-                .collection('Reviews')
-                .doc(this.id)
-                .get();
-            })
-            .then(doc => {
-              userReviews = [
-                {
-                  softwareID,
-                  softwareName,
-                  ...doc.data(),
-                  date: formatDate(doc.data().date.toDate()),
-                },
-                ...userReviews,
-              ];
-              // userReviews.unshift({
-              //   softwareID,
-              //   softwareName,
-              //   ...doc.data(),
-              //   date: formatDate(doc.data().date.toDate()),
-              // });
-              if (index + 1 === reviewedSoftwares.length) cb(userReviews);
-            });
-        });
-      })
-      .catch(error => console.log('Error: ', error));
+            .doc(softwareId)
+            .get();
+
+          softwareName = doc.data().name;
+
+          doc = await this.reviewRef(softwareId).get();
+
+          const userReview = {
+            softwareId,
+            softwareName,
+            ...doc.data(),
+            date: formatDate(doc.data().date.toDate()),
+          };
+          return userReview;
+        })
+      );
+    } catch (error) {
+      alert(error);
+    }
   }
 
   addSoftwareToReviews(softwareID) {
@@ -200,7 +175,7 @@ class User {
       .collection('Users')
       .doc(this.id)
       .set({ reviewedSoftwares: [] })
-      .catch(error => console.log('Error: ', error));
+      .catch(alertError);
   }
 
   isSignedin() {
