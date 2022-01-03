@@ -3,6 +3,7 @@
 ### `NOTE:`
 
 This is the older version of the app. This version used class components for state. Redux was not used neither do any hooks.
+Main branch has the updated version.
 
 ## About the App
 
