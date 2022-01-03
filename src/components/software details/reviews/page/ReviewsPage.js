@@ -6,55 +6,32 @@ import RateLink from '../../common components/common links/RateLink';
 import ReviewsInfo from './page components/reviews section/reviews info/ReviewsInfo';
 import { Link } from 'react-router-dom';
 import HomeLink from '../../../common/home link/HomeLink';
+import usePagination from '../../../../hooks/usePagination';
 
-function ReviewsPage(props) {
+const REVIEWS_PER_PAGE = 12;
+
+function ReviewsPage({ reviews, software }) {
   const [state, setState] = useState({
-    currentPage: 1,
-    star: 'all',
-    reviews: props.reviews,
+    category: 'all',
   });
 
-  const data = {
-    reviewsPerPage: 12,
-  };
+  const filteredReviews = () =>
+    state.category === 'all'
+      ? reviews
+      : reviews.filter(
+          review => review.rating === Number.parseInt(state.category)
+        );
 
-  const updateCurrentPage = newPageNumber =>
+  const [reviewsForCurrentPage, pagination] = usePagination(
+    filteredReviews(),
+    REVIEWS_PER_PAGE
+  );
+
+  const setCategory = category =>
     setState(state => ({
       ...state,
-      currentPage: newPageNumber,
+      category,
     }));
-
-  const filterReviews = category => {
-    const { reviews } = props;
-    setState(state => ({
-      ...state,
-      reviews:
-        category === 'all'
-          ? reviews
-          : reviews.filter(
-              review => review.rating === Number.parseInt(category)
-            ),
-      currentPage: 1,
-    }));
-  };
-
-  const getReviewsForCurrentPage = () => {
-    const { reviews } = state;
-    const { reviewsPerPage } = data;
-    return reviews.slice(
-      getInitialReviewIndexForCurrentPage(),
-      getInitialReviewIndexForCurrentPage() + reviewsPerPage
-    );
-  };
-  const getInitialReviewIndexForCurrentPage = () => {
-    const { reviewsPerPage } = data;
-    const { currentPage } = state;
-    return (currentPage - 1) * reviewsPerPage;
-  };
-
-  const { software } = props;
-  const { reviews } = state;
-  const { reviewsPerPage } = data;
 
   return (
     <div className='wrapper reviews-wrapper'>
@@ -82,22 +59,12 @@ function ReviewsPage(props) {
         <RateLink softwareID={software.id} />
 
         <ReviewsInfo
-          filterReviews={filterReviews}
-          total_reviews={reviews.length}
+          filterReviews={setCategory}
+          total_reviews={filteredReviews().length}
         />
 
-        <ReviewsList
-          reviews={getReviewsForCurrentPage()}
-          softwareID={software.id}
-        />
-        {reviews.length === 0 ? null : (
-          <Pages
-            totalItems={reviews.length}
-            itemsPerPage={reviewsPerPage}
-            currentPage={state.currentPage}
-            updateCurrentPage={updateCurrentPage}
-          />
-        )}
+        <ReviewsList reviews={reviewsForCurrentPage} softwareID={software.id} />
+        <Pages {...pagination} />
       </section>
     </div>
   );

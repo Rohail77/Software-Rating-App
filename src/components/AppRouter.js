@@ -6,7 +6,7 @@ import SoftwareDetailsRouterLogic from './software details/router/SoftwareDetail
 import SigninLogic from './gateway/pages/sign in/SigninLogic';
 import SignupLogic from './gateway/pages/sign up/SignupLogic';
 import useSoftwares from '../hooks/useSoftwares';
-import RatedAppsPageLogic from './rated apps/page/RatedAppsPageLogic';
+import RatedAppsPage from './rated apps/page/RatedAppsPage';
 
 function AppRouter(props) {
   const [softwares] = useSoftwares();
@@ -27,7 +27,7 @@ function AppRouter(props) {
         path='/rated_apps'
         exact
         render={() => {
-          return <RatedAppsPageLogic />;
+          return <RatedAppsPage />;
         }}
       />
 

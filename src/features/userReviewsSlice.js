@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const userReviewsSlice = createSlice({
-  name: 'user_reviews',
+  name: 'user-reviews',
   initialState: {
     list: [],
     fetched: false,
@@ -12,8 +12,8 @@ const userReviewsSlice = createSlice({
       state.fetched = true;
     },
     update: (state, action) => {
-      state.list = state.list.map(software =>
-        software.id === action.payload.id ? action.payload : software
+      state.list = state.list.map(review =>
+        review.id === action.payload.id ? action.payload : review
       );
     },
   },

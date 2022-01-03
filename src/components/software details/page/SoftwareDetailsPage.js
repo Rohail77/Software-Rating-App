@@ -4,6 +4,7 @@ import SoftwareInfo from './page components/software info/SoftwareInfo';
 import SoftwareDescription from './page components/software rating and description/software description/SoftwareDescription';
 import SoftwareRating from './page components/software rating and description/software rating/SoftwareRating';
 import ReviewsSection from './page components/reviews section/ReviewsSection';
+import useSoftwareReviews from '../../../hooks/useSoftwareReviews';
 
 function SoftwareDetailsPage(props) {
   const {
@@ -15,7 +16,8 @@ function SoftwareDetailsPage(props) {
     id,
     description,
   } = props.software;
-  const { reviews, reviewsFetched } = props;
+
+  const [reviews, reviewsFetched] = useSoftwareReviews(id);
 
   return (
     <div className='wrapper software-details-wrapper'>

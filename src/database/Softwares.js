@@ -1,7 +1,11 @@
 import { database } from '../config/database_config';
 import firebase from 'firebase';
 import { user } from './User';
-import { formatDate, getAverage } from './common functions/CommonFunctions';
+import {
+  formatDate,
+  getAverage,
+  isEmpty,
+} from './common functions/CommonFunctions';
 
 class Softwares {
   constructor() {
@@ -10,48 +14,92 @@ class Softwares {
   }
 
   bindUpdaterToReview(softwareID, cb) {
-    this.softwaresRef
+    const unsubscribe = this.softwaresRef
       .doc(softwareID)
       .collection('Reviews')
-      .doc(user.id)
-      .onSnapshot(doc => {
-        cb();
-      });
-  }
-
-  getSoftwares(cb) {
-    const softwares = [];
-    this.softwaresRef
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          softwares.push({ id: doc.id, ...doc.data() });
-        });
-        cb(softwares);
-      })
-      .catch(error => console.log('Error: ', error));
-  }
-
-  getReviews(softwareID, cb) {
-    const reviews = [];
-    this.softwaresRef
-      .doc(softwareID)
-      .collection('Reviews')
-      .orderBy('date', 'desc')
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          if (doc.data().review !== '') {
-            reviews.push({
-              id: doc.id,
-              ...doc.data(),
-              date: formatDate(doc.data().date.toDate()),
-            });
+      .onSnapshot(snapshot => {
+        snapshot.docChanges().forEach(change => {
+          if (change.type === 'added') {
+            console.log('Added: ', change.doc.data());
+            cb(this.getFormattedReview(change.doc));
+          }
+          if (change.type === 'modified') {
+            console.log('Modified: ', change.doc.data());
+          }
+          if (change.type === 'removed') {
+            console.log('Removed: ', change.doc.data());
           }
         });
-        cb(reviews);
-      })
-      .catch(error => console.log('Error: ', error));
+      });
+    return unsubscribe;
+    // const unsubscribe = this.softwaresRef
+    //   .doc(softwareID)
+    //   .collection('Reviews')
+    //   .doc(user.id)
+    //   .onSnapshot(doc => {
+    //     if (doc.data()) cb(this.getFormattedReview(doc));
+    //   });
+    // return unsubscribe;
+  }
+
+  async myReview(softwareId) {
+    const doc = await this.softwaresRef
+      .doc(softwareId)
+      .collection('Reviews')
+      .doc(user.id)
+      .get();
+    return this.getFormattedReview(doc);
+  }
+
+  getFormattedReview(doc) {
+    return {
+      id: doc.id,
+      ...doc.data(),
+      date: formatDate(doc.data().date.toDate()),
+    };
+  }
+
+  async getSoftwares() {
+    let softwares = [];
+    try {
+      const querySnapshot = await this.softwaresRef.get();
+      querySnapshot.forEach(doc =>
+        softwares.push({ id: doc.id, ...doc.data() })
+      );
+
+      // softwares = await Promise.all(
+      //   softwares.map(async software => {
+      //     const reviews = await this.getReviews(software.id);
+      //     return {
+      //       ...software,
+      //       reviews,
+      //     };
+      //   })
+      // );
+
+      return softwares;
+    } catch (error) {
+      console.log('Error: ', error);
+    }
+  }
+
+  async getReviews(softwareID) {
+    const reviews = [];
+    try {
+      const querySnapshot = await this.softwaresRef
+        .doc(softwareID)
+        .collection('Reviews')
+        .orderBy('date', 'desc')
+        .get();
+
+      querySnapshot.forEach(doc => {
+        if (!isEmpty(doc.data().review))
+          reviews.push(this.getFormattedReview(doc));
+      });
+      return reviews;
+    } catch (error) {
+      console.log('Error: ', error);
+    }
   }
 
   getSoftware(softwareID, cb) {

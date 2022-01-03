@@ -1,13 +1,11 @@
-function PreviousPageButton({ updateCurrentPage, currentPage, isDisabled }) {
-  const handleClick = () => updateCurrentPage(currentPage - 1);
-
+function PreviousPageButton({ updateCurrentPage, currentPage, disabled }) {
   return (
     <li>
       <button
-        className={`page${isDisabled ? '' : ' page--clickable'}`}
-        onClick={handleClick}
-        disabled={isDisabled}
-        style={{ cursor: `${isDisabled ? 'auto' : 'pointer'}` }}
+        className={`page${disabled ? '' : ' page--clickable'}`}
+        onClick={() => updateCurrentPage(currentPage - 1)}
+        disabled={disabled}
+        style={{ cursor: `${disabled ? 'auto' : 'pointer'}` }}
       >
         <img src='/images/left_arrow.svg' alt='left arrow' />
       </button>

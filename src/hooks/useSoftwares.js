@@ -11,9 +11,12 @@ function useSoftwares() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!fetched) {
-      softwares_imp.getSoftwares(softwares => dispatch(set(softwares)));
-    }
+    const fetchSoftwares = async () => {
+      const softwares = await softwares_imp.getSoftwares();
+      dispatch(set(softwares));
+    };
+
+    if (!fetched) fetchSoftwares();
   }, []);
 
   return [softwares, fetched];

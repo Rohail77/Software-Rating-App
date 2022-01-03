@@ -7,6 +7,8 @@ import { user } from '../../../../../../database/User';
 import useUserReviews from '../../../../../../hooks/useUserReviews';
 import { update } from '../../../../../../features/softwaresSlice';
 import { useDispatch } from 'react-redux';
+import useSoftwareReviews from '../../../../../../hooks/useSoftwareReviews';
+import { requestAddUserReview } from '../../../../../../features/softwareReviewsSlice';
 
 function ReviewForm(props) {
   const [state, setState] = useState({
@@ -95,6 +97,7 @@ function ReviewForm(props) {
   const afterSave = () => {
     const { showConfirmationModal, softwareID } = props;
     softwares.getSoftware(softwareID, software => dispatch(update(software)));
+    dispatch(requestAddUserReview(softwareID));
 
     setState({
       review: '',

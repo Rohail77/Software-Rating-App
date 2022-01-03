@@ -1,21 +1,21 @@
 import PagesList from './pages list/PagesList';
 
-function Pages(props) {
-  const { currentPage, totalItems, itemsPerPage, updateCurrentPage } = props;
-
-  const getTotalPages = () => Math.ceil(totalItems / itemsPerPage);
-
+function Pages({ currentPage, totalPages, updateCurrentPage }) {
   return (
     <div className='pages'>
-      <PagesList
-        currentPage={currentPage}
-        totalPages={getTotalPages()}
-        updateCurrentPage={updateCurrentPage}
-      />
-      <p className='pages__info'>
-        Page {currentPage} of{' '}
-        <span className='pages__info__total-pages'>{getTotalPages()}</span>
-      </p>
+      {totalPages > 1 && (
+        <>
+          <PagesList
+            currentPage={currentPage}
+            totalPages={totalPages}
+            updateCurrentPage={updateCurrentPage}
+          />
+          <p className='pages__info'>
+            Page {currentPage} of{' '}
+            <span className='pages__info__total-pages'>{totalPages}</span>
+          </p>
+        </>
+      )}
     </div>
   );
 }

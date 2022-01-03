@@ -3,7 +3,6 @@ import ReviewForm from './page components/review form/ReviewForm';
 import { Link } from 'react-router-dom';
 import HomeLink from '../../../common/home link/HomeLink';
 import Software from './page components/software info/Software';
-import { UpdateSoftwareContext } from '../../../../context/UpdateSoftwareContext';
 
 function RatePage(props) {
   const {

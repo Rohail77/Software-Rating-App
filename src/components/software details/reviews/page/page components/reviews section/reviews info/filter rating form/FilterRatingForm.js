@@ -1,18 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 function FilterRatingForm(props) {
-  const [state, setState] = useState({
-    category: 'all',
-  });
-
-  const handleChange = event =>
-    setState({
-      [event.target.name]: event.target.value,
-    });
+  const handleChange = event => props.filterReviews(event.target.value);
 
   useEffect(() => {
-    props.filterReviews(state.category);
-  }, [state.category]);
+    props.filterReviews('all');
+  }, []);
 
   return (
     <form className='filter-rating-form'>
@@ -22,7 +15,7 @@ function FilterRatingForm(props) {
           name='category'
           id='category'
           onChange={handleChange}
-          value={state.category}
+          value={props.category}
         >
           <option value='all'>All</option>
           <option value='5'>

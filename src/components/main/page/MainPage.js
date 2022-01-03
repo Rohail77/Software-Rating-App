@@ -6,16 +6,12 @@ import { Link } from 'react-router-dom';
 import WaitMessage from '../../common/wait message/WaitMessage';
 import AccountUISelector from './page components/account section/AccountUISelector';
 import Pages from '../../common/pages/Pages';
+import usePagination from '../../../hooks/usePagination';
+
+const SOFTWARES_PER_PAGE = 20;
 
 function MainPage(props) {
-  const {
-    softwares,
-    setSoftwareSearchString,
-    fetchedSoftwares,
-    updateCurrentPage,
-    currentPage,
-    softwaresPerPage,
-  } = props;
+  const { softwares, setSoftwareSearchString, fetchedSoftwares } = props;
 
   const softwareSearchInput = createRef();
 
@@ -27,16 +23,10 @@ function MainPage(props) {
   const emptySoftwareSearchInput = () =>
     (softwareSearchInput.current.value = '');
 
-  const getSoftwaresForCurrentPage = () =>
-    softwares.slice(
-      getInitialSoftwareIndexForCurrentPage(),
-      getInitialSoftwareIndexForCurrentPage() + softwaresPerPage
-    );
-
-  const getInitialSoftwareIndexForCurrentPage = () =>
-    (currentPage - 1) * softwaresPerPage;
-
-  const softwaresForCurrentPage = getSoftwaresForCurrentPage();
+  const [itemsForCurrentPage, pagination] = usePagination(
+    softwares,
+    SOFTWARES_PER_PAGE
+  );
 
   return (
     <Fragment>
@@ -55,21 +45,16 @@ function MainPage(props) {
         />
         {!fetchedSoftwares ? (
           <WaitMessage />
-        ) : softwaresForCurrentPage.length === 0 ? (
+        ) : itemsForCurrentPage.length === 0 ? (
           <p className='no-results-msg'>No results!</p>
         ) : (
           <Fragment>
             <ul className='softwares-list'>
-              {softwaresForCurrentPage.map(software => (
+              {itemsForCurrentPage.map(software => (
                 <Software software={software} key={uuidv4()} />
               ))}
             </ul>
-            <Pages
-              totalItems={softwares.length}
-              itemsPerPage={softwaresPerPage}
-              currentPage={currentPage}
-              updateCurrentPage={updateCurrentPage}
-            />
+            <Pages {...pagination} />
           </Fragment>
         )}
       </div>

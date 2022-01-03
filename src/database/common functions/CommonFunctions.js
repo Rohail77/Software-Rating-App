@@ -11,3 +11,11 @@ export function getAverage(stars_count) {
   });
   return denominator === 0 ? 0 : numerator / denominator;
 }
+
+export const removeExtraSpaces = str =>
+  str
+    .split(' ')
+    .filter(s => s)
+    .join(' ');
+
+export const isEmpty = str => removeExtraSpaces(str) === '';
