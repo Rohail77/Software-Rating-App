@@ -7,6 +7,7 @@ import { user } from '../../../../../../database/User';
 import { softwares } from '../../../../../../database/Softwares';
 import { update } from '../../../../../../features/softwaresSlice';
 import { useDispatch } from 'react-redux';
+import { isEmpty } from '../../../../../../utils/util-functions';
 
 function PastRating(props) {
   const [state, setState] = useState({
@@ -19,13 +20,11 @@ function PastRating(props) {
 
   const dispatch = useDispatch();
 
-  const handleChange = event => {
-    const { name, value } = event.target;
+  const handleChange = event =>
     setState(state => ({
       ...state,
-      [name]: value,
+      [event.target.name]: event.target.value,
     }));
-  };
 
   const handleSubmit = () => {
     if (reviewUpdated()) {
@@ -44,11 +43,14 @@ function PastRating(props) {
     return review !== userReview.review || rating !== userReview.rating;
   };
 
-  const updateSoftware = () => {
-    updateTotalReviews()
-      .then(updateStarCount)
-      .then(updateSoftwareLocal)
-      .catch(error => console.log(error));
+  const updateSoftware = async () => {
+    try {
+      await updateTotalReviews();
+      await updateStarCount();
+      updateSoftwareLocal();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const updateTotalReviews = () => {
@@ -61,35 +63,32 @@ function PastRating(props) {
     return Promise.resolve();
   };
 
-  const shouldDecrementTotalReviews = () => {
-    const { review } = state;
-    return review === '' && review !== props.userReview.review;
-  };
+  const shouldDecrementTotalReviews = () =>
+    isEmpty(state.review) && !isEmpty(props.userReview.review);
 
-  const shouldIncrementTotalReviews = () => {
-    const { review } = state;
-    return review !== '' && props.userReview.review === '';
-  };
+  const shouldIncrementTotalReviews = () =>
+    !isEmpty(state.review) && isEmpty(props.userReview.review);
 
-  const updateStarCount = () => {
+  const updateStarCount = async () => {
     if (shouldChangeStarCount()) {
       const { softwareID } = props.userReview;
       const { rating } = state;
-      return softwares
-        .replaceStarCount(softwareID, rating, props.userReview.rating)
-        .then(() => softwares.updateAverageRating(softwareID));
+      await softwares.replaceStarCount(
+        softwareID,
+        rating,
+        props.userReview.rating
+      );
+      return await softwares.updateAverageRating(softwareID);
     }
     return Promise.resolve();
   };
 
-  const shouldChangeStarCount = () => {
-    const { rating } = state;
-    return rating !== props.userReview.rating;
-  };
+  const shouldChangeStarCount = () => state.rating !== props.userReview.rating;
 
-  const updateSoftwareLocal = () => {
+  const updateSoftwareLocal = async () => {
     const { softwareID } = props.userReview;
-    softwares.getSoftware(softwareID, software => dispatch(update(software)));
+    const software = await softwares.getSoftware(softwareID);
+    dispatch(update(software));
   };
 
   const handleDelete = () => {
@@ -97,18 +96,16 @@ function PastRating(props) {
     deleteReview();
   };
 
-  const deleteReview = () => {
+  const deleteReview = async () => {
     const { rating, review } = state;
     const { softwareID } = props.userReview;
     const { getUpdatedUserReviews } = props;
-    user.deleteReview(softwareID).then(() => {
-      getUpdatedUserReviews();
-      if (review !== '') softwares.decrementTotalReviews(softwareID);
-      softwares
-        .updateStarCount(softwareID, rating, 'DEC')
-        .then(() => softwares.updateAverageRating(softwareID))
-        .then(updateSoftwareLocal);
-    });
+    await user.deleteReview(softwareID);
+    getUpdatedUserReviews();
+    if (!isEmpty(review)) softwares.decrementTotalReviews(softwareID);
+    await softwares.updateStarCount(softwareID, rating, 'DEC');
+    await softwares.updateAverageRating(softwareID);
+    updateSoftwareLocal();
   };
 
   const setRating = rating => {

@@ -94,9 +94,10 @@ function ReviewForm(props) {
     softwares.updateAverageRating(softwareID).then(afterSave);
   };
 
-  const afterSave = () => {
+  const afterSave = async () => {
     const { showConfirmationModal, softwareID } = props;
-    softwares.getSoftware(softwareID, software => dispatch(update(software)));
+    const software = await softwares.getSoftware(softwareID);
+    dispatch(update(software));
     dispatch(requestAddUserReview(softwareID));
 
     setState({

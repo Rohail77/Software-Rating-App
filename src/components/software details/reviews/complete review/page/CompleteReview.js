@@ -21,13 +21,13 @@ function CompleteReview({
         </Link>
         <span> \ </span>
         {noReviewsPage ? null : (
-          <Fragment>
+          <>
             <Link className='page-link' to={`/software_details/${id}/reviews`}>
               {' '}
               Reviews
             </Link>
             <span> \ </span>
-          </Fragment>
+          </>
         )}
         <Link
           className='page-link active-page-link'

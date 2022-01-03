@@ -99,21 +99,22 @@ class User {
       });
   }
 
-  deleteReview(softwareID) {
-    return this.userRef
-      .update({
+  async deleteReview(softwareID) {
+    try {
+      await this.userRef.update({
         reviewedSoftwares:
           firebase.firestore.FieldValue.arrayRemove(softwareID),
-      })
-      .then(() => {
-        return database
-          .collection('Softwares')
-          .doc(softwareID)
-          .collection('Reviews')
-          .doc(this.id)
-          .delete();
-      })
-      .catch(error => console.log('Error: ', error));
+      });
+
+      return await database
+        .collection('Softwares')
+        .doc(softwareID)
+        .collection('Reviews')
+        .doc(this.id)
+        .delete();
+    } catch (error) {
+      console.log('Error: ', error);
+    }
   }
 
   bindUpdaterToReviews(updater) {

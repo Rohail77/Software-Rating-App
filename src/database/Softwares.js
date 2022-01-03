@@ -1,11 +1,9 @@
 import { database } from '../config/database_config';
 import firebase from 'firebase';
 import { user } from './User';
-import {
-  formatDate,
-  getAverage,
-  isEmpty,
-} from './common functions/CommonFunctions';
+import { formatDate, isEmpty } from './common functions/CommonFunctions';
+
+import { getAverage } from '../utils/util-functions';
 
 class Softwares {
   constructor() {
@@ -102,14 +100,13 @@ class Softwares {
     }
   }
 
-  getSoftware(softwareID, cb) {
-    this.softwaresRef
-      .doc(softwareID)
-      .get()
-      .then(doc => {
-        cb({ ...doc.data(), id: doc.id });
-      })
-      .catch(error => console.log('Error: ', error));
+  async getSoftware(softwareID) {
+    try {
+      const doc = await this.softwaresRef.doc(softwareID).get();
+      return { ...doc.data(), id: doc.id };
+    } catch (error) {
+      console.log('Error: ', error);
+    }
   }
 
   writeRating(softwareID, data) {
@@ -152,18 +149,12 @@ class Softwares {
     });
   }
 
-  updateAverageRating(softwareID) {
-    return this.softwaresRef
-      .doc(softwareID)
-      .get()
-      .then(doc => {
-        return getAverage(doc.data().stars_count);
-      })
-      .then(averageRating => {
-        return this.softwaresRef.doc(softwareID).update({
-          average_rating: Number(averageRating.toFixed(1)),
-        });
-      });
+  async updateAverageRating(softwareID) {
+    const doc = await this.softwaresRef.doc(softwareID).get();
+    const averageRating = getAverage(doc.data().stars_count);
+    return await this.softwaresRef.doc(softwareID).update({
+      average_rating: Number(averageRating.toFixed(1)),
+    });
   }
 }
 
