@@ -1,110 +1,104 @@
-import { Component, Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { user } from '../../../../../database/User';
 
-class DangerZone extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      password: '',
-      deleted: false,
-      error: false,
-      errorMsg: '',
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.closeErrorMessage = this.closeErrorMessage.bind(this);
-  }
+function DangerZone(props) {
+  const [state, setState] = useState({
+    password: '',
+    deleted: false,
+    error: false,
+    errorMsg: '',
+  });
 
-  handleChange(event) {
-    const { name, value } = event.target;
-    this.setState({
-      [name]: value,
-    });
-  }
+  const handleChange = event =>
+    setState(state => ({
+      ...state,
+      [event.target.name]: event.target.value,
+    }));
 
-  handleSubmit(event) {
+  const handleSubmit = event => {
     event.preventDefault();
-    const { password } = this.state;
-    const { wait, stopWait } = this.props;
+    const { password } = state;
+    const { wait, stopWait } = props;
     wait();
     user
       .delete(password)
       .then(() => {
         stopWait();
-        this.setState({
+        setState(state => ({
+          ...state,
           deleted: true,
-        });
+        }));
       })
       .catch(error => {
         stopWait();
-        this.showError(error.message);
+        showError(error.message);
       });
-  }
+  };
 
-  showError(errorMsg) {
-    this.setState({
+  const showError = errorMsg =>
+    setState(state => ({
+      ...state,
       error: true,
       errorMsg,
-    });
-  }
+    }));
 
-  reset() {
-    this.setState({
+  const reset = () =>
+    setState({
       password: '',
       error: false,
       errorMsg: '',
     });
-  }
 
-  closeErrorMessage(event) {
+  const closeErrorMessage = event => {
     event.preventDefault();
-    this.reset();
-  }
+    reset();
+  };
 
-  render() {
-    const { password, deleted, error, errorMsg } = this.state;
-    return (
-      <Fragment>
-        {deleted ? <Redirect to='/' /> : null}
-        <section className='danger-zone'>
-          <h2 className='danger-zone__h'>Danger Zone</h2>
-          <h1 className='danger-zone__delete-h'>Delete account</h1>
-          <div className='danger-zone__cta'>
-            <input
-              type='password'
-              name='password'
-              value={password}
-              placeholder='Enter your password'
-              onChange={this.handleChange}
-            />
-            <button
-              type='button'
-              className={`danger-zone__delete-btn${
-                password.length < 6 ? ' danger-zone__delete-btn--disabled' : ''
-              }`}
-              onClick={this.handleSubmit}
+  const { password, deleted, error, errorMsg } = state;
+  return (
+    <Fragment>
+      {deleted && <Redirect to='/' />}
+      <section className='danger-zone'>
+        <h2 className='danger-zone__h'>Danger Zone</h2>
+        <h1 className='danger-zone__delete-h'>Delete account</h1>
+        <div className='danger-zone__cta'>
+          <input
+            type='password'
+            name='password'
+            value={password}
+            placeholder='Enter your password'
+            onChange={handleChange}
+          />
+          <button
+            type='button'
+            className={`danger-zone__delete-btn${
+              password.length < 6 ? ' danger-zone__delete-btn--disabled' : ''
+            }`}
+            onClick={handleSubmit}
+          >
+            Delete
+          </button>
+        </div>
+        {error && (
+          <div className='danger-zone__error-msg'>
+            <a
+              href='close'
+              className='danger-zone__error-msg__cross'
+              onClick={closeErrorMessage}
             >
-              Delete
-            </button>
+              <img src='/images/cross.svg' alt='cross' />{' '}
+            </a>
+            <p className='danger-zone__error-msg__para'>{errorMsg}</p>
           </div>
-          {error ? (
-            <div className='danger-zone__error-msg'>
-              <a
-                href='close'
-                className='danger-zone__error-msg__cross'
-                onClick={this.closeErrorMessage}
-              >
-                <img src='/images/cross.svg' alt='cross' />{' '}
-              </a>
-              <p className='danger-zone__error-msg__para'>{errorMsg}</p>
-            </div>
-          ) : null}
-          <p className='danger-zone__warning-para'>Deleting your account will not delete your ratings history. Delete it manually if you desire to.</p>
-        </section>
-      </Fragment>
-    );
-  }
+        )}
+        <p className='danger-zone__warning-para'>
+          Deleting your account will not delete your ratings history. Delete it
+          manually if you desire to.
+        </p>
+      </section>
+    </Fragment>
+  );
 }
 
 export default DangerZone;

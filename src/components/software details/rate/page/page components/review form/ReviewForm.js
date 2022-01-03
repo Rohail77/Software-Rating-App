@@ -1,152 +1,148 @@
-import { Component } from 'react';
+import { useEffect, useState } from 'react';
 import RatingInput from './rating input/RatingInput';
 import { softwares } from '../../../../../../database/Softwares';
 import WaitMessage from '../../../../../common/wait message/WaitMessage';
 import ReviewLimitMessage from './limit message/ReviewLimitMessage';
 import { user } from '../../../../../../database/User';
+import useUserReviews from '../../../../../../hooks/useUserReviews';
+import { update } from '../../../../../../features/softwaresSlice';
+import { useDispatch } from 'react-redux';
+import useSoftwareReviews from '../../../../../../hooks/useSoftwareReviews';
+import { requestAddUserReview } from '../../../../../../features/softwareReviewsSlice';
 
-class ReviewForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      review: '',
-      rating: 0,
-      onWait: false,
-    };
-    this.data = {
-      maxReviewLength: 3000,
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setRating = this.setRating.bind(this);
-    this.saveData = this.saveData.bind(this);
-    this.addSoftwareToUserReviews = this.addSoftwareToUserReviews.bind(this);
-    this.incrementTotalReviews = this.incrementTotalReviews.bind(this);
-    this.incrementStarCount = this.incrementStarCount.bind(this);
-    this.updateAverageRating = this.updateAverageRating.bind(this);
-    this.afterSave = this.afterSave.bind(this);
-  }
+function ReviewForm(props) {
+  const [state, setState] = useState({
+    review: '',
+    rating: 0,
+    onWait: false,
+  });
 
-  handleChange(event) {
+  const data = {
+    maxReviewLength: 3000,
+  };
+
+  const dispatch = useDispatch();
+
+  const handleChange = event => {
     event.preventDefault();
-    this.setState({
+    setState(state => ({
+      ...state,
       [event.target.name]: event.target.value,
-    });
-  }
+    }));
+  };
 
-  setRating(rating) {
-    this.setState({
+  const setRating = rating =>
+    setState(state => ({
+      ...state,
       rating,
-    });
-  }
+    }));
 
-  handleSubmit(event) {
+  const handleSubmit = event => {
     event.preventDefault();
-    this.wait();
-  }
+    wait();
+  };
 
-  wait() {
-    this.setState(
-      {
-        onWait: true,
-      },
-      this.saveData
-    );
-  }
+  const wait = () => {
+    setState(state => ({
+      ...state,
+      onWait: true,
+    }));
+  };
 
-  saveData() {
-    const { rating, review } = this.state;
-    const { softwareID } = this.props;
+  useEffect(() => {
+    if (state.onWait) saveData();
+  }, [state.onWait]);
+
+  const saveData = () => {
+    const { rating, review } = state;
+    const { softwareID } = props;
     softwares
       .writeRating(softwareID, {
         username: user.name,
         rating,
         review,
       })
-      .then(this.addSoftwareToUserReviews);
-    review === '' ? this.incrementStarCount() : this.incrementTotalReviews();
-  }
+      .then(addSoftwareToUserReviews);
+    review === '' ? incrementStarCount() : incrementTotalReviews();
+  };
 
-  addSoftwareToUserReviews() {
-    const { softwareID, getUpdatedUserReviews } = this.props;
+  const [, , getUpdatedUserReviews] = useUserReviews(true);
+
+  const addSoftwareToUserReviews = () => {
+    const { softwareID } = props;
     user.addSoftwareToReviews(softwareID).then(() => {
       getUpdatedUserReviews();
       user.bindUpdaterToReviews(getUpdatedUserReviews);
     });
-  }
+  };
 
-  incrementTotalReviews() {
-    const { softwareID } = this.props;
-    softwares.incrementTotalReviews(softwareID).then(this.incrementStarCount);
-  }
+  const incrementTotalReviews = () => {
+    const { softwareID } = props;
+    softwares.incrementTotalReviews(softwareID).then(incrementStarCount);
+  };
 
-  incrementStarCount() {
-    const { softwareID } = this.props;
-    const { rating } = this.state;
-    softwares.updateStarCount(softwareID, rating, 'INC').then(
-      this.updateAverageRating
-    );
-  }
+  const incrementStarCount = () => {
+    const { softwareID } = props;
+    const { rating } = state;
+    softwares
+      .updateStarCount(softwareID, rating, 'INC')
+      .then(updateAverageRating);
+  };
 
-  updateAverageRating() {
-    const { softwareID } = this.props;
-    softwares.updateAverageRating(softwareID).then(this.afterSave);
-  }
+  const updateAverageRating = () => {
+    const { softwareID } = props;
+    softwares.updateAverageRating(softwareID).then(afterSave);
+  };
 
-  afterSave() {
-    const { showConfirmationModal, updateSoftware, softwareID } = this.props;
-    updateSoftware(softwareID);
+  const afterSave = () => {
+    const { showConfirmationModal, softwareID } = props;
+    softwares.getSoftware(softwareID, software => dispatch(update(software)));
+    dispatch(requestAddUserReview(softwareID));
 
-    this.setState(
-      {
-        review: '',
-        rating: 0,
-        onWait: false,
-      },
-      showConfirmationModal
-    );
-  }
+    setState({
+      review: '',
+      rating: 0,
+      onWait: false,
+    });
+    showConfirmationModal();
+  };
 
-  isIncomplete() {
-    const { rating, review } = this.state;
-    const { maxReviewLength } = this.data;
+  const isIncomplete = () => {
+    const { rating, review } = state;
+    const { maxReviewLength } = data;
     return rating === 0 || review.length >= maxReviewLength;
-  }
+  };
 
-  render() {
-    const { rating, review, onWait } = this.state;
-    const { maxReviewLength } = this.data;
+  const { rating, review, onWait } = state;
+  const { maxReviewLength } = data;
 
-    return (
-      <form className='review-form' onSubmit={this.handleSubmit}>
-        <RatingInput setRating={this.setRating} rating={rating} />
-        <div>
-          <label htmlFor='review'>Review (optional) </label>
-          {review.length >= maxReviewLength ? (
-            <ReviewLimitMessage maxReviewLength={maxReviewLength} />
-          ) : null}
-          <textarea
-            name='review'
-            id='review'
-            placeholder='Tell us your experience with the app'
-            onChange={this.handleChange}
-            value={review}
-            maxLength={maxReviewLength}
-          ></textarea>
-        </div>
+  return (
+    <form className='review-form' onSubmit={handleSubmit}>
+      <RatingInput setRating={setRating} rating={rating} />
+      <div>
+        <label htmlFor='review'>Review (optional) </label>
+        {review.length >= maxReviewLength && (
+          <ReviewLimitMessage maxReviewLength={maxReviewLength} />
+        )}
+        <textarea
+          name='review'
+          id='review'
+          placeholder='Tell us your experience with the app'
+          onChange={handleChange}
+          value={review}
+          maxLength={maxReviewLength}
+        ></textarea>
+      </div>
 
-        <button
-          type='submit'
-          className={`submit-btn${
-            this.isIncomplete() ? ' submit-btn--disabled' : ''
-          }`}
-        >
-          Submit
-        </button>
-        {onWait ? <WaitMessage /> : null}
-      </form>
-    );
-  }
+      <button
+        type='submit'
+        className={`submit-btn${isIncomplete() ? ' submit-btn--disabled' : ''}`}
+      >
+        Submit
+      </button>
+      {onWait && <WaitMessage />}
+    </form>
+  );
 }
 
 export default ReviewForm;

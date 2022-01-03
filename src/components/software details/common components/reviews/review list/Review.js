@@ -27,20 +27,20 @@ function Review(props) {
           ? `${review.review.slice(0, maxLength)} ....`
           : review.review}
       </p>
-      {lengthDifference > maxLengthDifference ? (
+      {lengthDifference > maxLengthDifference && (
         <Link
           className='see-more-link'
           to={{
             pathname: `/software_details/${softwareID}/reviews/${review.id}`,
             state: {
               fromSoftwareDetailsPage,
-              noReviewsPage
+              noReviewsPage,
             },
           }}
         >
           See more
         </Link>
-      ) : null}
+      )}
     </li>
   );
 }

@@ -3,12 +3,13 @@ import AccountPage from './account/page/AccountPage';
 import MainPageLogic from './main/page/MainPageLogic';
 import NotFound from './not found page/NotFound';
 import SoftwareDetailsRouterLogic from './software details/router/SoftwareDetailsRouterLogic';
-import RatedAppsContextConsumer from './rated apps/page/RatedAppsContextConsumer';
 import SigninLogic from './gateway/pages/sign in/SigninLogic';
 import SignupLogic from './gateway/pages/sign up/SignupLogic';
+import useSoftwares from '../hooks/useSoftwares';
+import RatedAppsPage from './rated apps/page/RatedAppsPage';
 
 function AppRouter(props) {
-  const { onWait, softwares } = props;
+  const [softwares] = useSoftwares();
 
   const getSoftware = id => softwares.find(software => software.id === id);
 
@@ -18,7 +19,7 @@ function AppRouter(props) {
         path='/'
         exact
         render={() => {
-          return <MainPageLogic onWait={onWait} softwares={softwares} />;
+          return <MainPageLogic />;
         }}
       />
 
@@ -26,7 +27,7 @@ function AppRouter(props) {
         path='/rated_apps'
         exact
         render={() => {
-          return <RatedAppsContextConsumer />;
+          return <RatedAppsPage />;
         }}
       />
 

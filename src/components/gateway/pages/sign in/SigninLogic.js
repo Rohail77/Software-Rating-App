@@ -1,88 +1,78 @@
-import { Component, Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { authorization } from '../../auth/Authorization';
 import Signin from './Signin';
 
-class SigninLogic extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      password: '',
-      hasError: false,
-      errorMsg: '',
-      onWait: false,
-      signedin: false,
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.onSignin = this.onSignin.bind(this);
-  }
+function SigninLogic(props) {
+  const [state, setState] = useState({
+    email: '',
+    password: '',
+    hasError: false,
+    errorMsg: '',
+    onWait: false,
+    signedin: false,
+  });
 
-  handleSubmit(event) {
+  const handleSubmit = event => {
     event.preventDefault();
-    this.validationCheck()
-      ? this.showError({ msg: 'Please fill all the form fields.' })
-      : this.signin();
-  }
+    validationCheck()
+      ? showError({ msg: 'Please fill all the form fields.' })
+      : signin();
+  };
 
-  validationCheck() {
-    const { email, password } = this.state;
-    return email === '' || password === '';
-  }
+  const validationCheck = () => state.email === '' || state.password === '';
 
-  signin() {
-    const { email, password } = this.state;
-    authorization.signin({ email, password }, this.onSignin);
-    this.setState({
+  const signin = () => {
+    const { email, password } = state;
+    authorization.signin({ email, password }, onSignin);
+    setState(state => ({
+      ...state,
       onWait: true,
-    });
-  }
+    }));
+  };
 
-  onSignin(error) {
+  const onSignin = error => {
     if (error) {
       authorization.signout();
-      this.showError(error);
+      showError(error);
     } else {
-      this.setState({
+      setState(state => ({
+        ...state,
         onWait: false,
         hasError: false,
         errorMsg: '',
         signedin: true,
-      });
+      }));
     }
-  }
+  };
 
-  showError(error) {
-    this.setState({
+  const showError = error =>
+    setState(state => ({
+      ...state,
       onWait: false,
       hasError: true,
       errorMsg: error.msg,
-    });
-  }
+    }));
 
-  handleChange(event) {
-    const { name, value } = event.target;
-    this.setState({
-      [name]: value,
-    });
-  }
+  const handleChange = event =>
+    setState(state => ({
+      ...state,
+      [event.target.name]: event.target.value,
+    }));
 
-  render() {
-    const { from } = this.props;
-    const { signedin } = this.state;
-    return (
-      <Fragment>
-        {signedin ? <Redirect to='/' /> : null}
-        <Signin
-          {...this.state}
-          handleChange={this.handleChange}
-          handleSubmit={this.handleSubmit}
-          from={from}
-        />
-      </Fragment>
-    );
-  }
+  const { from } = props;
+  const { signedin } = state;
+  return (
+    <Fragment>
+      {signedin && <Redirect to='/' />}
+      <Signin
+        {...state}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        from={from}
+      />
+    </Fragment>
+  );
 }
 
 export default SigninLogic;

@@ -36,7 +36,7 @@ function PagesList({ currentPage, totalPages, updateCurrentPage }) {
   return (
     <ul className='pages__list'>
       <PreviousPageButton
-        isDisabled={disablePreviousPageButton()}
+        disabled={disablePreviousPageButton()}
         currentPage={currentPage}
         updateCurrentPage={updateCurrentPage}
       />
@@ -49,7 +49,7 @@ function PagesList({ currentPage, totalPages, updateCurrentPage }) {
         />
       ))}
       <NextPageButton
-        isDisabled={disableNextPageButton()}
+        disabled={disableNextPageButton()}
         currentPage={currentPage}
         updateCurrentPage={updateCurrentPage}
       />

@@ -1,204 +1,190 @@
-import { Component } from 'react';
+import { useEffect, useState } from 'react';
 import SoftwareLogo from '../../../../../common/software basic info/software logo and details/SoftwareLogo';
 import EditableFormButtons from './edit rating form/cta buttons/EditableFormButtons';
 import NonEditableFormButtons from './edit rating form/cta buttons/NonEditableFormButtons';
 import EditRatingForm from './edit rating form/EditRatingForm';
 import { user } from '../../../../../../database/User';
 import { softwares } from '../../../../../../database/Softwares';
+import { update } from '../../../../../../features/softwaresSlice';
+import { useDispatch } from 'react-redux';
 
-class PastRating extends Component {
-  constructor(props) {
-    super(props);
-    const { rating, review } = this.props.userReview;
-    this.state = {
-      rating,
-      review,
-      editable: false,
-      error: false,
-      clickable: true,
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setRating = this.setRating.bind(this);
-    this.setEditable = this.setEditable.bind(this);
-    this.reset = this.reset.bind(this);
-    this.hideNoChangeMessage = this.hideNoChangeMessage.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-    this.updateSoftware = this.updateSoftware.bind(this);
-    this.updateStarCount = this.updateStarCount.bind(this);
-    this.updateSoftwareLocal = this.updateSoftwareLocal.bind(this);
-  }
+function PastRating(props) {
+  const [state, setState] = useState({
+    rating: props.userReview.rating,
+    review: props.userReview.review,
+    editable: false,
+    error: false,
+    clickable: true,
+  });
 
-  handleChange(event) {
+  const dispatch = useDispatch();
+
+  const handleChange = event => {
     const { name, value } = event.target;
-    this.setState({
+    setState(state => ({
+      ...state,
       [name]: value,
-    });
-  }
+    }));
+  };
 
-  handleSubmit() {
-    if (this.reviewUpdated()) {
-      const { softwareID } = this.props.userReview;
-      const { rating, review } = this.state;
+  const handleSubmit = () => {
+    if (reviewUpdated()) {
+      const { softwareID } = props.userReview;
+      const { rating, review } = state;
       user.updateReview(softwareID, { rating, review });
-      this.updateSoftware();
+      updateSoftware();
     } else {
-      this.showNoChangeMessage();
+      showNoChangeMessage();
     }
-  }
+  };
 
-  reviewUpdated() {
-    const { review, rating } = this.state;
-    const { userReview } = this.props;
+  const reviewUpdated = () => {
+    const { review, rating } = state;
+    const { userReview } = props;
     return review !== userReview.review || rating !== userReview.rating;
-  }
+  };
 
-  updateSoftware() {
-    this.updateTotalReviews()
-      .then(this.updateStarCount)
-      .then(this.updateSoftwareLocal)
+  const updateSoftware = () => {
+    updateTotalReviews()
+      .then(updateStarCount)
+      .then(updateSoftwareLocal)
       .catch(error => console.log(error));
-  }
+  };
 
-  updateTotalReviews() {
-    const { softwareID } = this.props.userReview;
+  const updateTotalReviews = () => {
+    const { softwareID } = props.userReview;
 
-    if (this.shouldDecrementTotalReviews())
+    if (shouldDecrementTotalReviews())
       return softwares.decrementTotalReviews(softwareID);
-    if (this.shouldIncrementTotalReviews())
+    if (shouldIncrementTotalReviews())
       return softwares.incrementTotalReviews(softwareID);
     return Promise.resolve();
-  }
+  };
 
-  shouldDecrementTotalReviews() {
-    const { review } = this.state;
-    return review === '' && review !== this.props.userReview.review;
-  }
+  const shouldDecrementTotalReviews = () => {
+    const { review } = state;
+    return review === '' && review !== props.userReview.review;
+  };
 
-  shouldIncrementTotalReviews() {
-    const { review } = this.state;
-    return review !== '' && this.props.userReview.review === '';
-  }
+  const shouldIncrementTotalReviews = () => {
+    const { review } = state;
+    return review !== '' && props.userReview.review === '';
+  };
 
-  updateStarCount() {
-    if (this.shouldChangeStarCount()) {
-      const { softwareID } = this.props.userReview;
-      const { rating } = this.state;
+  const updateStarCount = () => {
+    if (shouldChangeStarCount()) {
+      const { softwareID } = props.userReview;
+      const { rating } = state;
       return softwares
-        .replaceStarCount(softwareID, rating, this.props.userReview.rating)
+        .replaceStarCount(softwareID, rating, props.userReview.rating)
         .then(() => softwares.updateAverageRating(softwareID));
     }
     return Promise.resolve();
-  }
+  };
 
-  shouldChangeStarCount() {
-    const { rating } = this.state;
-    return rating !== this.props.userReview.rating;
-  }
+  const shouldChangeStarCount = () => {
+    const { rating } = state;
+    return rating !== props.userReview.rating;
+  };
 
-  updateSoftwareLocal() {
-    const { softwareID } = this.props.userReview;
-    this.props.updateSoftware(softwareID);
-  }
+  const updateSoftwareLocal = () => {
+    const { softwareID } = props.userReview;
+    softwares.getSoftware(softwareID, software => dispatch(update(software)));
+  };
 
-  handleDelete() {
-    this.setState(
-      {
-        clickable: false,
-      },
-      this.deleteReview
-    );
-  }
+  const handleDelete = () => {
+    setState(state => ({ ...state, clickable: false }));
+    deleteReview();
+  };
 
-  deleteReview() {
-    const { rating, review } = this.state;
-    const { softwareID } = this.props.userReview;
-    const { getUpdatedUserReviews } = this.props;
+  const deleteReview = () => {
+    const { rating, review } = state;
+    const { softwareID } = props.userReview;
+    const { getUpdatedUserReviews } = props;
     user.deleteReview(softwareID).then(() => {
       getUpdatedUserReviews();
       if (review !== '') softwares.decrementTotalReviews(softwareID);
       softwares
         .updateStarCount(softwareID, rating, 'DEC')
         .then(() => softwares.updateAverageRating(softwareID))
-        .then(this.updateSoftwareLocal);
+        .then(updateSoftwareLocal);
     });
-  }
+  };
 
-  setRating(rating) {
-    this.setState({
+  const setRating = rating => {
+    setState(state => ({
+      ...state,
       rating,
-    });
-  }
+    }));
+  };
 
-  setEditable(value) {
-    this.setState({
+  const setEditable = value => {
+    setState(state => ({
+      ...state,
       editable: value,
-    });
-  }
+    }));
+  };
 
-  showNoChangeMessage() {
-    this.setState(
-      {
-        error: true,
-      },
-      () => setTimeout(this.hideNoChangeMessage, 3000)
-    );
-  }
+  const showNoChangeMessage = () => {
+    setState(state => ({
+      ...state,
+      error: true,
+    }));
+  };
 
-  hideNoChangeMessage() {
-    this.setState({
-      error: false,
-    });
-  }
+  useEffect(() => {
+    const hideNoChangeMessage = () =>
+      setState(state => ({
+        ...state,
+        error: false,
+      }));
 
-  reset() {
-    const { rating, review } = this.props.userReview;
-    this.setState({
+    if (state.error) setTimeout(hideNoChangeMessage, 3000);
+  }, [state.error]);
+
+  const reset = () => {
+    const { rating, review } = props.userReview;
+    setState(state => ({
+      ...state,
       rating,
       review,
       editable: false,
-    });
-  }
+    }));
+  };
 
-  render() {
-    const { date, softwareName } = this.props.userReview;
-    const { editable, rating, review, error, clickable } = this.state;
+  const { date, softwareName } = props.userReview;
+  const { editable, rating, review, error, clickable } = state;
 
-    return (
-      <li className='past-review'>
-        <div className='past-review__basic-info-and-ctas'>
-          <div className='past-review__software'>
-            <SoftwareLogo name={softwareName} />
-            <div className='software__details'>
-              <p className='software__name'>{softwareName}</p>
-              <p className='software__review-date'>{date}</p>
-            </div>
+  return (
+    <li className='past-review'>
+      <div className='past-review__basic-info-and-ctas'>
+        <div className='past-review__software'>
+          <SoftwareLogo name={softwareName} />
+          <div className='software__details'>
+            <p className='software__name'>{softwareName}</p>
+            <p className='software__review-date'>{date}</p>
           </div>
-          {editable ? (
-            <EditableFormButtons
-              reset={this.reset}
-              handleSubmit={this.handleSubmit}
-            />
-          ) : (
-            <NonEditableFormButtons
-              setEditable={this.setEditable}
-              handleDelete={this.handleDelete}
-              clickable={clickable}
-            />
-          )}
         </div>
-        {error ? <p className='no-change-msg'>* No change To update</p> : null}
-        <EditRatingForm
-          rating={rating}
-          review={review}
-          editable={editable}
-          handleChange={this.handleChange}
-          setRating={this.setRating}
-          textInputRef={this.textInputRef}
-        />
-      </li>
-    );
-  }
+        {editable ? (
+          <EditableFormButtons reset={reset} handleSubmit={handleSubmit} />
+        ) : (
+          <NonEditableFormButtons
+            setEditable={setEditable}
+            handleDelete={handleDelete}
+            clickable={clickable}
+          />
+        )}
+      </div>
+      {error && <p className='no-change-msg'>* No change To update</p>}
+      <EditRatingForm
+        rating={rating}
+        review={review}
+        editable={editable}
+        handleChange={handleChange}
+        setRating={setRating}
+      />
+    </li>
+  );
 }
 
 export default PastRating;

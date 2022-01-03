@@ -1,36 +1,23 @@
-import { Component } from 'react';
+import { useState } from 'react';
+import useSoftwares from '../../../hooks/useSoftwares';
 import MainPage from './MainPage';
 
-class MainPageLogic extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentPage: 1,
-      softwareSearchString: '',
-    };
-    this.data = {
-      softwaresPerPage: 20,
-    };
-    this.setSoftwareSearchString = this.setSoftwareSearchString.bind(this);
-    this.updateCurrentPage = this.updateCurrentPage.bind(this);
-  }
+function MainPageLogic(props) {
+  const [state, setState] = useState({
+    softwareSearchString: '',
+  });
 
-  updateCurrentPage(newPageNumber) {
-    this.setState({
-      currentPage: newPageNumber,
-    });
-  }
+  const [softwares, fetchedSoftwares] = useSoftwares();
 
-  setSoftwareSearchString(string) {
-    this.setState({
+  const setSoftwareSearchString = string => {
+    setState(state => ({
+      ...state,
       softwareSearchString: string,
-      currentPage: 1,
-    });
-  }
+    }));
+  };
 
-  getFilteredSoftwares() {
-    const { softwareSearchString } = this.state;
-    const { softwares } = this.props;
+  const getFilteredSoftwares = () => {
+    const { softwareSearchString } = state;
 
     return softwareSearchString === ''
       ? softwares
@@ -39,24 +26,15 @@ class MainPageLogic extends Component {
             .toLocaleLowerCase()
             .includes(softwareSearchString.toLocaleLowerCase());
         });
-  }
+  };
 
-  render() {
-    const { onWait } = this.props;
-    const { currentPage } = this.state;
-    const { softwaresPerPage } = this.data;
-
-    return (
-      <MainPage
-        softwares={this.getFilteredSoftwares()}
-        setSoftwareSearchString={this.setSoftwareSearchString}
-        onWait={onWait}
-        updateCurrentPage={this.updateCurrentPage}
-        currentPage={currentPage}
-        softwaresPerPage={softwaresPerPage}
-      />
-    );
-  }
+  return (
+    <MainPage
+      softwares={getFilteredSoftwares()}
+      setSoftwareSearchString={setSoftwareSearchString}
+      fetchedSoftwares={fetchedSoftwares}
+    />
+  );
 }
 
 export default MainPageLogic;

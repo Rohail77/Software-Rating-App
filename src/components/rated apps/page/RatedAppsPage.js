@@ -1,20 +1,22 @@
-import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import usePagination from '../../../hooks/usePagination';
+import useUserReviews from '../../../hooks/useUserReviews';
 import HomeLink from '../../common/home link/HomeLink';
 import Pages from '../../common/pages/Pages';
 import NoRatingsMessage from './page components/no ratings message/NoRatingsMessage';
 import PastRatingsList from './page components/past ratings list/PastRatingsList';
 
+const REVIEWS_PER_PAGE = 7;
+
 function RatedAppsPage(props) {
-  const {
+  const [userReviews, fetchedUserReviews, getUpdatedUserReviews] =
+    useUserReviews(true);
+
+  const [userReviewsForCurrentPage, pagination] = usePagination(
     userReviews,
-    fetchingUserReviews,
-    getUpdatedUserReviews,
-    reviewsPerPage,
-    currentPage,
-    updateCurrentPage,
-    totalReviews,
-  } = props;
+    REVIEWS_PER_PAGE
+  );
+
   return (
     <div className='wrapper rated-apps-wrapper'>
       <header>
@@ -29,21 +31,16 @@ function RatedAppsPage(props) {
       {userReviews.length === 0 ? (
         <NoRatingsMessage />
       ) : (
-        <Fragment>
+        <>
           <h1 className='ratings-h'>Your Ratings</h1>
           <PastRatingsList
-            userReviews={userReviews}
+            userReviews={userReviewsForCurrentPage}
             getUpdatedUserReviews={getUpdatedUserReviews}
-            fetchingUserReviews={fetchingUserReviews}
+            fetchedUserReviews={fetchedUserReviews}
           />
-          <Pages
-            totalItems={totalReviews}
-            itemsPerPage={reviewsPerPage}
-            currentPage={currentPage}
-            updateCurrentPage={updateCurrentPage}
-          />
-        </Fragment>
-      )}{' '}
+          <Pages {...pagination} />
+        </>
+      )}
     </div>
   );
 }

@@ -1,183 +1,158 @@
-import { Component, createRef } from 'react';
+import { createRef, useState, useEffect } from 'react';
 import { user } from '../../../../../../database/User';
 
-class NameForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: user.name,
-      activated: false,
-      updated: false,
-      error: false,
-      errorMsg: '',
-    };
-    this.data = {
-      errorMsg: '',
-    };
-    this.nameFieldRef = createRef();
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.activateForm = this.activateForm.bind(this);
-    this.deactivateForm = this.deactivateForm.bind(this);
-    this.hideSuccessMessage = this.hideSuccessMessage.bind(this);
-    this.hideErrorMessage = this.hideErrorMessage.bind(this);
-    this.reset = this.reset.bind(this);
-  }
+function NameForm(props) {
+  const [state, setState] = useState({
+    name: user.name,
+    activated: false,
+    updated: false,
+    error: false,
+    errorMsg: '',
+  });
 
-  handleChange(event) {
-    const { name, value } = event.target;
-    this.setState({
-      [name]: value,
-    });
-  }
+  const data = {
+    errorMsg: '',
+  };
 
-  handleSubmit(event) {
+  const nameFieldRef = createRef();
+
+  const handleChange = event =>
+    setState(state => ({
+      ...state,
+      [event.target.name]: event.target.value,
+    }));
+
+  const handleSubmit = event => {
     event.preventDefault();
-    this.removeExtraSpaces();
-  }
+    updateName();
+  };
 
-  removeExtraSpaces() {
-    this.setState(
-      state => ({
-        name: state.name
-          .split(' ')
-          .filter(s => s)
-          .join(' '),
-      }),
-      this.updateName
-    );
-  }
+  const removeExtraSpaces = value =>
+    value
+      .split(' ')
+      .filter(s => s)
+      .join(' ');
 
-  updateName() {
-    if (!this.validate()) {
-      this.showErrorMessage(this.data.errorMsg);
-      setTimeout(this.hideErrorMessage, 2000);
+  const updateName = () => {
+    if (!validate()) {
+      showErrorMessage(data.errorMsg);
+      setTimeout(hideErrorMessage, 2000);
       return;
     }
 
-    const { name } = this.state;
-    const { wait, stopWait } = this.props;
+    const { wait, stopWait } = props;
     wait();
-    user.updateUsername(name).then(() => {
+    user.updateUsername(removeExtraSpaces(state.name)).then(() => {
       stopWait();
-      this.deactivateForm();
-      this.showSuccessMessage();
+      deactivateForm();
+      showSuccessMessage();
     });
-  }
+  };
 
-  validate() {
-    const { name } = this.state;
+  const validate = () => {
+    const { name } = state;
     if (name === '') {
-      this.data.errorMsg = 'Name field is empty';
+      data.errorMsg = 'Name field is empty';
       return false;
     }
     if (name.length < 2) {
-      this.data.errorMsg = 'Name should be at least 2 characters long';
+      data.errorMsg = 'Name should be at least 2 characters long';
       return false;
     }
     if (user.name === name) {
-      this.data.errorMsg = 'No change to update';
+      data.errorMsg = 'No change to update';
       return false;
     }
     return true;
-  }
+  };
 
-  isChange() {
-    const { name } = this.state;
-    return user.name !== name;
-  }
+  const showSuccessMessage = () =>
+    setState(state => ({
+      ...state,
+      updated: true,
+    }));
 
-  showSuccessMessage() {
-    this.setState(
-      {
-        updated: true,
-      },
-      () => {
-        setTimeout(this.hideSuccessMessage, 2000);
-      }
-    );
-  }
+  useEffect(() => {
+    if (state.updated) setTimeout(hideSuccessMessage, 2000);
+  }, [state.updated]);
 
-  hideSuccessMessage() {
-    this.setState({
+  const hideSuccessMessage = () =>
+    setState(state => ({
+      ...state,
       updated: false,
-    });
-  }
+    }));
 
-  showErrorMessage(errorMsg) {
-    this.setState({
+  const showErrorMessage = errorMsg =>
+    setState(state => ({
+      ...state,
       error: true,
       errorMsg,
-    });
-  }
+    }));
 
-  hideErrorMessage() {
-    this.setState({
+  const hideErrorMessage = () =>
+    setState(state => ({
+      ...state,
       error: false,
       errorMsg: '',
-    });
-  }
+    }));
 
-  activateForm() {
-    this.setState(
-      {
-        activated: true,
-      },
-      () => this.nameFieldRef.current.focus()
-    );
-  }
+  const activateForm = () => {
+    setState(state => ({
+      ...state,
+      activated: true,
+    }));
+    nameFieldRef.current.focus();
+  };
 
-  deactivateForm() {
-    this.setState({
+  const deactivateForm = () =>
+    setState(state => ({
+      ...state,
       activated: false,
-    });
-  }
+    }));
 
-  reset() {
-    this.setState({
+  const reset = () =>
+    setState(state => ({
+      ...state,
       name: user.name,
       activated: false,
-    });
-  }
+    }));
 
-  render() {
-    const { name, activated, updated, error, errorMsg } = this.state;
+  const { name, activated, updated, error, errorMsg } = state;
 
-    return (
-      <form className='name-form' onSubmit={this.handleSubmit}>
-        <div>
-          <label htmlFor='name'>Name</label>
-          <input
-            className='input-field'
-            type='text'
-            name='name'
-            id='name'
-            value={name}
-            onChange={this.handleChange}
-            disabled={!activated}
-            ref={this.nameFieldRef}
-            maxLength={50}
-          />
+  return (
+    <form className='name-form' onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor='name'>Name</label>
+        <input
+          className='input-field'
+          type='text'
+          name='name'
+          id='name'
+          value={name}
+          onChange={handleChange}
+          disabled={!activated}
+          ref={nameFieldRef}
+          maxLength={50}
+        />
+      </div>
+      {activated ? (
+        <div className='ctas'>
+          <input type='submit' className='save-btn' value='Save'></input>
+          <button type='button' className='cancel-btn' onClick={reset}>
+            Cancel{' '}
+          </button>
         </div>
-        {activated ? (
-          <div className='ctas'>
-            <input type='submit' className='save-btn' value='Save'></input>
-            <button type='button' className='cancel-btn' onClick={this.reset}>
-              Cancel{' '}
-            </button>
-          </div>
-        ) : (
-          <div className='ctas'>
-            <button className='change-btn' onClick={this.activateForm}>
-              Change{' '}
-            </button>
-          </div>
-        )}
-        {updated ? <p className='success-msg'>* Name Changed</p> : null}
-        {error ? <p className='error-msg'>* {errorMsg}</p> : null}
-      </form>
-    );
-  }
+      ) : (
+        <div className='ctas'>
+          <button className='change-btn' onClick={activateForm}>
+            Change{' '}
+          </button>
+        </div>
+      )}
+      {updated && <p className='success-msg'>* Name Changed</p>}
+      {error && <p className='error-msg'>* {errorMsg}</p>}
+    </form>
+  );
 }
 
 export default NameForm;
