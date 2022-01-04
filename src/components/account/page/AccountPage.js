@@ -5,6 +5,14 @@ import WaitMessage from '../../common/wait message/WaitMessage';
 import DangerZone from './page components/danger zone/DangerZone';
 import Forms from './page components/forms/Forms';
 
+const waitMessageStyles = {
+  position: 'fixed',
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0,
+};
+
 function AccountPage() {
   const [state, setState] = useState({
     onWait: false,
@@ -37,7 +45,7 @@ function AccountPage() {
       <Forms wait={wait} stopWait={stopWait} />
 
       <DangerZone wait={wait} stopWait={stopWait} />
-      {onWait ? <WaitMessage /> : null}
+      {onWait && <WaitMessage styles={waitMessageStyles} />}
     </div>
   );
 }

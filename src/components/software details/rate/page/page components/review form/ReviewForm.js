@@ -12,7 +12,7 @@ import useUserReviews from '../../../../../../hooks/useUserReviews';
 import { update } from '../../../../../../features/softwaresSlice';
 import { useDispatch } from 'react-redux';
 import { requestAddUserReview } from '../../../../../../features/softwareReviewsSlice';
-import { isEmpty } from '../../../../../../database/common functions/CommonFunctions';
+import { isEmpty } from '../../../../../../utils/util-functions';
 
 const MAX_REVIEW_LENGTH = 3000;
 

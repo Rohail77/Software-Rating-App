@@ -160,7 +160,7 @@ function PasswordForm(props) {
           </button>
         </div>
       )}
-      {updated && <p className='success-msg'>* Password Changed</p>}
+      {updated && <p className='success-msg'>* Password Updated</p>}
     </form>
   );
 }

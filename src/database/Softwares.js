@@ -1,9 +1,7 @@
 import { database } from '../config/database_config';
 import firebase from 'firebase';
 import { id } from './User';
-import { formatDate, isEmpty } from './common functions/CommonFunctions';
-
-import { getAverage } from '../utils/util-functions';
+import { getAverage, formatDate, isEmpty } from '../utils/util-functions';
 
 class Softwares {
   constructor() {

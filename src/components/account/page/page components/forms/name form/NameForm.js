@@ -3,6 +3,10 @@ import {
   name as userName,
   updateUsername,
 } from '../../../../../../database/User';
+import {
+  alertError,
+  removeExtraSpaces,
+} from '../../../../../../utils/util-functions';
 
 function NameForm(props) {
   const [state, setState] = useState({
@@ -30,26 +34,23 @@ function NameForm(props) {
     updateName();
   };
 
-  const removeExtraSpaces = value =>
-    value
-      .split(' ')
-      .filter(s => s)
-      .join(' ');
+  const updateName = async () => {
+    try {
+      if (!validate()) {
+        showErrorMessage(data.errorMsg);
+        setTimeout(hideErrorMessage, 2000);
+        return;
+      }
 
-  const updateName = () => {
-    if (!validate()) {
-      showErrorMessage(data.errorMsg);
-      setTimeout(hideErrorMessage, 2000);
-      return;
-    }
-
-    const { wait, stopWait } = props;
-    wait();
-    updateUsername(removeExtraSpaces(state.name)).then(() => {
+      const { wait, stopWait } = props;
+      wait();
+      await updateUsername(removeExtraSpaces(state.name));
       stopWait();
       deactivateForm();
       showSuccessMessage();
-    });
+    } catch (error) {
+      alertError();
+    }
   };
 
   const validate = () => {
@@ -152,7 +153,7 @@ function NameForm(props) {
           </button>
         </div>
       )}
-      {updated && <p className='success-msg'>* Name Changed</p>}
+      {updated && <p className='success-msg'>* Name Updated</p>}
       {error && <p className='error-msg'>* {errorMsg}</p>}
     </form>
   );
