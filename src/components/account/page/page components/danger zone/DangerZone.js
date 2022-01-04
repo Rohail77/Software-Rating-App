@@ -1,6 +1,6 @@
 import { Fragment, useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import { user } from '../../../../../database/User';
+import { deleteUser } from '../../../../../database/User';
 
 function DangerZone(props) {
   const [state, setState] = useState({
@@ -21,8 +21,7 @@ function DangerZone(props) {
     const { password } = state;
     const { wait, stopWait } = props;
     wait();
-    user
-      .delete(password)
+    deleteUser(password)
       .then(() => {
         stopWait();
         setState(state => ({

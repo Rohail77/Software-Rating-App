@@ -1,6 +1,6 @@
 import { database } from '../config/database_config';
 import firebase from 'firebase';
-import { user } from './User';
+import { id } from './User';
 import { formatDate, isEmpty } from './common functions/CommonFunctions';
 
 import { getAverage } from '../utils/util-functions';
@@ -44,7 +44,7 @@ class Softwares {
     const doc = await this.softwaresRef
       .doc(softwareId)
       .collection('Reviews')
-      .doc(user.id)
+      .doc(id())
       .get();
     return this.getFormattedReview(doc);
   }
@@ -103,7 +103,7 @@ class Softwares {
     return this.softwaresRef
       .doc(softwareID)
       .collection('Reviews')
-      .doc(user.id)
+      .doc(id())
       .set({ ...data, date: firebase.firestore.Timestamp.now() });
   }
 

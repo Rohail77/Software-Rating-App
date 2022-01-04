@@ -1,4 +1,4 @@
-import { user } from '../../../../../../database/User';
+import { email } from '../../../../../../database/User';
 
 function EmailForm() {
   return (
@@ -10,7 +10,7 @@ function EmailForm() {
           type='email'
           name='email'
           id='email'
-          value={user.email}
+          value={email()}
           disabled
         />
       </div>

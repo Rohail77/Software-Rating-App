@@ -3,11 +3,14 @@ import SoftwareLogo from '../../../../../common/software basic info/software log
 import EditableFormButtons from './edit rating form/cta buttons/EditableFormButtons';
 import NonEditableFormButtons from './edit rating form/cta buttons/NonEditableFormButtons';
 import EditRatingForm from './edit rating form/EditRatingForm';
-import { user } from '../../../../../../database/User';
+import {
+  deleteUserReview,
+  updateUserReview,
+} from '../../../../../../database/User';
 import { softwares } from '../../../../../../database/Softwares';
 import { update } from '../../../../../../features/softwaresSlice';
 import { useDispatch } from 'react-redux';
-import { isEmpty } from '../../../../../../utils/util-functions';
+import { alertError, isEmpty } from '../../../../../../utils/util-functions';
 
 function PastRating(props) {
   const [state, setState] = useState({
@@ -27,13 +30,17 @@ function PastRating(props) {
     }));
 
   const handleSubmit = () => {
-    if (reviewUpdated()) {
-      const { softwareID } = props.userReview;
-      const { rating, review } = state;
-      user.updateReview(softwareID, { rating, review });
-      updateSoftware();
-    } else {
-      showNoChangeMessage();
+    try {
+      if (reviewUpdated()) {
+        const { softwareId } = props.userReview;
+        const { rating, review } = state;
+        updateUserReview(softwareId, { rating, review });
+        updateSoftware();
+      } else {
+        showNoChangeMessage();
+      }
+    } catch (error) {
+      alertError();
     }
   };
 
@@ -44,22 +51,18 @@ function PastRating(props) {
   };
 
   const updateSoftware = async () => {
-    try {
-      await updateTotalReviews();
-      await updateStarCount();
-      updateSoftwareLocal();
-    } catch (error) {
-      console.log(error);
-    }
+    await updateTotalReviews();
+    await updateStarCount();
+    updateSoftwareLocal();
   };
 
   const updateTotalReviews = () => {
-    const { softwareID } = props.userReview;
+    const { softwareId } = props.userReview;
 
     if (shouldDecrementTotalReviews())
-      return softwares.decrementTotalReviews(softwareID);
+      return softwares.decrementTotalReviews(softwareId);
     if (shouldIncrementTotalReviews())
-      return softwares.incrementTotalReviews(softwareID);
+      return softwares.incrementTotalReviews(softwareId);
     return Promise.resolve();
   };
 
@@ -71,14 +74,14 @@ function PastRating(props) {
 
   const updateStarCount = async () => {
     if (shouldChangeStarCount()) {
-      const { softwareID } = props.userReview;
+      const { softwareId } = props.userReview;
       const { rating } = state;
       await softwares.replaceStarCount(
-        softwareID,
+        softwareId,
         rating,
         props.userReview.rating
       );
-      return await softwares.updateAverageRating(softwareID);
+      return await softwares.updateAverageRating(softwareId);
     }
     return Promise.resolve();
   };
@@ -86,8 +89,8 @@ function PastRating(props) {
   const shouldChangeStarCount = () => state.rating !== props.userReview.rating;
 
   const updateSoftwareLocal = async () => {
-    const { softwareID } = props.userReview;
-    const software = await softwares.getSoftware(softwareID);
+    const { softwareId } = props.userReview;
+    const software = await softwares.getSoftware(softwareId);
     dispatch(update(software));
   };
 
@@ -98,13 +101,13 @@ function PastRating(props) {
 
   const deleteReview = async () => {
     const { rating, review } = state;
-    const { softwareID } = props.userReview;
+    const { softwareId } = props.userReview;
     const { getUpdatedUserReviews } = props;
-    await user.deleteReview(softwareID);
+    await deleteUserReview(softwareId);
     getUpdatedUserReviews();
-    if (!isEmpty(review)) softwares.decrementTotalReviews(softwareID);
-    await softwares.updateStarCount(softwareID, rating, 'DEC');
-    await softwares.updateAverageRating(softwareID);
+    if (!isEmpty(review)) softwares.decrementTotalReviews(softwareId);
+    await softwares.updateStarCount(softwareId, rating, 'DEC');
+    await softwares.updateAverageRating(softwareId);
     updateSoftwareLocal();
   };
 

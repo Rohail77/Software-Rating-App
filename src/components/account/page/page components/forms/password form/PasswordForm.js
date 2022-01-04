@@ -1,5 +1,5 @@
 import { createRef, Fragment, useEffect, useState } from 'react';
-import { user } from '../../../../../../database/User';
+import { updatePassword } from '../../../../../../database/User';
 
 function PasswordForm(props) {
   const [state, setState] = useState({
@@ -25,8 +25,7 @@ function PasswordForm(props) {
       const { oldPassword, newPassword } = state;
       const { wait, stopWait } = props;
       wait();
-      user
-        .updatePassword(oldPassword, newPassword)
+      updatePassword(oldPassword, newPassword)
         .then(() => {
           stopWait();
           deactivateForm();

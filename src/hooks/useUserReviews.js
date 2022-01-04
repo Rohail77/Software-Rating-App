@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { user } from '../database/User';
+import { bindUpdaterToUserReviews, getUserReviews } from '../database/User';
 import { set } from '../features/userReviewsSlice';
 
 function useUserReviews(loggedin) {
@@ -13,17 +13,17 @@ function useUserReviews(loggedin) {
 
   useEffect(() => {
     if (loggedin && !fetched) {
-      getUserReviews();
-      user.bindUpdaterToReviews(getUserReviews);
+      userReviews();
+      bindUpdaterToUserReviews(userReviews);
     }
   }, [loggedin, fetched]);
 
-  const getUserReviews = async () => {
-    const reviews = await user.getReviews();
+  const userReviews = async () => {
+    const reviews = await getUserReviews();
     dispatch(set(reviews));
   };
 
-  return [reviews, fetched, getUserReviews];
+  return [reviews, fetched, userReviews];
 }
 
 export default useUserReviews;

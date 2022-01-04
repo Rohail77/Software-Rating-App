@@ -1,9 +1,12 @@
 import { createRef, useState, useEffect } from 'react';
-import { user } from '../../../../../../database/User';
+import {
+  name as userName,
+  updateUsername,
+} from '../../../../../../database/User';
 
 function NameForm(props) {
   const [state, setState] = useState({
-    name: user.name,
+    name: userName(),
     activated: false,
     updated: false,
     error: false,
@@ -42,7 +45,7 @@ function NameForm(props) {
 
     const { wait, stopWait } = props;
     wait();
-    user.updateUsername(removeExtraSpaces(state.name)).then(() => {
+    updateUsername(removeExtraSpaces(state.name)).then(() => {
       stopWait();
       deactivateForm();
       showSuccessMessage();
@@ -59,7 +62,7 @@ function NameForm(props) {
       data.errorMsg = 'Name should be at least 2 characters long';
       return false;
     }
-    if (user.name === name) {
+    if (userName() === name) {
       data.errorMsg = 'No change to update';
       return false;
     }
@@ -113,7 +116,7 @@ function NameForm(props) {
   const reset = () =>
     setState(state => ({
       ...state,
-      name: user.name,
+      name: userName(),
       activated: false,
     }));
 

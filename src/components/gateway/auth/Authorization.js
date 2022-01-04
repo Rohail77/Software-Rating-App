@@ -1,5 +1,5 @@
 import { auth } from '../../../config/database_config';
-import { user } from '../../../database/User';
+import { createUser, emailVerified } from '../../../database/User';
 
 export class Authorization {
   signout() {
@@ -10,7 +10,7 @@ export class Authorization {
     auth
       .createUserWithEmailAndPassword(email, password)
       .then(userCredential => {
-        user.write();
+        createUser();
         userCredential.user.updateProfile({
           displayName: name,
         });
@@ -33,8 +33,7 @@ export class Authorization {
     auth
       .signInWithEmailAndPassword(email, password)
       .then(userCredential => {
-        if (user.isEmailVerified())
-        cb();
+        if (emailVerified()) cb();
         else {
           cb({
             msg: `You have not verified your email. Please verify your email by clicking the link we emailed you at your provided email address (${email}).`,

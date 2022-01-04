@@ -3,7 +3,11 @@ import RatingInput from './rating input/RatingInput';
 import { softwares } from '../../../../../../database/Softwares';
 import WaitMessage from '../../../../../common/wait message/WaitMessage';
 import ReviewLimitMessage from './limit message/ReviewLimitMessage';
-import { user } from '../../../../../../database/User';
+import {
+  addSoftwareToUserReviews,
+  bindUpdaterToUserReviews,
+  name,
+} from '../../../../../../database/User';
 import useUserReviews from '../../../../../../hooks/useUserReviews';
 import { update } from '../../../../../../features/softwaresSlice';
 import { useDispatch } from 'react-redux';
@@ -64,11 +68,11 @@ function ReviewForm(props) {
     const { rating, review } = state;
     const { softwareID } = props;
     await softwares.writeRating(softwareID, {
-      username: user.name,
+      username: name(),
       rating,
       review,
     });
-    addSoftwareToUserReviews();
+    updateUserReviews();
     if (!isEmpty(review)) await softwares.incrementTotalReviews(softwareID);
     await softwares.updateStarCount(softwareID, rating, 'INC');
     await softwares.updateAverageRating(softwareID);
@@ -77,10 +81,10 @@ function ReviewForm(props) {
 
   const [, , getUpdatedUserReviews] = useUserReviews(true);
 
-  const addSoftwareToUserReviews = async () => {
-    await user.addSoftwareToReviews(props.softwareID);
+  const updateUserReviews = async () => {
+    await addSoftwareToUserReviews(props.softwareID);
     getUpdatedUserReviews();
-    user.bindUpdaterToReviews(getUpdatedUserReviews);
+    bindUpdaterToUserReviews(getUpdatedUserReviews);
   };
 
   const afterSave = async () => {

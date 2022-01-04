@@ -3,7 +3,7 @@ import './App.css';
 import AppRouter from './components/AppRouter';
 import { authorization } from './components/gateway/auth/Authorization';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { user } from './database/User';
+import { set } from './database/User';
 
 function App(props) {
   useEffect(() => {
@@ -11,7 +11,7 @@ function App(props) {
   }, []);
 
   const handleLogin = loggedin => {
-    if (loggedin) user.set();
+    if (loggedin) set();
   };
 
   return (

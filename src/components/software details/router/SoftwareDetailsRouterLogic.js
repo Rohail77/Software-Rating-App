@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import SoftwareDetailsRouter from './SoftwareDetailsRouter';
-import { user } from '../../../database/User';
+import { canUserReview, signedin } from '../../../database/User';
 import { CanUserReviewContext } from '../../../context/CanUserReviewContext';
 
 function SoftwareDetailsRouterLogic(props) {
@@ -18,8 +18,8 @@ function SoftwareDetailsRouterLogic(props) {
 
   useEffect(() => {
     const { id } = props.software;
-    if (user.isSignedin())
-      user.canReview(id).then(canUserReview => setCanUserReview(canUserReview));
+    if (signedin())
+      canUserReview(id).then(canUserReview => setCanUserReview(canUserReview));
   }, []);
 
   return (

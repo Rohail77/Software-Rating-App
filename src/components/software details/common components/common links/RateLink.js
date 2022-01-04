@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
-import { user } from '../../../../database/User';
+import { signedin, user } from '../../../../database/User';
 
 function RateLink({ softwareID, from }) {
   const getDestinationInformation = () =>
-    user.isSignedin()
+    signedin()
       ? {
           pathname: `/software_details/${softwareID}/rate`,
         }
