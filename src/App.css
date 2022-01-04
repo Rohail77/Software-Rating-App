@@ -370,11 +370,14 @@ body {
   border: 0.5px solid #000000;
   border-radius: 5px;
   width: 100%;
+  font-size: 1.5rem;
 }
 .main-wrapper .search input::placeholder {
   color: #5e5e5e;
   font-weight: 300;
+  font-size: 1.3rem;
 }
+
 .main-wrapper .no-results-msg {
   font-size: 2rem;
   text-align: center;

@@ -1,12 +1,12 @@
 import { auth, database } from '../config/database_config';
 import firebase from 'firebase';
 import { alertError, formatDate } from '../utils/util-functions';
+import { formatReview, softwaresRef, userReview } from './common';
 
-export let userRef, softwaresRef;
+export let userRef;
 
 export const set = () => {
   userRef = database.collection('Users').doc(id());
-  softwaresRef = database.collection('Softwares');
 };
 
 export const id = () => auth.currentUser.uid;
@@ -17,6 +17,11 @@ export const name = () => auth.currentUser.displayName;
 
 export const reviewRef = softwareId =>
   softwaresRef.doc(softwareId).collection('Reviews').doc(id());
+
+export const getUserReview = async softwareId => {
+  const doc = await userReview(softwareId);
+  return formatReview(doc);
+};
 
 export const updateUsername = async newName => {
   try {

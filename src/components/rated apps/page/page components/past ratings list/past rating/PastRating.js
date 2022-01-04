@@ -7,7 +7,14 @@ import {
   deleteUserReview,
   updateUserReview,
 } from '../../../../../../database/User';
-import { softwares } from '../../../../../../database/Softwares';
+import {
+  decrementTotalReviews,
+  getSoftware,
+  incrementTotalReviews,
+  replaceStarCount,
+  updateAverageRating,
+  updateStarCount as updateStarCount_imp,
+} from '../../../../../../database/Softwares';
 import { update } from '../../../../../../features/softwaresSlice';
 import { useDispatch } from 'react-redux';
 import { alertError, isEmpty } from '../../../../../../utils/util-functions';
@@ -53,16 +60,15 @@ function PastRating(props) {
   const updateSoftware = async () => {
     await updateTotalReviews();
     await updateStarCount();
+    await updateAverageRating(props.userReview.softwareId);
     updateSoftwareLocal();
   };
 
   const updateTotalReviews = () => {
     const { softwareId } = props.userReview;
 
-    if (shouldDecrementTotalReviews())
-      return softwares.decrementTotalReviews(softwareId);
-    if (shouldIncrementTotalReviews())
-      return softwares.incrementTotalReviews(softwareId);
+    if (shouldDecrementTotalReviews()) return decrementTotalReviews(softwareId);
+    if (shouldIncrementTotalReviews()) return incrementTotalReviews(softwareId);
     return Promise.resolve();
   };
 
@@ -76,21 +82,19 @@ function PastRating(props) {
     if (shouldChangeStarCount()) {
       const { softwareId } = props.userReview;
       const { rating } = state;
-      await softwares.replaceStarCount(
+      return await replaceStarCount(
         softwareId,
         rating,
         props.userReview.rating
       );
-      return await softwares.updateAverageRating(softwareId);
     }
-    return Promise.resolve();
   };
 
   const shouldChangeStarCount = () => state.rating !== props.userReview.rating;
 
   const updateSoftwareLocal = async () => {
     const { softwareId } = props.userReview;
-    const software = await softwares.getSoftware(softwareId);
+    const software = await getSoftware(softwareId);
     dispatch(update(software));
   };
 
@@ -105,9 +109,9 @@ function PastRating(props) {
     const { getUpdatedUserReviews } = props;
     await deleteUserReview(softwareId);
     getUpdatedUserReviews();
-    if (!isEmpty(review)) softwares.decrementTotalReviews(softwareId);
-    await softwares.updateStarCount(softwareId, rating, 'DEC');
-    await softwares.updateAverageRating(softwareId);
+    if (!isEmpty(review)) decrementTotalReviews(softwareId);
+    await updateStarCount_imp(softwareId, rating, 'DEC');
+    await updateAverageRating(softwareId);
     updateSoftwareLocal();
   };
 

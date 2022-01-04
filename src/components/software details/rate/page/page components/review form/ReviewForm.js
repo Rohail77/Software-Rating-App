@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import RatingInput from './rating input/RatingInput';
-import { softwares } from '../../../../../../database/Softwares';
+import {
+  getSoftware,
+  incrementTotalReviews,
+  updateAverageRating,
+  updateStarCount,
+  writeRating,
+} from '../../../../../../database/Softwares';
 import WaitMessage from '../../../../../common/wait message/WaitMessage';
 import ReviewLimitMessage from './limit message/ReviewLimitMessage';
 import {
@@ -67,15 +73,15 @@ function ReviewForm(props) {
   const saveData = async () => {
     const { rating, review } = state;
     const { softwareID } = props;
-    await softwares.writeRating(softwareID, {
+    await writeRating(softwareID, {
       username: name(),
       rating,
       review,
     });
     updateUserReviews();
-    if (!isEmpty(review)) await softwares.incrementTotalReviews(softwareID);
-    await softwares.updateStarCount(softwareID, rating, 'INC');
-    await softwares.updateAverageRating(softwareID);
+    if (!isEmpty(review)) await incrementTotalReviews(softwareID);
+    await updateStarCount(softwareID, rating, 'INC');
+    await updateAverageRating(softwareID);
     afterSave();
   };
 
@@ -89,7 +95,7 @@ function ReviewForm(props) {
 
   const afterSave = async () => {
     const { showConfirmationModal, softwareID } = props;
-    const software = await softwares.getSoftware(softwareID);
+    const software = await getSoftware(softwareID);
     dispatch(update(software));
     dispatch(requestAddUserReview(softwareID));
     reset();

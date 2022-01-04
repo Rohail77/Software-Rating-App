@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { softwares } from '../database/Softwares';
+import { getReviews } from '../database/Softwares';
 import { set } from '../features/softwareReviewsSlice';
 
 function useSoftwareReviews(softwareId) {
@@ -16,7 +16,7 @@ function useSoftwareReviews(softwareId) {
   }, [fetched]);
 
   const fetchReviews = async () => {
-    const reviews = await softwares.getReviews(softwareId);
+    const reviews = await getReviews(softwareId);
     dispatch(set(reviews));
   };
 

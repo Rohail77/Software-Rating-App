@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { softwares } from '../database/Softwares';
+import { getUserReview } from '../database/User';
 import { isEmpty } from '../utils/util-functions';
 
 const softwareReviewsSlice = createSlice({
@@ -31,7 +31,7 @@ const softwareReviewsSlice = createSlice({
 export const requestAddUserReview = softwareId => {
   const { add } = softwareReviewsSlice.actions;
   return async dispatch => {
-    const review = await softwares.myReview(softwareId);
+    const review = await getUserReview(softwareId);
     if (!isEmpty(review.review)) dispatch(add(review));
   };
 };

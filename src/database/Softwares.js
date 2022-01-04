@@ -1,149 +1,95 @@
-import { database } from '../config/database_config';
 import firebase from 'firebase';
-import { id } from './User';
-import { getAverage, formatDate, isEmpty } from '../utils/util-functions';
+import { getAverage, isEmpty } from '../utils/util-functions';
+import {
+  formatReview,
+  software,
+  softwareRef,
+  softwareReviewsRef,
+  softwaresRef,
+  userReviewRef,
+} from './common';
 
-class Softwares {
-  constructor() {
-    this.softwaresRef = database.collection('Softwares');
-    this.usersRef = database.collection('Users');
+export const getSoftwares = async () => {
+  let softwares = [];
+  try {
+    const querySnapshot = await softwaresRef.get();
+    querySnapshot.forEach(doc => softwares.push({ id: doc.id, ...doc.data() }));
+    return softwares;
+  } catch (error) {
+    console.log('Error: ', error);
   }
+};
 
-  bindUpdaterToReview(softwareID, cb) {
-    const unsubscribe = this.softwaresRef
-      .doc(softwareID)
-      .collection('Reviews')
-      .onSnapshot(snapshot => {
-        snapshot.docChanges().forEach(change => {
-          if (change.type === 'added') {
-            console.log('Added: ', change.doc.data());
-            cb(this.getFormattedReview(change.doc));
-          }
-          if (change.type === 'modified') {
-            console.log('Modified: ', change.doc.data());
-          }
-          if (change.type === 'removed') {
-            console.log('Removed: ', change.doc.data());
-          }
-        });
-      });
-    return unsubscribe;
-    // const unsubscribe = this.softwaresRef
-    //   .doc(softwareID)
-    //   .collection('Reviews')
-    //   .doc(user.id)
-    //   .onSnapshot(doc => {
-    //     if (doc.data()) cb(this.getFormattedReview(doc));
-    //   });
-    // return unsubscribe;
-  }
-
-  async myReview(softwareId) {
-    const doc = await this.softwaresRef
-      .doc(softwareId)
-      .collection('Reviews')
-      .doc(id())
+export const getReviews = async softwareId => {
+  const reviews = [];
+  try {
+    const querySnapshot = await softwareReviewsRef(softwareId)
+      .orderBy('date', 'desc')
       .get();
-    return this.getFormattedReview(doc);
-  }
 
-  getFormattedReview(doc) {
-    return {
-      id: doc.id,
-      ...doc.data(),
-      date: formatDate(doc.data().date.toDate()),
-    };
-  }
-
-  async getSoftwares() {
-    let softwares = [];
-    try {
-      const querySnapshot = await this.softwaresRef.get();
-      querySnapshot.forEach(doc =>
-        softwares.push({ id: doc.id, ...doc.data() })
-      );
-
-      return softwares;
-    } catch (error) {
-      console.log('Error: ', error);
-    }
-  }
-
-  async getReviews(softwareID) {
-    const reviews = [];
-    try {
-      const querySnapshot = await this.softwaresRef
-        .doc(softwareID)
-        .collection('Reviews')
-        .orderBy('date', 'desc')
-        .get();
-
-      querySnapshot.forEach(doc => {
-        if (!isEmpty(doc.data().review))
-          reviews.push(this.getFormattedReview(doc));
-      });
-      return reviews;
-    } catch (error) {
-      console.log('Error: ', error);
-    }
-  }
-
-  async getSoftware(softwareID) {
-    try {
-      const doc = await this.softwaresRef.doc(softwareID).get();
-      return { ...doc.data(), id: doc.id };
-    } catch (error) {
-      console.log('Error: ', error);
-    }
-  }
-
-  writeRating(softwareID, data) {
-    return this.softwaresRef
-      .doc(softwareID)
-      .collection('Reviews')
-      .doc(id())
-      .set({ ...data, date: firebase.firestore.Timestamp.now() });
-  }
-
-  incrementTotalReviews(softwareID) {
-    return this.softwaresRef.doc(softwareID).update({
-      total_reviews: firebase.firestore.FieldValue.increment(1),
+    querySnapshot.forEach(doc => {
+      if (!isEmpty(doc.data().review)) reviews.push(formatReview(doc));
     });
+    return reviews;
+  } catch (error) {
+    console.log('Error: ', error);
   }
+};
 
-  decrementTotalReviews(softwareID) {
-    return this.softwaresRef.doc(softwareID).update({
-      total_reviews: firebase.firestore.FieldValue.increment(-1),
-    });
+export const getSoftware = async Id => {
+  try {
+    const doc = await software(Id);
+    return { ...doc.data(), id: doc.id };
+  } catch (error) {
+    console.log('Error: ', error);
   }
+};
 
-  updateStarCount(softwareID, starType, updateType) {
-    return this.softwaresRef.doc(softwareID).update({
-      ['stars_count.' + starType]:
-        updateType === 'INC'
-          ? firebase.firestore.FieldValue.increment(1)
-          : firebase.firestore.FieldValue.increment(-1),
-    });
-  }
+export const writeRating = (softwareId, data) => {
+  return userReviewRef(softwareId).set({
+    ...data,
+    date: firebase.firestore.Timestamp.now(),
+  });
+};
 
-  async replaceStarCount(softwareID, incrementStarType, decrementStarType) {
-    await this.softwaresRef.doc(softwareID).update({
-      ['stars_count.' + incrementStarType]:
-        firebase.firestore.FieldValue.increment(1),
-    });
-    return await this.softwaresRef.doc(softwareID).update({
-      ['stars_count.' + decrementStarType]:
-        firebase.firestore.FieldValue.increment(-1),
-    });
-  }
+export const incrementTotalReviews = softwareId =>
+  softwareRef(softwareId).update({
+    total_reviews: firebase.firestore.FieldValue.increment(1),
+  });
 
-  async updateAverageRating(softwareID) {
-    const doc = await this.softwaresRef.doc(softwareID).get();
-    const averageRating = getAverage(doc.data().stars_count);
-    return await this.softwaresRef.doc(softwareID).update({
-      average_rating: Number(averageRating.toFixed(1)),
-    });
-  }
-}
+export const decrementTotalReviews = softwareId =>
+  softwareRef(softwareId).update({
+    total_reviews: firebase.firestore.FieldValue.increment(-1),
+  });
 
-export const softwares = new Softwares();
+export const updateStarCount = (softwareId, starType, updateType) => {
+  return softwareRef(softwareId).update({
+    ['stars_count.' + starType]:
+      updateType === 'INC'
+        ? firebase.firestore.FieldValue.increment(1)
+        : firebase.firestore.FieldValue.increment(-1),
+  });
+};
+
+export const replaceStarCount = async (
+  softwareId,
+  incrementStarType,
+  decrementStarType
+) => {
+  await softwareRef(softwareId).update({
+    ['stars_count.' + incrementStarType]:
+      firebase.firestore.FieldValue.increment(1),
+  });
+  return await softwareRef(softwareId).update({
+    ['stars_count.' + decrementStarType]:
+      firebase.firestore.FieldValue.increment(-1),
+  });
+};
+
+export const updateAverageRating = async softwareId => {
+  const doc = await software(softwareId);
+  const averageRating = getAverage(doc.data().stars_count);
+  return await softwareRef(softwareId).update({
+    average_rating: Number(averageRating.toFixed(1)),
+  });
+};

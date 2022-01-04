@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { softwares as softwares_imp } from '../database/Softwares';
+import { getSoftwares } from '../database/Softwares';
 import { set } from '../features/softwaresSlice';
 
 function useSoftwares() {
@@ -12,7 +12,7 @@ function useSoftwares() {
 
   useEffect(() => {
     const fetchSoftwares = async () => {
-      const softwares = await softwares_imp.getSoftwares();
+      const softwares = await getSoftwares();
       dispatch(set(softwares));
     };
 
