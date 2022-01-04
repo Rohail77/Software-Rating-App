@@ -1,7 +1,13 @@
 import { auth, database } from '../config/database_config';
 import firebase from 'firebase';
 import { alertError, formatDate } from '../utils/util-functions';
-import { formatReview, softwaresRef, userReview } from './common';
+import {
+  formatReview,
+  software,
+  softwaresRef,
+  userReview,
+  userReviewRef,
+} from './common';
 
 export let userRef;
 
@@ -20,7 +26,13 @@ export const reviewRef = softwareId =>
 
 export const getUserReview = async softwareId => {
   const doc = await userReview(softwareId);
-  return formatReview(doc);
+  const softwareDoc = await software(softwareId);
+  return {
+    softwareId: softwareId,
+    softwareName: softwareDoc.data().name,
+    ...doc.data(),
+    date: formatDate(doc.data().date.toDate()),
+  };
 };
 
 export const updateUsername = async newName => {
@@ -39,7 +51,7 @@ export const updateUsername = async newName => {
       )
     );
   } catch (error) {
-    console.log('Error: ', error);
+    alertError();
   }
 };
 
@@ -78,7 +90,7 @@ export const canUserReview = softwareID => {
 };
 
 export const updateUserReview = (softwareId, updatedReview) => {
-  return reviewRef(softwareId).update({
+  return userReviewRef(softwareId).update({
     date: firebase.firestore.Timestamp.now(),
     ...updatedReview,
   });
@@ -91,20 +103,8 @@ export const deleteUserReview = async softwareId => {
     });
     return await reviewRef(softwareId).delete();
   } catch (error) {
-    console.log('Error: ', error);
-  }
-};
-
-export const bindUpdaterToUserReviews = async updater => {
-  try {
-    const doc = await userRef.get();
-    if (doc.exists) {
-      doc.data().reviewedSoftwares.forEach(softwareId => {
-        reviewRef(softwareId).onSnapshot(updater);
-      });
-    }
-  } catch (error) {
-    alert(error);
+    console.log('here');
+    alertError();
   }
 };
 

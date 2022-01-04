@@ -7,11 +7,14 @@ import WaitMessage from '../../common/wait message/WaitMessage';
 import AccountUISelector from './page components/account section/AccountUISelector';
 import Pages from '../../common/pages/Pages';
 import usePagination from '../../../hooks/usePagination';
+import useWaiter from '../../../hooks/useWaiter';
 
 const SOFTWARES_PER_PAGE = 20;
 
 function MainPage(props) {
   const { softwares, setSoftwareSearchString, fetchedSoftwares } = props;
+
+  const [waiting] = useWaiter(!fetchedSoftwares);
 
   const softwareSearchInput = createRef();
 
@@ -40,7 +43,7 @@ function MainPage(props) {
           setSoftwareSearchString={setSoftwareSearchString}
           softwareSearchInput={softwareSearchInput}
         />
-        {!fetchedSoftwares ? (
+        {waiting ? (
           <WaitMessage styles={{ marginTop: '6em' }} />
         ) : itemsForCurrentPage.length === 0 ? (
           <p className='no-results-msg'>No results!</p>

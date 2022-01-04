@@ -11,14 +11,16 @@ import WaitMessage from '../../../../../common/wait message/WaitMessage';
 import ReviewLimitMessage from './limit message/ReviewLimitMessage';
 import {
   addSoftwareToUserReviews,
-  bindUpdaterToUserReviews,
+  getUserReview,
   name,
 } from '../../../../../../database/User';
 import useUserReviews from '../../../../../../hooks/useUserReviews';
 import { update } from '../../../../../../features/softwaresSlice';
 import { useDispatch } from 'react-redux';
 import { requestAddUserReview } from '../../../../../../features/softwareReviewsSlice';
-import { isEmpty } from '../../../../../../utils/util-functions';
+import { alertError, isEmpty } from '../../../../../../utils/util-functions';
+import { add } from '../../../../../../features/userReviewsSlice';
+import useWaiter from '../../../../../../hooks/useWaiter';
 
 const MAX_REVIEW_LENGTH = 3000;
 
@@ -34,12 +36,15 @@ function ReviewForm(props) {
   const initialState = {
     review: '',
     rating: 0,
-    onWait: false,
   };
 
   const [state, setState] = useState(initialState);
 
   const dispatch = useDispatch();
+
+  const [waiting, wait, stopWait] = useWaiter();
+
+  useUserReviews(true);
 
   const handleChange = event => {
     event.preventDefault();
@@ -60,37 +65,34 @@ function ReviewForm(props) {
     wait();
   };
 
-  const wait = () =>
-    setState(state => ({
-      ...state,
-      onWait: true,
-    }));
-
   useEffect(() => {
-    if (state.onWait) saveData();
-  }, [state.onWait]);
+    if (waiting) saveData();
+  }, [waiting]);
 
   const saveData = async () => {
-    const { rating, review } = state;
-    const { softwareID } = props;
-    await writeRating(softwareID, {
-      username: name(),
-      rating,
-      review,
-    });
-    updateUserReviews();
-    if (!isEmpty(review)) await incrementTotalReviews(softwareID);
-    await updateStarCount(softwareID, rating, 'INC');
-    await updateAverageRating(softwareID);
-    afterSave();
+    try {
+      const { rating, review } = state;
+      const { softwareID } = props;
+      await writeRating(softwareID, {
+        username: name(),
+        rating,
+        review,
+      });
+      updateUserReviews();
+      if (!isEmpty(review)) await incrementTotalReviews(softwareID);
+      await updateStarCount(softwareID, rating, 'INC');
+      await updateAverageRating(softwareID);
+      await afterSave();
+      stopWait();
+    } catch (error) {
+      alertError();
+    }
   };
-
-  const [, , getUpdatedUserReviews] = useUserReviews(true);
 
   const updateUserReviews = async () => {
     await addSoftwareToUserReviews(props.softwareID);
-    getUpdatedUserReviews();
-    bindUpdaterToUserReviews(getUpdatedUserReviews);
+    const review = await getUserReview(props.softwareID);
+    dispatch(add(review));
   };
 
   const afterSave = async () => {
@@ -109,7 +111,7 @@ function ReviewForm(props) {
     return rating === 0 || review.length >= MAX_REVIEW_LENGTH;
   };
 
-  const { rating, review, onWait } = state;
+  const { rating, review } = state;
 
   return (
     <form className='review-form' onSubmit={handleSubmit}>
@@ -135,7 +137,7 @@ function ReviewForm(props) {
       >
         Submit
       </button>
-      {onWait && <WaitMessage styles={waitMessageStyles} />}
+      {waiting && <WaitMessage styles={waitMessageStyles} />}
     </form>
   );
 }

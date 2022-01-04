@@ -1,5 +1,5 @@
 import firebase from 'firebase';
-import { getAverage, isEmpty } from '../utils/util-functions';
+import { alertError, getAverage, isEmpty } from '../utils/util-functions';
 import {
   formatReview,
   software,
@@ -16,7 +16,7 @@ export const getSoftwares = async () => {
     querySnapshot.forEach(doc => softwares.push({ id: doc.id, ...doc.data() }));
     return softwares;
   } catch (error) {
-    console.log('Error: ', error);
+    alertError();
   }
 };
 
@@ -32,7 +32,7 @@ export const getReviews = async softwareId => {
     });
     return reviews;
   } catch (error) {
-    console.log('Error: ', error);
+    alertError();
   }
 };
 
@@ -41,7 +41,7 @@ export const getSoftware = async Id => {
     const doc = await software(Id);
     return { ...doc.data(), id: doc.id };
   } catch (error) {
-    console.log('Error: ', error);
+    alertError();
   }
 };
 

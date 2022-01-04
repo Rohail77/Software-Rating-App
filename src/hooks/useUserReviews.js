@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { bindUpdaterToUserReviews, getUserReviews } from '../database/User';
+import { getUserReviews } from '../database/User';
 import { set } from '../features/userReviewsSlice';
 
 function useUserReviews(loggedin) {
@@ -14,7 +14,6 @@ function useUserReviews(loggedin) {
   useEffect(() => {
     if (loggedin && !fetched) {
       userReviews();
-      bindUpdaterToUserReviews(userReviews);
     }
   }, [loggedin, fetched]);
 

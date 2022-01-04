@@ -18,7 +18,7 @@ function RatedAppsPage(props) {
   );
 
   return (
-    <div className='wrapper rated-apps-wrapper'>
+    <div className='wrapper rated-apps-wrapper' id='rated-apps-wrapper'>
       <header>
         <div className='breadcrumbs'>
           <HomeLink />

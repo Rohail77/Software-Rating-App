@@ -5,6 +5,7 @@ import NonEditableFormButtons from './edit rating form/cta buttons/NonEditableFo
 import EditRatingForm from './edit rating form/EditRatingForm';
 import {
   deleteUserReview,
+  getUserReview,
   updateUserReview,
 } from '../../../../../../database/User';
 import {
@@ -16,8 +17,24 @@ import {
   updateStarCount as updateStarCount_imp,
 } from '../../../../../../database/Softwares';
 import { update } from '../../../../../../features/softwaresSlice';
+import {
+  remove,
+  update as updateUserReview_imp,
+} from '../../../../../../features/userReviewsSlice';
 import { useDispatch } from 'react-redux';
 import { alertError, isEmpty } from '../../../../../../utils/util-functions';
+import useWaiter from '../../../../../../hooks/useWaiter';
+import WaitMessage from '../../../../../common/wait message/WaitMessage';
+
+const waitMessageStyles = {
+  position: 'fixed',
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0,
+  background: '#000000c4',
+  opacity: 0.95,
+};
 
 function PastRating(props) {
   const [state, setState] = useState({
@@ -28,7 +45,18 @@ function PastRating(props) {
     clickable: true,
   });
 
+  const [waitingForUpdate, waitForUpdate] = useWaiter();
+  const [waitingForDelete, waitForDelete] = useWaiter();
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (waitingForUpdate) updateRating();
+  }, [waitingForUpdate]);
+
+  useEffect(() => {
+    if (waitingForDelete) deleteReview();
+  }, [waitingForDelete]);
 
   const handleChange = event =>
     setState(state => ({
@@ -37,15 +65,21 @@ function PastRating(props) {
     }));
 
   const handleSubmit = () => {
+    if (reviewUpdated()) {
+      waitForUpdate();
+    } else {
+      showNoChangeMessage();
+    }
+  };
+
+  const updateRating = async () => {
     try {
-      if (reviewUpdated()) {
-        const { softwareId } = props.userReview;
-        const { rating, review } = state;
-        updateUserReview(softwareId, { rating, review });
-        updateSoftware();
-      } else {
-        showNoChangeMessage();
-      }
+      const { softwareId } = props.userReview;
+      const { rating, review } = state;
+      await updateUserReview(softwareId, { rating, review });
+      const updatedReview = await getUserReview(softwareId);
+      dispatch(updateUserReview_imp(updatedReview));
+      updateSoftware();
     } catch (error) {
       alertError();
     }
@@ -100,19 +134,22 @@ function PastRating(props) {
 
   const handleDelete = () => {
     setState(state => ({ ...state, clickable: false }));
-    deleteReview();
+    waitForDelete();
   };
 
   const deleteReview = async () => {
-    const { rating, review } = state;
-    const { softwareId } = props.userReview;
-    const { getUpdatedUserReviews } = props;
-    await deleteUserReview(softwareId);
-    getUpdatedUserReviews();
-    if (!isEmpty(review)) decrementTotalReviews(softwareId);
-    await updateStarCount_imp(softwareId, rating, 'DEC');
-    await updateAverageRating(softwareId);
-    updateSoftwareLocal();
+    try {
+      const { rating, review } = state;
+      const { softwareId } = props.userReview;
+      await deleteUserReview(softwareId);
+      if (!isEmpty(review)) decrementTotalReviews(softwareId);
+      await updateStarCount_imp(softwareId, rating, 'DEC');
+      await updateAverageRating(softwareId);
+      updateSoftwareLocal();
+      dispatch(remove(softwareId));
+    } catch (error) {
+      alertError();
+    }
   };
 
   const setRating = rating =>
@@ -157,34 +194,42 @@ function PastRating(props) {
   const { editable, rating, review, error, clickable } = state;
 
   return (
-    <li className='past-review'>
-      <div className='past-review__basic-info-and-ctas'>
-        <div className='past-review__software'>
-          <SoftwareLogo name={softwareName} />
-          <div className='software__details'>
-            <p className='software__name'>{softwareName}</p>
-            <p className='software__review-date'>{date}</p>
+    <>
+      <li className='past-review'>
+        <div className='past-review__basic-info-and-ctas'>
+          <div className='past-review__software'>
+            <SoftwareLogo name={softwareName} />
+            <div className='software__details'>
+              <p className='software__name'>{softwareName}</p>
+              <p className='software__review-date'>{date}</p>
+            </div>
           </div>
+          {editable ? (
+            <EditableFormButtons reset={reset} handleSubmit={handleSubmit} />
+          ) : (
+            <NonEditableFormButtons
+              setEditable={setEditable}
+              handleDelete={handleDelete}
+              clickable={clickable}
+            />
+          )}
         </div>
-        {editable ? (
-          <EditableFormButtons reset={reset} handleSubmit={handleSubmit} />
-        ) : (
-          <NonEditableFormButtons
-            setEditable={setEditable}
-            handleDelete={handleDelete}
-            clickable={clickable}
-          />
-        )}
-      </div>
-      {error && <p className='no-change-msg'>* No change To update</p>}
-      <EditRatingForm
-        rating={rating}
-        review={review}
-        editable={editable}
-        handleChange={handleChange}
-        setRating={setRating}
-      />
-    </li>
+        {error && <p className='no-change-msg'>* No change To update</p>}
+        <EditRatingForm
+          rating={rating}
+          review={review}
+          editable={editable}
+          handleChange={handleChange}
+          setRating={setRating}
+        />
+      </li>
+      {(waitingForDelete || waitingForUpdate) && (
+        <WaitMessage
+          styles={waitMessageStyles}
+          containerId='rated-apps-wrapper'
+        />
+      )}
+    </>
   );
 }
 

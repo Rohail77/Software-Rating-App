@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import useWaiter from '../../../hooks/useWaiter';
 import HomeLink from '../../common/home link/HomeLink';
 import WaitMessage from '../../common/wait message/WaitMessage';
 import DangerZone from './page components/danger zone/DangerZone';
@@ -14,21 +14,7 @@ const waitMessageStyles = {
 };
 
 function AccountPage() {
-  const [state, setState] = useState({
-    onWait: false,
-  });
-
-  const wait = () =>
-    setState({
-      onWait: true,
-    });
-
-  const stopWait = () =>
-    setState({
-      onWait: false,
-    });
-
-  const { onWait } = state;
+  const [waiting, wait, stopWait] = useWaiter();
 
   return (
     <div className='wrapper account-wrapper'>
@@ -45,7 +31,7 @@ function AccountPage() {
       <Forms wait={wait} stopWait={stopWait} />
 
       <DangerZone wait={wait} stopWait={stopWait} />
-      {onWait && <WaitMessage styles={waitMessageStyles} />}
+      {waiting && <WaitMessage styles={waitMessageStyles} />}
     </div>
   );
 }
