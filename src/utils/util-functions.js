@@ -19,4 +19,5 @@ export const removeExtraSpaces = str =>
 export const isEmpty = str => removeExtraSpaces(str) === '';
 
 const ALERT_MESSAGE = 'An error ocurred while interacting with the database.';
-export const alertError = () => alert(ALERT_MESSAGE);
+export const alertError = (msg = null) =>
+  msg ? alert(msg) : alert(ALERT_MESSAGE);

@@ -11,6 +11,7 @@ function App(props) {
   }, []);
 
   const handleLogin = loggedin => {
+    console.log(loggedin);
     if (loggedin) set();
   };
 

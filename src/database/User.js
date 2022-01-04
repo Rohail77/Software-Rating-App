@@ -26,10 +26,8 @@ export const updateUsername = async newName => {
 
     const doc = await userRef.get();
 
-    const reviewedSoftwares = doc.data().reviewedSoftwares;
-
     return await Promise.all(
-      reviewedSoftwares.map(softwareId =>
+      doc.data().reviewedSoftwares.map(softwareId =>
         reviewRef(softwareId).update({
           username: newName,
         })
@@ -53,18 +51,13 @@ export const deleteUser = password => {
     });
 };
 
-export const updatePassword = (oldPassword, newPassword) => {
+export const updatePassword = async (oldPassword, newPassword) => {
   const credential = firebase.auth.EmailAuthProvider.credential(
     email(),
     oldPassword
   );
-  return auth.currentUser.reauthenticateWithCredential(credential).then(() => {
-    if (oldPassword === newPassword) {
-      throw new Error('No change to update');
-    } else {
-      return auth.currentUser.updatePassword(newPassword);
-    }
-  });
+  await auth.currentUser.reauthenticateWithCredential(credential);
+  return await auth.currentUser.updatePassword(newPassword);
 };
 
 export const canUserReview = softwareID => {

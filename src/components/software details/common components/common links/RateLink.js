@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { signedin, user } from '../../../../database/User';
+import { signedin } from '../../../../database/User';
 
 function RateLink({ softwareID, from }) {
   const getDestinationInformation = () =>
