@@ -17,11 +17,8 @@ function MainPage(props) {
 
   const onHomePageClick = () => {
     setSoftwareSearchString('');
-    emptySoftwareSearchInput();
+    softwareSearchInput.current.value = '';
   };
-
-  const emptySoftwareSearchInput = () =>
-    (softwareSearchInput.current.value = '');
 
   const [itemsForCurrentPage, pagination] = usePagination(
     softwares,

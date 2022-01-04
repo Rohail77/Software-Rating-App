@@ -18,6 +18,12 @@ export const removeExtraSpaces = str =>
 
 export const isEmpty = str => removeExtraSpaces(str) === '';
 
+// See if one string (parent) includes another string (child)
+export const stringIncludes = (parentString, childString) =>
+  removeExtraSpaces(parentString)
+    .toLowerCase()
+    .includes(removeExtraSpaces(childString).toLowerCase());
+
 const ALERT_MESSAGE = 'An error ocurred while interacting with the database.';
 export const alertError = (msg = null) =>
   msg ? alert(msg) : alert(ALERT_MESSAGE);

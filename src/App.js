@@ -15,7 +15,6 @@ function App(props) {
   const dispatch = useDispatch();
 
   const handleLogin = loggedin => {
-    console.log(loggedin);
     if (loggedin) {
       set();
       dispatch(login());

@@ -39,14 +39,13 @@ export class Authorization {
   async signin({ email, password }) {
     try {
       await auth.signInWithEmailAndPassword(email, password);
-      return null;
-      // if (emailVerified()) return null;
-      // else {
-      //   return {
-      //     type: authErrors.EMAIL_UNVERIFIED,
-      //     msg: `You have not verified your email. Please verify your email by clicking the link we emailed you at your provided email address (${email})`,
-      //   };
-      // }
+      if (emailVerified()) return null;
+      else {
+        return {
+          type: authErrors.EMAIL_UNVERIFIED,
+          msg: `You have not verified your email. Please verify your email by clicking the link we emailed you at your provided email address (${email})`,
+        };
+      }
     } catch (error) {
       return {
         type: authErrors.INCORRECT_LOGIN_CREDENTIALS,

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import useSoftwares from '../../../hooks/useSoftwares';
+import { stringIncludes } from '../../../utils/util-functions';
 import MainPage from './MainPage';
 
 function MainPageLogic(props) {
@@ -9,24 +10,18 @@ function MainPageLogic(props) {
 
   const [softwares, fetchedSoftwares] = useSoftwares();
 
-  const setSoftwareSearchString = string => {
+  const setSoftwareSearchString = string =>
     setState(state => ({
       ...state,
       softwareSearchString: string,
     }));
-  };
 
-  const getFilteredSoftwares = () => {
-    const { softwareSearchString } = state;
-
-    return softwareSearchString === ''
+  const getFilteredSoftwares = () =>
+    state.softwareSearchString === ''
       ? softwares
-      : softwares.filter(software => {
-          return software.name
-            .toLocaleLowerCase()
-            .includes(softwareSearchString.toLocaleLowerCase());
-        });
-  };
+      : softwares.filter(software =>
+          stringIncludes(software.name, state.softwareSearchString)
+        );
 
   return (
     <MainPage

@@ -1,19 +1,18 @@
 function Search({ setSoftwareSearchString, softwareSearchInput }) {
-  const handleClick = event => {
+  const handleChange = event => {
     event.preventDefault();
     setSoftwareSearchString(softwareSearchInput.current.value);
   };
 
   return (
     <div className='search'>
-      <a className='search__img' href='null' onClick={handleClick}>
-        <img src='images/search.svg' alt='magnifying glass' />
-      </a>
+      <span className='material-icons search__img'>search</span>
       <input
         type='text'
         name='name'
-        placeholder='Search'
+        placeholder='Search for a software...'
         ref={softwareSearchInput}
+        onChange={handleChange}
       />
     </div>
   );
