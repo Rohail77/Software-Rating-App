@@ -153,6 +153,6 @@ export const createUser = async user => {
     .catch(alertError);
 };
 
-export const signedin = async () => auth.currentUser;
+export const signedin = () => auth.currentUser;
 
-export const emailVerified = async () => auth.currentUser.emailVerified;
+export const emailVerified = () => auth.currentUser.emailVerified;
