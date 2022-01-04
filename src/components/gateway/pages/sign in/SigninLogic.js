@@ -1,7 +1,9 @@
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { authorization } from '../../auth/Authorization';
+import { authErrors, authorization } from '../../auth/Authorization';
 import Signin from './Signin';
+import { logout } from '../../../../features/authSlice';
 
 function SigninLogic(props) {
   const [state, setState] = useState({
@@ -10,8 +12,11 @@ function SigninLogic(props) {
     hasError: false,
     errorMsg: '',
     onWait: false,
-    signedin: false,
+    signinComplete: false,
   });
+
+  const dispatch = useDispatch();
+  const loggedin = useSelector(state => state.loggedin);
 
   const handleSubmit = event => {
     event.preventDefault();
@@ -22,26 +27,23 @@ function SigninLogic(props) {
 
   const validationCheck = () => state.email === '' || state.password === '';
 
-  const signin = () => {
+  const signin = async () => {
     const { email, password } = state;
-    authorization.signin({ email, password }, onSignin);
     setState(state => ({
       ...state,
       onWait: true,
     }));
-  };
-
-  const onSignin = error => {
+    const error = await authorization.signin({ email, password });
     if (error) {
-      authorization.signout();
+      if (error.type === authErrors.EMAIL_UNVERIFIED) {
+        authorization.signout();
+        dispatch(logout());
+      }
       showError(error);
     } else {
       setState(state => ({
         ...state,
-        onWait: false,
-        hasError: false,
-        errorMsg: '',
-        signedin: true,
+        signinComplete: true,
       }));
     }
   };
@@ -60,18 +62,16 @@ function SigninLogic(props) {
       [event.target.name]: event.target.value,
     }));
 
-  const { from } = props;
-  const { signedin } = state;
   return (
-    <Fragment>
-      {signedin && <Redirect to='/' />}
+    <>
+      {loggedin && state.signinComplete && <Redirect to='/' />}
       <Signin
         {...state}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
-        from={from}
+        from={props.from}
       />
-    </Fragment>
+    </>
   );
 }
 

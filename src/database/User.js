@@ -145,12 +145,15 @@ export const addSoftwareToUserReviews = async softwareID => {
     });
 };
 
-export const createUser = async user => {
-  return database
-    .collection('Users')
-    .doc(id)
-    .set({ reviewedSoftwares: [] })
-    .catch(alertError);
+export const createUser = async () => {
+  try {
+    return await database
+      .collection('Users')
+      .doc(id())
+      .set({ reviewedSoftwares: [] });
+  } catch (error) {
+    alertError();
+  }
 };
 
 export const signedin = () => auth.currentUser;

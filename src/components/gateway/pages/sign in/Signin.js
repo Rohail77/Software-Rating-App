@@ -3,6 +3,14 @@ import FormError from '../../common components/FormError';
 import BackLink from '../../common components/BackLink';
 import { Link } from 'react-router-dom';
 
+const waitMessageStyles = {
+  position: 'fixed',
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0,
+};
+
 function Signin(props) {
   const {
     email,
@@ -56,12 +64,12 @@ function Signin(props) {
               },
             }}
           >
-            Sign up{' '}
+            Sign up
           </Link>{' '}
           instead.
         </p>
       </section>
-      {onWait && <WaitMessage />}
+      {onWait && <WaitMessage styles={waitMessageStyles} />}
     </div>
   );
 }

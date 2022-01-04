@@ -4,6 +4,14 @@ import WaitMessage from '../../../common/wait message/WaitMessage';
 import BackLink from '../../common components/BackLink';
 import SigninLink from '../../../common/signin link/SigninLink';
 
+const waitMessageStyles = {
+  position: 'fixed',
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0,
+};
+
 function Signup(props) {
   const {
     name,
@@ -63,7 +71,7 @@ function Signup(props) {
         </p>
       </section>
       {signedUp && <EmailVerificationModal email={email} />}
-      {onWait && <WaitMessage />}
+      {onWait && <WaitMessage styles={waitMessageStyles} />}
     </div>
   );
 }

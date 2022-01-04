@@ -1193,17 +1193,15 @@ input[type='submit'] {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #00000030;
+  background-color: #000000bf;
 }
 
 .email-verification-modal {
-  background-color: #2d2b2b;
-  color: white;
+  background-color: #fdfdfd;
   padding: 1em;
-  border-radius: 7px;
+  border-radius: 5px;
   max-width: 400px;
   font-size: 1.4rem;
-  box-shadow: -5px 5px 16px 0px #a0a0a0;
 }
 
 .email-verification-modal p {

@@ -25,16 +25,13 @@ function SignupLogic(props) {
     return email === '' || password === '' || name === '';
   };
 
-  const signup = () => {
-    const { email, password, name } = state;
-    authorization.signup({ email, password, name }, onSignup);
+  const signup = async () => {
     setState(state => ({
       ...state,
       onWait: true,
     }));
-  };
-
-  const onSignup = error => {
+    const { email, password, name } = state;
+    const error = await authorization.signup({ email, password, name });
     if (error) {
       showError(error);
     } else {
