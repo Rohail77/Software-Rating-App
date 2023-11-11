@@ -42,8 +42,3 @@ The following resources were helpful in completing this project:
 - [**Redux Docs**](https://redux.js.org/introduction/getting-started)
 - [**React Router documentation**](https://reactrouter.com/web/guides/quick-start).
 - [**React Router Tutorial**](https://www.youtube.com/watch?v=Law7wfdg_ls) on [Dev Ed's youtube channel](https://www.youtube.com/channel/UClb90NQQcskPUGDIXsQEz5Q).
-
-### `NOTE:`
-
-This repository contains the development code of the app. To view the production build see the repository:
-https://github.com/Rohail77/Softwares-Rating-App-Production
